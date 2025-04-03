@@ -1,7 +1,7 @@
 services:
 
   omekas:
-    image: ghcr.io/erseco/omeka-s-docker:master
+    image: ghcr.io/fmateos/omeka-s-docker:latest
     restart: unless-stopped
     ports:
       - 8000:80
@@ -34,4 +34,3 @@ services:
 volumes:
   mariadb_data:
   omekas_data:
-
