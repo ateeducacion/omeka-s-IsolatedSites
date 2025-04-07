@@ -7,7 +7,7 @@ services:
       - 8000:80
     volumes:
       - omekas_data:/var/www/html/volume:Z
-      - ./:/var/www/html/volume/modules/ThreeDViewer
+      - ./:/var/www/html/volume/modules/IsolatedSites
     environment:
       MYSQL_DATABASE: omeka
       MYSQL_USER: omeka

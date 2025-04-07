@@ -47,3 +47,4 @@ See general end user documentation for [Installing a module](http://omeka.org/s/
 ## License
 
 This module is published under the [GNU GPLv3](LICENSE) license.
+
