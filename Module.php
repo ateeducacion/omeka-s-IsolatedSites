@@ -12,6 +12,7 @@ use Omeka\Module\AbstractModule;
 use Omeka\Mvc\Controller\Plugin\Messenger;
 use Omeka\Stdlib\Message;
 use IsolatedSites\Form\ConfigForm;
+
 /**
  * Main class for the IsoltatedSites module.
  */
@@ -37,7 +38,6 @@ class Module extends AbstractModule
         $messenger = new Messenger();
         $message = new Message("IsolatedSites module installed.");
         $messenger->addSuccess($message);
-
     }
     /**
      * Execute logic when the module is uninstalled.
@@ -59,7 +59,6 @@ class Module extends AbstractModule
     public function attachListeners(SharedEventManagerInterface $sharedEventManager): void
     {
         // Replace the default file validator with our custom one
-
     }
     
     /**
@@ -100,9 +99,7 @@ class Module extends AbstractModule
 
         // Save configuration settings in omeka settings database
         $settings->set('activate_IsolatedSites', $value);
-
     }
     
     // /**
-
 }
