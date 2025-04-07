@@ -1,6 +1,6 @@
 {
     "name": "ateeducacion/omeka-s-threedviewer",
-    "description": "Embeds 3D models (GLB, etc.) in Omeka S collections using either model-viewer.js or three.js",
+    "description": "Filtes out from the admin browser sites where the logged in user has no role",
     "type": "omeka-s-module",
     "license": "GPL-3.0-or-later",
     "authors": [
@@ -9,9 +9,9 @@
             "email": "ate.educacion@gobiernodecanarias.org"
         }
     ],
-    "homepage": "https://github.com/ateeducacion/omeka-s-ThreeDViewer",
+    "homepage": "https://github.com/ateeducacion/omeka-s-IsolatedSites",
     "support": {
-        "issues": "https://github.com/ateeducacion/omeka-s-ThreeDViewer/issues"
+        "issues": "https://github.com/ateeducacion/omeka-s-IsolatedSites/issues"
     },
     "keywords": [
         "Omeka S",
@@ -41,12 +41,12 @@
     },
     "autoload": {
         "psr-4": {
-            "ThreeDViewer\\": "src/"
+            "IsolatedSites\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Viewer3DTest\\": "test/"
+            "IsolatedSitesTest\\": "test/"
         }
     },
     "repositories": [
