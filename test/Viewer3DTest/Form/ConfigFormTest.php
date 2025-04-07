@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Viewer3DTest\Form;
+namespace IsolatedSites\Form;
 
 use PHPUnit\Framework\TestCase;
-use ThreeDViewer\Form\ConfigForm;
+use IsolatedSites\Form\ConfigForm;
 use Laminas\Form\Element;
 use Laminas\Form\Form;
 
