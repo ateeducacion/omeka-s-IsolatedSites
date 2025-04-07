@@ -1,14 +1,10 @@
-# ThreeDViewer (3D) Module for Omeka S
+# IsolatedSites Module for Omeka S
 
-This module allows users to view and interact with 3D models (STL and GLB files) directly within Omeka S.
 
 ## Features
+- By default, sites where the logged in user has no role are filtered out from the admin browse page  
+- In Profiles->User Settings: "View all" checkbox allow users checked by admin user to view all the items in admin browse page.
 
-- View 3D models (STL and GLB formats) directly in the browser
-- Interactive controls for rotating, zooming, and panning 3D models
-- Customizable display options including background color
-- Optional auto-rotation for better visualization
-- Grid display option for better spatial reference
 
 ## Installation
 
@@ -42,19 +38,13 @@ See general end user documentation for [Installing a module](http://omeka.org/s/
 
 ## Usage
 
-1. Upload STL or GLB files to your Omeka S items as you would any other media file
-2. When viewing an item with a 3D model, the model will automatically be displayed in an interactive viewer
-3. Use your mouse to:
-   - Left-click and drag to rotate the model
-   - Right-click and drag to pan
-   - Scroll to zoom in and out
-4. The module settings allow administrators to customize the default display options
+
 
 ## Requirements
 
 - Omeka S 4.x or later
-- Modern browser with WebGL support (Chrome, Firefox, Safari, Edge)
 
 ## License
 
 This module is published under the [GNU GPLv3](LICENSE) license.
+
