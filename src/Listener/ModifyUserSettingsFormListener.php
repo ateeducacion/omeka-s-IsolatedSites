@@ -57,7 +57,8 @@ class ModifyUserSettingsFormListener
                 'use_hidden_element' => true,
                 'checked_value' => '1',
                 'unchecked_value' => '0',
-                'info' =>   'If checked, items and itemsets shown in admin view are limited to those assigned to sites where the user has permissions', //@translate
+                'info' =>   'If checked, items and itemsets shown in admin'.//@translate
+                    'view are limited to those assigned to sites where the user has permissions', //@translate
             ],
 
             'attributes' => [
