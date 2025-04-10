@@ -1,3 +1,5 @@
+.aider*                  export-ignore
+.DS_Store                export-ignore
 /.distignore             export-ignore
 /.editorconfig           export-ignore
 /.env                    export-ignore
@@ -5,6 +7,7 @@
 /.github/                export-ignore
 /.gitignore              export-ignore
 /.php-cs-fixer.dist.php  export-ignore
+/.tx/                    export-ignore
 /language/*.po           export-ignore
 /language/*.pot          export-ignore
 /test/                   export-ignore
@@ -13,6 +16,5 @@ composer.lock            export-ignore
 docker-compose.yml       export-ignore
 Makefile                 export-ignore
 phpunit.xml              export-ignore
-README.md                export-ignore
 renovate.json            export-ignore
 test.php                 export-ignore
