@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace IsolatedSites;
 
 use Laminas\EventManager\Event;
+use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\SharedEventManagerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Mvc\Controller\AbstractController;
@@ -12,6 +13,8 @@ use Omeka\Module\AbstractModule;
 use Omeka\Mvc\Controller\Plugin\Messenger;
 use Omeka\Stdlib\Message;
 use IsolatedSites\Form\ConfigForm;
+use IsolatedSites\Listener\ModifyQueryListener;
+use IsolatedSites\Listener\ModifyUserSettingsFormListener;
 
 /**
  * Main class for the IsoltatedSites module.
@@ -50,17 +53,50 @@ class Module extends AbstractModule
         $message = new Message("IsolatedSites module uninstalled.");
         $messenger->addWarning($message);
     }
-    
+
+    public function onBootstrap(\Laminas\Mvc\MvcEvent $event)
+    {
+
+        $services = $event->getApplication()->getServiceManager();
+        $sharedEventManager = $services->get('SharedEventManager');
+
+        $this->attachListeners($sharedEventManager, $services);
+    }
     /**
      * Register the file validator service and renderers.
      *
      * @param SharedEventManagerInterface $sharedEventManager
      */
-    public function attachListeners(SharedEventManagerInterface $sharedEventManager): void
+    public function attachListeners(SharedEventManagerInterface $sharedEventManager, $services = null): void
     {
-        // Replace the default file validator with our custom one
+        
+        //Listeners to add form field in user settings
+        $listener=$services->get(ModifyUserSettingsFormListener::class);
+        $sharedEventManager->attach(
+            \Omeka\Form\UserForm::class,
+            'form.add_elements',
+            [$listener, '__invoke']
+        );
+
+        $sharedEventManager->attach(
+            \Omeka\Form\UserForm::class,
+            'form.add_input_filters',
+            [$listener, 'addInputFilters']
+        );
+
+        $sharedEventManager->attach(
+            \Omeka\Form\UserForm::class,
+            'form.submit',
+            [$listener, 'handleUserSettings']
+        );
+
+        //Listener to limit item view
+        $sharedEventManager->attach(
+            'Omeka\Api\Adapter\ItemAdapter',
+            'api.search.query',
+            [new ModifyQueryListener(), '__invoke']
+        );
     }
-    
     /**
      * Get the configuration form for this module.
      *

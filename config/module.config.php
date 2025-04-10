@@ -3,7 +3,12 @@ declare(strict_types=1);
 
 namespace IsolatedSites;
 
-//use ThreeDViewer\Media\FileRenderer\Viewer3DRenderer;
+use IsolatedSites\Listener\ModifyUserSettingsFormListener;
+use Omeka\Acl\Acl;
+use Omeka\Api\Adapter\ItemAdapter;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use IsolatedSites\Form\UserSettingsFieldset;
+use Omeka\Settings\User as UserSettingsService;
 
 return [
     'view_manager' => [
@@ -27,9 +32,21 @@ return [
             ],
         ],
     ],
+    'service_manager' => [
+        'factories' => [
+            ModifyUserSettingsFormListener::class => function ($container) {
+                return new ModifyUserSettingsFormListener(
+                    $container->get('Omeka\Acl'),
+                    $container->get('Omeka\EntityManager'),
+                    $container->get(UserSettingsService::class)
+                );
+            },
+        ],
+    ],
     'IsolatedSites' => [
         'settings' => [
             'activate_IsolatedSites' => true,
         ]
     ],
+    'environment' => 'development',
 ];
