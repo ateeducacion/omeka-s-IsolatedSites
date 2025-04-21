@@ -49,8 +49,6 @@ class ModifyQueryListener
             $siteIds = $stmt->fetchFirstColumn(); // Returns an array of site IDs
     
             $queryBuilder = $event->getParam('queryBuilder');
-            error_log("    CLASE               ");
-            error_log(get_class($queryBuilder));
     
             $alias = $queryBuilder->getRootAliases()[0];
             $queryBuilder->innerJoin("$alias.sites", 'site')
