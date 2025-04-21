@@ -38,7 +38,8 @@ return [
                 return new ModifyUserSettingsFormListener(
                     $container->get('Omeka\Acl'),
                     $container->get('Omeka\EntityManager'),
-                    $container->get(UserSettingsService::class)
+                    $container->get(UserSettingsService::class),
+                    $container->get('Omeka\AuthenticationService')
                 );
             },
         ],
