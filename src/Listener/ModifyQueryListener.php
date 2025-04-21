@@ -57,6 +57,5 @@ class ModifyQueryListener
                ->andWhere('site.id IN (:siteIds)')
                ->setParameter('siteIds', $siteIds);
         }
-        
     }
 }

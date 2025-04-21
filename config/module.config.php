@@ -46,14 +46,14 @@ return [
                     $container->get('Omeka\AuthenticationService')
                 );
             },
-            ModifyQueryListener::class => function ($container){
+            ModifyQueryListener::class => function ($container) {
                 return new ModifyQueryListener(
                     $container->get('Omeka\AuthenticationService'),
                     $container->get('Omeka\Settings\User'),
                     $container->get('Omeka\Connection')
                 );
             },
-            ModifyItemSetQueryListener::class => function($services) {
+            ModifyItemSetQueryListener::class => function ($services) {
                 return new ModifyItemSetQueryListener(
                     $services->get('Omeka\AuthenticationService'),
                     $services->get('Omeka\Settings\User'),
@@ -69,6 +69,3 @@ return [
     ],
     'environment' => 'development',
 ];
-
-
-

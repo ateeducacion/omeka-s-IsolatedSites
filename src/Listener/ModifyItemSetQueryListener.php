@@ -56,9 +56,9 @@ class ModifyItemSetQueryListener
 
             // Join with site_item_set table and filter by site IDs
             $queryBuilder->innerJoin(
-                    "$alias.siteItemSets",
-                    'sis'
-                )
+                "$alias.siteItemSets",
+                'sis'
+            )
                 ->innerJoin(
                     'sis.site',
                     'site'
