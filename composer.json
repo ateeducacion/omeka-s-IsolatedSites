@@ -1,5 +1,5 @@
 {
-    "name": "ateeducacion/omeka-s-threedviewer",
+    "name": "ateeducacion/omeka-s-isolatedsites",
     "description": "Filtes out from the admin browser sites where the logged in user has no role",
     "type": "omeka-s-module",
     "license": "GPL-3.0-or-later",
@@ -16,9 +16,7 @@
     "keywords": [
         "Omeka S",
         "module",
-        "3D",
-        "three.js",
-        "model-viewer"
+        "IsolatedSites"
     ],
     "require": {
         "php": ">=7.4"
@@ -37,7 +35,12 @@
         "squizlabs/php_codesniffer": "*",
         "phpunit/phpunit": "*",
         "zerocrates/extract-tagged-strings": "dev-master",
-        "laminas/laminas-form": "^3.4"
+        "laminas/laminas-form": "^3.4",
+        "laminas/laminas-permissions-acl": "*",
+        "laminas/laminas-eventmanager": "*",
+        "laminas/laminas-authentication": "*",
+        "doctrine/orm": "^2.10"
+
     },
     "autoload": {
         "psr-4": {

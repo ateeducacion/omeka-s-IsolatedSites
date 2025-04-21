@@ -2,10 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ThreeDViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-10 13:05+0100\n"
+"POT-Creation-Date: 2025-04-10 13:08+0100\n"
 "PO-Revision-Date: 2025-04-10 13:10+0100\n"
-"Last-Translator: Área de Tecnología Educativa <ate@gobiernodecanarias."
-"org>\n"
+"Last-Translator: Área de Tecnología Educativa <ate@gobiernodecanarias.org>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -15,18 +14,19 @@ msgstr ""
 "X-Generator: Poedit 2.4.2\n"
 
 #: language/empty.php:1
-msgid "Translate module texts"
+#, fuzzy
+msgid "Traslate module texts"
 msgstr "Traducir textos de módulos"
 
 #: src\Listener\ModifyUserSettingsFormListener.php:56
 msgid "Limit item list to granted sites only"
-msgstr "Limitar la lista de artículos sólo a los sitios autorizados"
+msgstr "Limitar la lista de recursos digitales sólo a los sitios autorizados"
 
 #: src\Listener\ModifyUserSettingsFormListener.php:60
 msgid ""
 "If checked, items and itemsets shown in admin view are limited to those "
 "assigned to sites where the user has permissions"
 msgstr ""
-"Si esta opción está seleccionada, los elementos y conjuntos de "
-"elementos mostrados en la vista de administrador se limitan a los "
+"Si esta opción está seleccionada, los recursos digitales y conjuntos de "
+"recursos digitales mostrados en la vista de administrador se limitan a los "
 "asignados a los sitios en los que el usuario tiene permisos"

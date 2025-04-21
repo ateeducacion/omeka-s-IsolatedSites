@@ -1,7 +1,7 @@
 services:
 
   omekas:
-    image: ghcr.io/erseco/omeka-s-docker:latest
+    image: ghcr.io/erseco/omeka-s-docker:master
     restart: unless-stopped
     ports:
       - 8000:80

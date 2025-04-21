@@ -58,11 +58,11 @@ build: check-docker
 
 # Run the linter to check PHP code style
 lint:
-	"vendor/bin/phpcs" . --standard=PSR2 --ignore=vendor/,assets/,node_modules/,tests/js/,tests/ --colors --extensions=php
+	"vendor/bin/phpcs" . --standard=PSR2 --ignore=vendor/,assets/,node_modules/,test/js/,test/ --colors --extensions=php
 
 # Automatically fix PHP code style issues
 fix:
-	"vendor/bin/phpcbf" . --standard=PSR2 --ignore=vendor/,assets/,node_modules/,tests/js/,tests/ --colors --extensions=php
+	"vendor/bin/phpcbf" . --standard=PSR2 --ignore=vendor/,assets/,node_modules/,test/js/,test/ --colors --extensions=php
 
 # Open a shell inside the omekas container
 shell: check-docker
