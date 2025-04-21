@@ -17,8 +17,12 @@ class ModifyUserSettingsFormListener
     protected $userSettingsService;
     protected $auth;
 
-    public function __construct(Acl $acl, EntityManager $entityManager, UserSettingsService $userSettingsService, AuthenticationService $auth)
-    {
+    public function __construct(
+        Acl $acl,
+        EntityManager $entityManager,
+        UserSettingsService $userSettingsService,
+        AuthenticationService $auth
+    ) {
         $this->acl = $acl;
         $this->entityManager=$entityManager;
         $this->userSettingsService=$userSettingsService;
@@ -80,8 +84,8 @@ class ModifyUserSettingsFormListener
                 ],
                 'attributes' => [
                     'value' => $limitToGrantedSites ? '1' : '0',
-                    'disabled' => !$isCurrentUserGlobalAdmin, // Disable the field if current user is not global    admin
-                    'readonly' => !$isCurrentUserGlobalAdmin, // Make it readonly if current user is not global     admin
+                    'disabled' => !$isCurrentUserGlobalAdmin,
+                    'readonly' => !$isCurrentUserGlobalAdmin,
                 ],
             ]);
         } catch (\Doctrine\ORM\ORMException $e) {
