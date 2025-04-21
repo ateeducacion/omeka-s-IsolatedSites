@@ -69,8 +69,6 @@ class ModifyUserSettingsFormListener
             $this->userSettingsService->setTargetId($userId);
             $limitToGrantedSites = $this->userSettingsService->get('limit_to_granted_sites', false);
 
-    
-            //$fieldset = $form->get('user-settings');
             $fieldset->add([
                 'name' => 'limit_to_granted_sites',
                 'type' => 'Checkbox',

@@ -1,17 +1,13 @@
 <?php
-//namespace IsolatedSites;
 
 namespace IsolatedSites\Listener;
 
-use Omeka\Api\Manager as ApiManager;
-use Omeka\Api\Representation\ItemRepresentation;
 use Laminas\EventManager\EventInterface;
-//use Omeka\Entity\User;
-use Omeka\Settings\UserSettings as UserSettings;
-use Doctrine\DBAL\Connection;
 use Laminas\Authentication\AuthenticationService;
+use Omeka\Settings\UserSettings;
+use Doctrine\DBAL\Connection;
 
-class ModifyQueryListener
+class ModifyItemSetQueryListener
 {
     private $authService;
     private $userSettings;
@@ -26,8 +22,9 @@ class ModifyQueryListener
         $this->userSettings = $userSettings;
         $this->connection = $connection;
     }
+
     /**
-     * Modify the item query based on the user's role.
+     * Modify the itemset query based on the user's role and site permissions.
      *
      * @param EventInterface $event
      */
@@ -35,7 +32,7 @@ class ModifyQueryListener
     {
         $user = $this->authService->getIdentity();
 
-        // Not limit the view of items/item_sets to global_admins o not_logged users (public view)
+        // Not limit the view of itemsets to global_admins or not_logged users (public view)
         if (!$user || $user->getRole() === 'global_admin') {
             return;
         }
@@ -44,18 +41,30 @@ class ModifyQueryListener
         $limit = $this->userSettings->get('limit_to_granted_sites', 1);
         
         if ($limit) {
+            // Get the sites where the user has permissions
             $sql = 'SELECT site_id FROM site_permission WHERE user_id = :user_id';
             $stmt = $this->connection->executeQuery($sql, ['user_id' => $user->getId()]);
-            $siteIds = $stmt->fetchFirstColumn(); // Returns an array of site IDs
-    
+            $siteIds = $stmt->fetchFirstColumn();
+
+            // If user has no site permissions, ensure they see no itemsets
+            if (empty($siteIds)) {
+                $siteIds = [-1]; // Use an impossible ID to return no results
+            }
+
             $queryBuilder = $event->getParam('queryBuilder');
-            error_log("    CLASE               ");
-            error_log(get_class($queryBuilder));
-    
             $alias = $queryBuilder->getRootAliases()[0];
-            $queryBuilder->innerJoin("$alias.sites", 'site')
-               ->andWhere('site.id IN (:siteIds)')
-               ->setParameter('siteIds', $siteIds);
+
+            // Join with site_item_set table and filter by site IDs
+            $queryBuilder->innerJoin(
+                "$alias.siteItemSets",
+                'sis'
+            )
+                ->innerJoin(
+                    'sis.site',
+                    'site'
+                )
+                ->andWhere('site.id IN (:siteIds)')
+                ->setParameter('siteIds', $siteIds);
         }
     }
 }

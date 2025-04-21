@@ -15,6 +15,7 @@ use Omeka\Stdlib\Message;
 use IsolatedSites\Form\ConfigForm;
 use IsolatedSites\Listener\ModifyQueryListener;
 use IsolatedSites\Listener\ModifyUserSettingsFormListener;
+use IsolatedSites\Listener\ModifyItemSetQueryListener;
 
 /**
  * Main class for the IsoltatedSites module.
@@ -69,32 +70,37 @@ class Module extends AbstractModule
      */
     public function attachListeners(SharedEventManagerInterface $sharedEventManager, $services = null): void
     {
-        
-        //Listeners to add form field in user settings
-        $listener=$services->get(ModifyUserSettingsFormListener::class);
+
         $sharedEventManager->attach(
             \Omeka\Form\UserForm::class,
             'form.add_elements',
-            [$listener, '__invoke']
+            [$services->get(ModifyUserSettingsFormListener::class), '__invoke']
         );
 
         $sharedEventManager->attach(
             \Omeka\Form\UserForm::class,
             'form.add_input_filters',
-            [$listener, 'addInputFilters']
+            [$services->get(ModifyUserSettingsFormListener::class), 'addInputFilters']
         );
 
         $sharedEventManager->attach(
             \Omeka\Form\UserForm::class,
             'form.submit',
-            [$listener, 'handleUserSettings']
+            [$services->get(ModifyUserSettingsFormListener::class), 'handleUserSettings']
         );
 
         //Listener to limit item view
         $sharedEventManager->attach(
             'Omeka\Api\Adapter\ItemAdapter',
             'api.search.query',
-            [new ModifyQueryListener(), '__invoke']
+            [$services->get(ModifyQueryListener::class), '__invoke']
+        );
+
+        // For limit the view of ItemSets
+        $sharedEventManager->attach(
+            'Omeka\Api\Adapter\ItemSetAdapter',
+            'api.search.query',
+            [$services->get(ModifyItemSetQueryListener::class), '__invoke']
         );
     }
     /**

@@ -3,12 +3,16 @@ declare(strict_types=1);
 
 namespace IsolatedSites;
 
-use IsolatedSites\Listener\ModifyUserSettingsFormListener;
 use Omeka\Acl\Acl;
 use Omeka\Api\Adapter\ItemAdapter;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use IsolatedSites\Form\UserSettingsFieldset;
 use Omeka\Settings\User as UserSettingsService;
+use Laminas\Authentication\AuthenticationService;
+use Doctrine\DBAL\Connection;
+use IsolatedSites\Listener\ModifyUserSettingsFormListener;
+use IsolatedSites\Listener\ModifyQueryListener;
+use IsolatedSites\Listener\ModifyItemSetQueryListener;
 
 return [
     'view_manager' => [
@@ -40,6 +44,20 @@ return [
                     $container->get('Omeka\EntityManager'),
                     $container->get(UserSettingsService::class),
                     $container->get('Omeka\AuthenticationService')
+                );
+            },
+            ModifyQueryListener::class => function ($container) {
+                return new ModifyQueryListener(
+                    $container->get('Omeka\AuthenticationService'),
+                    $container->get('Omeka\Settings\User'),
+                    $container->get('Omeka\Connection')
+                );
+            },
+            ModifyItemSetQueryListener::class => function ($services) {
+                return new ModifyItemSetQueryListener(
+                    $services->get('Omeka\AuthenticationService'),
+                    $services->get('Omeka\Settings\User'),
+                    $services->get('Omeka\Connection')
                 );
             },
         ],
