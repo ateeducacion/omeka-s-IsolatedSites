@@ -81,13 +81,15 @@ package:
 	@echo "Updating version to $(VERSION) in module.ini..."
 	$(SED_INPLACE) 's/^\([[:space:]]*version[[:space:]]*=[[:space:]]*\).*$$/\1"$(VERSION)"/' config/module.ini
 	@echo "Creating ZIP archive: IsolatedSites-$(VERSION).zip..."
-	composer archive --format=zip --file="IsolatedSites-$(VERSION)"
+	composer archive --format=zip --file="IsolatedSites-$(VERSION)-raw"
+	@echo "Repacking into proper structure..."
+	mkdir -p tmpzip/IsolatedSites && unzip -q IsolatedSites-$(VERSION)-raw.zip -d tmpzip/IsolatedSites && \
+	cd tmpzip && zip -qr ../IsolatedSites-$(VERSION).zip IsolatedSites && cd .. && rm -rf tmpzip IsolatedSites-$(VERSION)-raw.zip
 	@echo "Restoring version to 0.0.0 in module.ini..."
 	$(SED_INPLACE) 's/^\([[:space:]]*version[[:space:]]*=[[:space:]]*\).*$$/\1"0.0.0"/' config/module.ini
 
 # Generate .pot template from translate() and // @translate
 generate-pot:
-	echo "<?php translate(\"Translate module texts\"); ?>" > language/empty.php
 	@echo "Extracting strings using xgettext..."
 	find . -path ./vendor -prune -o \( -name '*.php' -o -name '*.phtml' \) -print \
 	| xargs xgettext \
@@ -100,7 +102,7 @@ generate-pot:
 	vendor/zerocrates/extract-tagged-strings/extract-tagged-strings.php > language/tagged.pot
 	@echo "Merging xgettext.pot and tagged.pot into template.pot..."
 	msgcat language/xgettext.pot language/tagged.pot --use-first -o language/template.pot
-	@rm -f language/xgettext.pot language/tagged.pot language/empty.php
+	@rm -f language/xgettext.pot language/tagged.pot
 	@echo "Generated language/template.pot"
 
 
