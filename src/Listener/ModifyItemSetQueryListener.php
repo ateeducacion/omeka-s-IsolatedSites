@@ -58,7 +58,7 @@ class ModifyItemSetQueryListener
             $queryBuilder->innerJoin(
                 "$alias.siteItemSets",
                 'sis'
-                )
+            )
                 ->innerJoin(
                     'sis.site',
                     'site'
