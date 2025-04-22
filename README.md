@@ -2,7 +2,8 @@
 
 
 ## Features
-- By default, sites where the logged in user has no role are filtered out from the admin browse page  
+- By default, items and item sets assigned to sites where the logged in user has no role are filtered out from the admin browse page
+- By default, resourses which do not belong to the user logged in are filtered out from the admin browse page
 - In Profiles->User Settings: "View all" checkbox allow users checked by admin user to view all the items in admin browse page.
 
 
