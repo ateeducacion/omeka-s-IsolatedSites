@@ -1,5 +1,4 @@
 <?php
-
 namespace IsolatedSitesTest\Listener;
 
 use IsolatedSites\Listener\ModifyQueryListener;
@@ -12,7 +11,7 @@ use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\TestCase;
 use Omeka\Entity\User;
 
-class ModifyQueryListenerTest extends TestCase
+class ModifyItemSetQueryListenerTest extends TestCase
 {
     private $authService;
     private $userSettings;
@@ -38,7 +37,7 @@ class ModifyQueryListenerTest extends TestCase
         $this->user->method('getRole')->willReturn('global_admin');
         $this->authService->method('getIdentity')->willReturn($this->user);
 
-        $listener = new ModifyQueryListener(
+        $listener = new ModifyItemSetQueryListener(
             $this->authService,
             $this->userSettings,
             $this->connection
@@ -51,20 +50,51 @@ class ModifyQueryListenerTest extends TestCase
         $listener($this->event);
     }
 
-    public function testNonLoggedUserBypassesFilter()
+    public function testRegularUserWithNoSitePermissions()
     {
         // Setup
-        $this->authService->method('getIdentity')->willReturn(null);
+        $userId = 1;
+        $siteIds = []; // Empty array to simulate no permissions
+        
+        $this->user->method('getRole')->willReturn('editor');
+        $this->user->method('getId')->willReturn($userId);
+        $this->authService->method('getIdentity')->willReturn($this->user);
 
-        $listener = new ModifyQueryListener(
+        $stmt = $this->createMock(\Doctrine\DBAL\Result::class);
+        $stmt->method('fetchFirstColumn')->willReturn($siteIds);
+
+        $this->connection->method('executeQuery')
+            ->willReturn($stmt);
+
+        $this->userSettings->method('get')
+            ->with('limit_to_granted_sites', 1)
+            ->willReturn(1);
+
+        $this->queryBuilder->method('getRootAliases')
+            ->willReturn(['root']);
+
+        $this->queryBuilder->expects($this->exactly(2))
+            ->method('innerJoin')
+            ->withConsecutive(
+                ['root.siteItemSets', 'sis'],
+                ['sis.site', 'site']
+            )
+            ->willReturn($this->queryBuilder);
+
+        $this->queryBuilder->expects($this->once())
+            ->method('andWhere')
+            ->with('site.id IN (:siteIds)')
+            ->willReturn($this->queryBuilder);
+
+        $this->event->method('getParam')
+            ->with('queryBuilder')
+            ->willReturn($this->queryBuilder);
+
+        $listener = new ModifyItemSetQueryListener(
             $this->authService,
             $this->userSettings,
             $this->connection
         );
-
-        // Event should not be modified
-        $this->event->expects($this->never())
-            ->method('getParam');
 
         $listener($this->event);
     }
@@ -92,9 +122,12 @@ class ModifyQueryListenerTest extends TestCase
         $this->queryBuilder->method('getRootAliases')
             ->willReturn(['root']);
 
-        $this->queryBuilder->expects($this->once())
+        $this->queryBuilder->expects($this->exactly(2))
             ->method('innerJoin')
-            ->with('root.sites', 'site')
+            ->withConsecutive(
+                ['root.siteItemSets', 'sis'],
+                ['sis.site', 'site']
+            )
             ->willReturn($this->queryBuilder);
 
         $this->queryBuilder->expects($this->once())
@@ -106,7 +139,7 @@ class ModifyQueryListenerTest extends TestCase
             ->with('queryBuilder')
             ->willReturn($this->queryBuilder);
 
-        $listener = new ModifyQueryListener(
+        $listener = new ModifyItemSetQueryListener(
             $this->authService,
             $this->userSettings,
             $this->connection

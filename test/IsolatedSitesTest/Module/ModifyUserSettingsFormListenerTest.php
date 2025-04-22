@@ -62,8 +62,7 @@ class ModifyUserSettingsFormListenerTest extends TestCase
         $this->auth->method('getIdentity')->willReturn($this->currentUser);
         $this->currentUser->method('getRole')->willReturn('global_admin');
         $this->currentUser->method('getId')->willReturn(1);
-
-        
+   
         $this->entityManager->method('find')
             ->willReturnCallback(function($class, $id) {
                 if ($class === User::class && $id === 1) {

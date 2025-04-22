@@ -6,6 +6,8 @@ namespace IsolatedSitesTest;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
+
+
 spl_autoload_register(function ($class) {
     $prefixes = [
         'Omeka\\' => __DIR__ . '/stubs/',
@@ -22,4 +24,7 @@ spl_autoload_register(function ($class) {
             }
         }
     }
+    
 });
+
+require_once __DIR__ . '/../Module.php';

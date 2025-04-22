@@ -39,6 +39,10 @@
         "laminas/laminas-permissions-acl": "*",
         "laminas/laminas-eventmanager": "*",
         "laminas/laminas-authentication": "*",
+        "laminas/laminas-modulemanager": "*",
+        "laminas/laminas-mvc": "*",
+        "laminas/laminas-view": "*",
+        "laminas/laminas-session": "*",
         "doctrine/orm": "^2.10"
 
     },

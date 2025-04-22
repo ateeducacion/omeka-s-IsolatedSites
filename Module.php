@@ -37,9 +37,11 @@ class Module extends AbstractModule
      *
      * @param ServiceLocatorInterface $serviceLocator
      */
-    public function install(ServiceLocatorInterface $serviceLocator)
+    public function install(ServiceLocatorInterface $serviceLocator, Messenger $messenger = null)
     {
-        $messenger = new Messenger();
+        if (!$messenger) {
+            $messenger = new Messenger();
+        }
         $message = new Message("IsolatedSites module installed.");
         $messenger->addSuccess($message);
     }
@@ -48,59 +50,61 @@ class Module extends AbstractModule
      *
      * @param ServiceLocatorInterface $serviceLocator
      */
-    public function uninstall(ServiceLocatorInterface $serviceLocator)
+    public function uninstall(ServiceLocatorInterface $serviceLocator, Messenger $messenger = null)
     {
-        $messenger = new Messenger();
+        if (!$messenger) {
+            $messenger = new Messenger();
+        }
         $message = new Message("IsolatedSites module uninstalled.");
-        $messenger->addWarning($message);
+        $messenger->addSuccess($message);
     }
 
     public function onBootstrap(\Laminas\Mvc\MvcEvent $event)
     {
 
-        $services = $event->getApplication()->getServiceManager();
-        $sharedEventManager = $services->get('SharedEventManager');
+        $this->serviceLocator = $event->getApplication()->getServiceManager();
+        $sharedEventManager = $this->serviceLocator->get('SharedEventManager');
 
-        $this->attachListeners($sharedEventManager, $services);
+        $this->attachListeners($sharedEventManager);
     }
     /**
      * Register the file validator service and renderers.
      *
      * @param SharedEventManagerInterface $sharedEventManager
      */
-    public function attachListeners(SharedEventManagerInterface $sharedEventManager, $services = null): void
+    public function attachListeners(SharedEventManagerInterface $sharedEventManager): void
     {
 
         $sharedEventManager->attach(
             \Omeka\Form\UserForm::class,
             'form.add_elements',
-            [$services->get(ModifyUserSettingsFormListener::class), '__invoke']
+            [$this->serviceLocator->get(ModifyUserSettingsFormListener::class), '__invoke']
         );
 
         $sharedEventManager->attach(
             \Omeka\Form\UserForm::class,
             'form.add_input_filters',
-            [$services->get(ModifyUserSettingsFormListener::class), 'addInputFilters']
+            [$this->serviceLocator->get(ModifyUserSettingsFormListener::class), 'addInputFilters']
         );
 
         $sharedEventManager->attach(
             \Omeka\Form\UserForm::class,
             'form.submit',
-            [$services->get(ModifyUserSettingsFormListener::class), 'handleUserSettings']
+            [$this->serviceLocator->get(ModifyUserSettingsFormListener::class), 'handleUserSettings']
         );
 
         //Listener to limit item view
         $sharedEventManager->attach(
             'Omeka\Api\Adapter\ItemAdapter',
             'api.search.query',
-            [$services->get(ModifyQueryListener::class), '__invoke']
+            [$this->serviceLocator->get(ModifyQueryListener::class), '__invoke']
         );
 
         // For limit the view of ItemSets
         $sharedEventManager->attach(
             'Omeka\Api\Adapter\ItemSetAdapter',
             'api.search.query',
-            [$services->get(ModifyItemSetQueryListener::class), '__invoke']
+            [$this->serviceLocator->get(ModifyItemSetQueryListener::class), '__invoke']
         );
     }
     /**
@@ -111,7 +115,7 @@ class Module extends AbstractModule
      */
     public function getConfigForm(PhpRenderer $renderer)
     {
-        $services = $this->getServiceLocator();
+        $services = $this->serviceLocator;
         $config = $services->get('Config');
         $settings = $services->get('Omeka\Settings');
         
@@ -135,7 +139,7 @@ class Module extends AbstractModule
         $services = $this->getServiceLocator();
         $settings = $services->get('Omeka\Settings');
         
-        $config = $controller->params()->fromPost();
+        $config = $controller->plugin('params')->fromPost();
 
         $value = isset($config['activate_IsolatedSites_cb']) ? $config['activate_IsolatedSites_cb'] : 0;
 
