@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ThreeDViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-21 08:50+0100\n"
+"POT-Creation-Date: 2025-04-24 07:51+0100\n"
 "PO-Revision-Date: 2025-04-23 13:37+0100\n"
 "Last-Translator: Área de Tecnología Educativa <ate@gobiernodecanarias.org>\n"
 "Language-Team: Spanish\n"
@@ -13,362 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.4.2\n"
 
-#: test/stubs/Site/BlockLayout/BlockGroup.php:30
-msgid "Drag blocks here to group."
-msgstr ""
-
-#: test/stubs/Site/BlockLayout/Fallback.php:44
-#, fuzzy
-msgid "This layout is invalid."
-msgstr "Tipo de publicación inválido."
-
-#: test/stubs/Site/BlockLayout/LineBreak.php:46
-#, fuzzy
-msgid "Break type"
-msgstr "Tipo de publicación inválido."
-
-#: test/stubs/Site/BlockLayout/ListOfPages.php:61
-#, fuzzy
-msgid "Add pages"
-msgstr "Añadir Nuevo"
-
-#: test/stubs/Site/BlockLayout/Media.php:45
-msgid "Options"
-msgstr ""
-
-#: test/stubs/Site/BlockLayout/Oembed.php:113
-msgid "Advanced"
-msgstr ""
-
-#: test/stubs/Site/BlockLayout/TableOfContents.php:38
-msgid "Depth"
-msgstr ""
-
-#: test/stubs/Site/BlockLayout/TableOfContents.php:39
-msgid "Number of child page levels to display"
-msgstr ""
-
-#: test/stubs/Site/Navigation/Link/Page.php:37
-msgid "[Missing Page]"
-msgstr ""
-
-#: test/stubs/Site/Navigation/Translator.php:60
-msgid "Home"
-msgstr ""
-
-#: test/stubs/Stdlib/Mailer.php:174
-#, php-format
-msgid ""
-"Greetings, %1$s!\n"
-"\n"
-"It seems you have forgotten your password for %5$s at %2$s\n"
-"\n"
-"To reset your password, click this link:\n"
-"%3$s\n"
-"\n"
-"Your reset link will expire on %4$s."
-msgstr ""
-
-#: test/stubs/Stdlib/Mailer.php:196
-#, php-format
-msgid "Reset your password for %s"
-msgstr ""
-
-#: test/stubs/Stdlib/Mailer.php:212
-#, php-format
-msgid ""
-"Greetings!\n"
-"\n"
-"A user has been created for you on %5$s at %1$s\n"
-"\n"
-"Your username is your email: %2$s\n"
-"\n"
-"Click this link to set a password and begin using Omeka S:\n"
-"%3$s\n"
-"\n"
-"Your activation link will expire on %4$s. If you have not completed the user "
-"activation process by the time the link expires, you will need to request "
-"another activation email from your site administrator."
-msgstr ""
-
-#: test/stubs/Stdlib/Mailer.php:236
-#, fuzzy, php-format
-msgid "User activation for %s"
-msgstr "en %s"
-
-#: test/stubs/Stdlib/Oembed.php:44
-#, php-format
-msgid "oEmbed: URL is not allowed %s"
-msgstr ""
-
-#: test/stubs/Stdlib/Oembed.php:57
-#, php-format
-msgid "oEmbed: links cannot be found at %s"
-msgstr ""
-
-#: test/stubs/Stdlib/Oembed.php:69
-#, php-format
-msgid "oEmbed: response cannot be decoded to JSON %s"
-msgstr ""
-
-#: test/stubs/Stdlib/Oembed.php:114
-#, php-format
-msgid "oEmbed: URL is invalid: %s"
-msgstr ""
-
-#: test/stubs/Stdlib/Oembed.php:123
-#, php-format
-msgid "oEmbed: URL is unreadable at %s: %s (%s)"
-msgstr ""
-
-#: test/stubs/View/Helper/BlockShowTitleSelect.php:33
-#, fuzzy
-msgid "Show attachment title"
-msgstr "El título es obligatorio."
-
-#: test/stubs/View/Helper/CancelButton.php:14
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: test/stubs/View/Helper/PasswordRequirements.php:40
-#, php-format
-msgid "Password must be a minimum of %s characters in length."
-msgstr ""
-
-#: test/stubs/View/Helper/PasswordRequirements.php:46
-#, php-format
-msgid "Password must contain at least %s lowercase characters."
-msgstr ""
-
-#: test/stubs/View/Helper/PasswordRequirements.php:52
-#, php-format
-msgid "Password must contain at least %s uppercase characters."
-msgstr ""
-
-#: test/stubs/View/Helper/PasswordRequirements.php:58
-#, php-format
-msgid "Password must contain at least %s numbers."
-msgstr ""
-
-#: test/stubs/View/Helper/PasswordRequirements.php:67
-#, php-format
-msgid "Password must contain at least %1$s symbols: <code>%2$s</code>"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:32
-msgid "is exactly"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:33
-msgid "is not exactly"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:34
-msgid "contains"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:35
-msgid "does not contain"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:36
-msgid "starts with"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:37
-#, fuzzy
-msgid "does not start with"
-msgstr "Inicio"
-
-#: test/stubs/View/Helper/SearchFilters.php:38
-msgid "ends with"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:39
-#, fuzzy
-msgid "does not end with"
-msgstr "Fecha de Fin:"
-
-#: test/stubs/View/Helper/SearchFilters.php:40
-#, fuzzy
-msgid "is resource with ID"
-msgstr "ID de Tarjeta de Nextcloud"
-
-#: test/stubs/View/Helper/SearchFilters.php:41
-#, fuzzy
-msgid "is not resource with ID"
-msgstr "No estás autorizado para acceder a este recurso."
-
-#: test/stubs/View/Helper/SearchFilters.php:42
-#, fuzzy
-msgid "has any value"
-msgstr "La tarea se ha archivado correctamente."
-
-#: test/stubs/View/Helper/SearchFilters.php:43
-msgid "has no values"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:51
-#, fuzzy
-msgid "Search full-text"
-msgstr "Diseño Completo"
-
-#: test/stubs/View/Helper/SearchFilters.php:64
-#, fuzzy
-msgid "Class"
-msgstr "Archivado <span class=\"count\">(%s)</span>"
-
-#: test/stubs/View/Helper/SearchFilters.php:68
-#, fuzzy
-msgid "Unknown class"
-msgstr "Usuario Desconocido"
-
-#: test/stubs/View/Helper/SearchFilters.php:106
-#, fuzzy
-msgid "Unknown property"
-msgstr "Usuario Desconocido"
-
-#: test/stubs/View/Helper/SearchFilters.php:109
-msgid "[Any property]"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:117
-msgid "OR"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:119
-msgid "AND"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:128
-msgid "Search"
-msgstr "Buscar"
-
-#: test/stubs/View/Helper/SearchFilters.php:141
-msgid "Template"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:145
-#, fuzzy
-msgid "Unknown template"
-msgstr "Usuario Desconocido"
-
-#: test/stubs/View/Helper/SearchFilters.php:160
-msgid "In item set"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:164
-#: test/stubs/View/Helper/SearchFilters.php:182
-#, fuzzy
-msgid "Unknown item set"
-msgstr "Usuario Desconocido"
-
-#: test/stubs/View/Helper/SearchFilters.php:178
-msgid "Not in item set"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:190
-#, fuzzy
-msgid "User"
-msgstr "Usuario y Fecha de la Tarea"
-
-#: test/stubs/View/Helper/SearchFilters.php:194
-msgid "Unknown user"
-msgstr "Usuario desconocido"
-
-#: test/stubs/View/Helper/SearchFilters.php:200
-#, fuzzy
-msgid "Site"
-msgstr "Está ejecutando este sitio con datos de demostración."
-
-#: test/stubs/View/Helper/SearchFilters.php:204
-#: test/stubs/View/Helper/SearchUserFilters.php:74
-#, fuzzy
-msgid "Unknown site"
-msgstr "Usuario Desconocido"
-
-#: test/stubs/View/Helper/SearchFilters.php:210
-msgid "Visibility"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:211
-msgid "Public"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:211
-msgid "Not public"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:215
-msgid "Media presence"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:216
-msgid "Has media"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:216
-msgid "Has no media"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchFilters.php:220
-#, fuzzy
-msgid "ID"
-msgstr "ID de Tarjeta de Nextcloud"
-
-#: test/stubs/View/Helper/SearchUserFilters.php:49
-#, fuzzy
-msgid "Email"
-msgstr "Permitir notificaciones por correo electrónico"
-
-#: test/stubs/View/Helper/SearchUserFilters.php:54
-msgid "Name"
-msgstr "Nombre"
-
-#: test/stubs/View/Helper/SearchUserFilters.php:59
-msgid "Role"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchUserFilters.php:61
-#, fuzzy
-msgid "Unknown role"
-msgstr "Usuario Desconocido"
-
-#: test/stubs/View/Helper/SearchUserFilters.php:65
-#, fuzzy
-msgid "Is active"
-msgstr "Tareas Activas"
-
-#: test/stubs/View/Helper/SearchUserFilters.php:66
-#, fuzzy
-msgid "yes"
-msgstr "Sí"
-
-#: test/stubs/View/Helper/SearchUserFilters.php:66
-msgid "no"
-msgstr ""
-
-#: test/stubs/View/Helper/SearchUserFilters.php:70
-#, fuzzy
-msgid "Has permission in site"
-msgstr "La tarea se ha archivado correctamente."
-
-#: test/stubs/View/Helper/UploadLimit.php:26
-#, php-format
-msgid "The maximum upload size is %s MB."
-msgstr ""
-
-#: test/stubs/View/Helper/UserBar.php:120
-#: test/stubs/View/Helper/UserBar.php:166
-msgid "Edit"
-msgstr "Editar"
-
-#: test/stubs/View/Helper/UserBar.php:159
-#, fuzzy
-msgid "View"
-msgstr "Ver Tarea"
-
-#: src\Listener\ModifyUserSettingsFormListener.php:76
+#: src/Listener/ModifyUserSettingsFormListener.php:76
 msgid "Limit item list to granted sites only"
 msgstr "Limitar la lista de recursos digitales sólo a los sitios autorizados"
 
@@ -404,2622 +49,1028 @@ msgstr ""
 msgid "view are limited to those owned by the user"
 msgstr "se limitan a los que son propiedad del usuario"
 
-#: test\stubs\Api\Adapter\AbstractResourceEntityAdapter.php:214
-#, php-format
-msgid "The \"%1$s\" resource template requires a \"%2$s\" value"
-msgstr ""
-
-#: test\stubs\Api\Adapter\ItemAdapter.php:158
-msgid "Item sets must be an array"
-msgstr ""
-
-#: test\stubs\Api\Adapter\ItemAdapter.php:164
 #, fuzzy
-msgid "Media must be an array"
-msgstr "El tablero es obligatorio y debe ser un número entero positivo."
+#~ msgid "Media must be an array"
+#~ msgstr "El tablero es obligatorio y debe ser un número entero positivo."
 
-#: test\stubs\Api\Adapter\MediaAdapter.php:118
-msgid "Media must set an ingester."
-msgstr ""
-
-#: test\stubs\Api\Adapter\MediaAdapter.php:142
-msgid "Media must set a valid ingester."
-msgstr ""
-
-#: test\stubs\Api\Adapter\MediaAdapter.php:187
-msgid "Media must belong to an item."
-msgstr ""
-
-#: test\stubs\Api\Adapter\PropertyAdapter.php:189
-#: test\stubs\Api\Adapter\ResourceClassAdapter.php:178
 #, fuzzy
-msgid "The local name cannot be empty."
-msgstr "Dejar vacío para generación automática desde el nombre"
+#~ msgid "The local name cannot be empty."
+#~ msgstr "Dejar vacío para generación automática desde el nombre"
 
-#: test\stubs\Api\Adapter\PropertyAdapter.php:194
-#: test\stubs\Api\Adapter\ResourceClassAdapter.php:183
-#: test\stubs\Api\Adapter\ResourceTemplateAdapter.php:99
-#: test\stubs\Api\Adapter\VocabularyAdapter.php:225
 #, fuzzy
-msgid "The label cannot be empty."
-msgstr "Editar Etiqueta"
+#~ msgid "The label cannot be empty."
+#~ msgstr "Editar Etiqueta"
 
-#: test\stubs\Api\Adapter\PropertyAdapter.php:207
-#: test\stubs\Api\Adapter\ResourceClassAdapter.php:196
-#: test\stubs\Api\Adapter\VocabularyAdapter.php:233
-#: test\stubs\Api\Adapter\VocabularyAdapter.php:246
-#, php-format
-msgid "The local name \"%s\" is already taken."
-msgstr ""
-
-#: test\stubs\Api\Adapter\PropertyAdapter.php:213
-#: test\stubs\Api\Adapter\ResourceClassAdapter.php:202
 #, fuzzy
-msgid "A vocabulary must be set."
-msgstr "El tablero es obligatorio y debe ser un número entero positivo."
+#~ msgid "A vocabulary must be set."
+#~ msgstr "El tablero es obligatorio y debe ser un número entero positivo."
 
-#: test\stubs\Api\Adapter\ResourceTemplateAdapter.php:84
-#, php-format
-msgid "Attempting to add duplicate property with ID %s"
-msgstr ""
-
-#: test\stubs\Api\Adapter\ResourceTemplateAdapter.php:102
 #, fuzzy
-msgid "The label is already taken."
-msgstr "Esta combinación de usuario y fecha ya existe."
+#~ msgid "The label is already taken."
+#~ msgstr "Esta combinación de usuario y fecha ya existe."
 
-#: test\stubs\Api\Adapter\SiteAdapter.php:260
-msgid "A site must have a title."
-msgstr ""
-
-#: test\stubs\Api\Adapter\SiteAdapter.php:264
-#: test\stubs\Api\Adapter\SitePageAdapter.php:174
 #, fuzzy
-msgid "The slug cannot be empty."
-msgstr "Slug"
+#~ msgid "The slug cannot be empty."
+#~ msgstr "Slug"
 
-#: test\stubs\Api\Adapter\SiteAdapter.php:267
-#: test\stubs\Api\Adapter\SitePageAdapter.php:177
-msgid "A slug can only contain letters, numbers, underscores, and hyphens."
-msgstr ""
-
-#: test\stubs\Api\Adapter\SiteAdapter.php:271
-#: test\stubs\Api\Adapter\SitePageAdapter.php:185
-#, php-format
-msgid "The slug \"%s\" is already taken."
-msgstr ""
-
-#: test\stubs\Api\Adapter\SiteAdapter.php:277
-msgid "A site must have a theme."
-msgstr ""
-
-#: test\stubs\Api\Adapter\SiteAdapter.php:282
-msgid "A site must have item pool data."
-msgstr ""
-
-#: test\stubs\Api\Adapter\SiteAdapter.php:287
-msgid "A homepage must belong to its parent site."
-msgstr ""
-
-#: test\stubs\Api\Adapter\SiteAdapter.php:363
-msgid "Invalid navigation: navigation must be an array"
-msgstr ""
-
-#: test\stubs\Api\Adapter\SiteAdapter.php:372
-msgid "Invalid navigation: link missing type"
-msgstr ""
-
-#: test\stubs\Api\Adapter\SiteAdapter.php:376
-msgid "Invalid navigation: link missing data"
-msgstr ""
-
-#: test\stubs\Api\Adapter\SiteAdapter.php:380
-msgid "Invalid navigation: invalid link data"
-msgstr ""
-
-#: test\stubs\Api\Adapter\SiteAdapter.php:385
-msgid "Invalid navigation: page links must be unique"
-msgstr ""
-
-#: test\stubs\Api\Adapter\SiteAdapter.php:392
-msgid "Invalid navigation: links must be an array"
-msgstr ""
-
-#: test\stubs\Api\Adapter\SitePageAdapter.php:164
-msgid "A page must belong to a site."
-msgstr ""
-
-#: test\stubs\Api\Adapter\SitePageAdapter.php:169
 #, fuzzy
-msgid "A page must have a title."
-msgstr "No tienes permiso para ver esta página."
+#~ msgid "A page must have a title."
+#~ msgstr "No tienes permiso para ver esta página."
 
-#: test\stubs\Api\Adapter\SitePageAdapter.php:232
-msgid "All blocks must have a layout."
-msgstr ""
-
-#: test\stubs\Api\Adapter\SitePageAdapter.php:243
-msgid "Block data must not be a scalar value."
-msgstr ""
-
-#: test\stubs\Api\Adapter\UserAdapter.php:132
 #, fuzzy
-msgid "The name cannot be empty."
-msgstr "Nombre"
+#~ msgid "The name cannot be empty."
+#~ msgstr "Nombre"
 
-#: test\stubs\Api\Adapter\UserAdapter.php:142
-#, php-format
-msgid "The email %s is already taken."
-msgstr ""
-
-#: test\stubs\Api\Adapter\UserAdapter.php:148
-msgid "Users must have a role."
-msgstr ""
-
-#: test\stubs\Api\Adapter\UserAdapter.php:181
-#, php-format
-msgid "The current user #%d was removed from the batch process."
-msgstr ""
-
-#: test\stubs\Api\Adapter\VocabularyAdapter.php:68
 #, fuzzy
-msgid "Classes must be an array"
-msgstr "El tablero es obligatorio y debe ser un número entero positivo."
+#~ msgid "Classes must be an array"
+#~ msgstr "El tablero es obligatorio y debe ser un número entero positivo."
 
-#: test\stubs\Api\Adapter\VocabularyAdapter.php:74
 #, fuzzy
-msgid "Properties must be an array"
-msgstr "El tablero es obligatorio y debe ser un número entero positivo."
+#~ msgid "Properties must be an array"
+#~ msgstr "El tablero es obligatorio y debe ser un número entero positivo."
 
-#: test\stubs\Api\Adapter\VocabularyAdapter.php:193
-msgid "The namespace URI cannot be empty."
-msgstr ""
-
-#: test\stubs\Api\Adapter\VocabularyAdapter.php:197
-#, php-format
-msgid "The namespace URI \"%s\" is already taken."
-msgstr ""
-
-#: test\stubs\Api\Adapter\VocabularyAdapter.php:205
-msgid "The prefix cannot be empty."
-msgstr ""
-
-#: test\stubs\Api\Adapter\VocabularyAdapter.php:209
-#, php-format
-msgid "The prefix \"%s\" is already taken."
-msgstr ""
-
-#: test\stubs\Api\Adapter\VocabularyAdapter.php:216
 #, fuzzy, php-format
-msgid "The prefix \"%s\" is reserved."
-msgstr "Completado por %s"
+#~ msgid "The prefix \"%s\" is reserved."
+#~ msgstr "Completado por %s"
 
-#: test\stubs\Api\Representation\JobRepresentation.php:12
-msgid "Starting"
-msgstr ""
+#~ msgid "In Progress"
+#~ msgstr "En Progreso"
 
-#: test\stubs\Api\Representation\JobRepresentation.php:13
-msgid "Stopping"
-msgstr ""
-
-#: test\stubs\Api\Representation\JobRepresentation.php:14
-msgid "In Progress"
-msgstr "En Progreso"
-
-#: test\stubs\Api\Representation\JobRepresentation.php:15
 #, fuzzy
-msgid "Completed"
-msgstr "Completado por %s"
+#~ msgid "Completed"
+#~ msgstr "Completado por %s"
 
-#: test\stubs\Api\Representation\JobRepresentation.php:16
-msgid "Stopped"
-msgstr ""
+#~ msgid "Error"
+#~ msgstr "Error"
 
-#: test\stubs\Api\Representation\JobRepresentation.php:17
-msgid "Error"
-msgstr "Error"
+#~ msgid "Created"
+#~ msgstr "Creado"
 
-#: test\stubs\ColumnType\Created.php:11
-#: test\stubs\Site\BlockLayout\PageDateTime.php:33
-msgid "Created"
-msgstr "Creado"
-
-#: test\stubs\ColumnType\IsOpen.php:11
-msgid "Is open"
-msgstr ""
-
-#: test\stubs\ColumnType\IsPublic.php:11
-msgid "Is public"
-msgstr ""
-
-#: test\stubs\ColumnType\MediaType.php:11
 #, fuzzy
-msgid "Media type"
-msgstr "Tipo de publicación inválido."
+#~ msgid "ID"
+#~ msgstr "ID de Tarjeta de Nextcloud"
 
-#: test\stubs\ColumnType\Modified.php:11
-#: test\stubs\Site\BlockLayout\PageDateTime.php:34
-msgid "Modified"
-msgstr ""
-
-#: test\stubs\ColumnType\Owner.php:11 test\stubs\Form\ResourceForm.php:91
-msgid "Owner"
-msgstr ""
-
-#: test\stubs\ColumnType\ResourceClass.php:11
-#: test\stubs\Site\ResourcePageBlockLayout\ResourceClass.php:11
 #, fuzzy
-msgid "Resource class"
-msgstr "No estás autorizado para acceder a este recurso."
+#~ msgid "Media type"
+#~ msgstr "Tipo de publicación inválido."
 
-#: test\stubs\ColumnType\ResourceTemplate.php:11
-#: test\stubs\Form\ResourceForm.php:42
 #, fuzzy
-msgid "Resource template"
-msgstr "No estás autorizado para acceder a este recurso."
+#~ msgid "Resource class"
+#~ msgstr "No estás autorizado para acceder a este recurso."
 
-#: test\stubs\ColumnType\Size.php:11
-#: test\stubs\Form\BlockLayoutDataForm.php:260
 #, fuzzy
-msgid "Size"
-msgstr "Tamaño de la Barra Lateral"
+#~ msgid "Resource template"
+#~ msgstr "No estás autorizado para acceder a este recurso."
 
-#: test\stubs\ColumnType\Slug.php:11 test\stubs\Form\SiteForm.php:31
-#: test\stubs\Form\SitePageForm.php:30
 #, fuzzy
-msgid "URL slug"
-msgstr "Slug"
+#~ msgid "Size"
+#~ msgstr "Tamaño de la Barra Lateral"
 
-#: test\stubs\ColumnType\Theme.php:19
 #, fuzzy
-msgid "Theme"
-msgstr "Modo de Tema"
+#~ msgid "URL slug"
+#~ msgstr "Slug"
 
-#: test\stubs\ColumnType\Unknown.php:22
 #, fuzzy
-msgid "[Unknown]"
-msgstr "Usuario Desconocido"
+#~ msgid "Theme"
+#~ msgstr "Modo de Tema"
 
-#: test\stubs\ColumnType\Unknown.php:40
 #, fuzzy
-msgid "Unknown column data"
-msgstr "Usuario Desconocido"
+#~ msgid "[Unknown]"
+#~ msgstr "Usuario Desconocido"
 
-#: test\stubs\ColumnType\Value.php:25
-msgid "Value"
-msgstr ""
-
-#: test\stubs\ColumnType\Value.php:43
-msgid "Property"
-msgstr ""
-
-#: test\stubs\ColumnType\Value.php:56
 #, fuzzy
-msgid "Max values"
-msgstr "Máxima Prioridad"
+#~ msgid "Unknown column data"
+#~ msgstr "Usuario Desconocido"
 
-#: test\stubs\ColumnType\Value.php:57
-msgid ""
-"Enter the maximum number of values to display. Set to blank to display all "
-"values."
-msgstr ""
-
-#: test\stubs\Controller\Admin\AssetController.php:93
 #, fuzzy
-msgid "Asset successfully updated"
-msgstr "Tablero actualizado correctamente"
+#~ msgid "Max values"
+#~ msgstr "Máxima Prioridad"
 
-#: test\stubs\Controller\Admin\AssetController.php:124
-msgid "asset"
-msgstr ""
-
-#: test\stubs\Controller\Admin\AssetController.php:137
 #, fuzzy
-msgid "Asset successfully deleted"
-msgstr "Tablero eliminado correctamente"
+#~ msgid "Asset successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
 
-#: test\stubs\Controller\Admin\ItemController.php:48
-#: test\stubs\Controller\Admin\ItemController.php:53
-#: test\stubs\Controller\Admin\ItemSetController.php:94
-#: test\stubs\Controller\Admin\ItemSetController.php:99
-#: test\stubs\Controller\Admin\MediaController.php:33
-#: test\stubs\Controller\Admin\MediaController.php:38
-#: test\stubs\Controller\Admin\UserController.php:45
-#: test\stubs\Controller\Admin\UserController.php:50
 #, fuzzy
-msgid "Confirm Delete"
-msgstr "Eliminar"
+#~ msgid "Asset successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
 
-#: test\stubs\Controller\Admin\ItemController.php:121
 #, fuzzy
-msgid "item"
-msgstr "Limitar la lista de artículos sólo a los sitios autorizados"
+#~ msgid "Confirm Delete"
+#~ msgstr "Eliminar"
 
-#: test\stubs\Controller\Admin\ItemController.php:137
 #, fuzzy
-msgid "Item successfully deleted"
-msgstr "Tablero eliminado correctamente"
+#~ msgid "item"
+#~ msgstr "Limitar la lista de artículos sólo a los sitios autorizados"
 
-#: test\stubs\Controller\Admin\ItemController.php:159
-msgid "You must select at least one item to batch delete."
-msgstr ""
-
-#: test\stubs\Controller\Admin\ItemController.php:168
 #, fuzzy
-msgid "Items successfully deleted"
-msgstr "Tablero eliminado correctamente"
+#~ msgid "Item successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
 
-#: test\stubs\Controller\Admin\ItemController.php:201
-msgid "Deleting items. This may take a while."
-msgstr ""
+#, fuzzy
+#~ msgid "Items successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
 
-#: test\stubs\Controller\Admin\ItemController.php:225
 #, fuzzy, php-format
-msgid "Item successfully created. %s"
-msgstr "Tablero creado correctamente"
+#~ msgid "Item successfully created. %s"
+#~ msgstr "Tablero creado correctamente"
 
-#: test\stubs\Controller\Admin\ItemController.php:264
 #, fuzzy
-msgid "Item successfully updated"
-msgstr "Tablero actualizado correctamente"
+#~ msgid "Item successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
 
-#: test\stubs\Controller\Admin\ItemController.php:292
-msgid "You must select at least one item to batch edit."
-msgstr ""
-
-#: test\stubs\Controller\Admin\ItemController.php:316
 #, fuzzy
-msgid "Items successfully edited"
-msgstr "Tablero actualizado correctamente"
+#~ msgid "Items successfully edited"
+#~ msgstr "Tablero actualizado correctamente"
 
-#: test\stubs\Controller\Admin\ItemController.php:379
-msgid "Editing items. This may take a while."
-msgstr ""
-
-#: test\stubs\Controller\Admin\ItemSetController.php:32
-#, php-format
-msgid "Item set successfully created. %s"
-msgstr ""
-
-#: test\stubs\Controller\Admin\ItemSetController.php:70
 #, fuzzy
-msgid "Item set successfully updated"
-msgstr "Tablero actualizado correctamente"
+#~ msgid "Item set successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
 
-#: test\stubs\Controller\Admin\ItemSetController.php:165
-msgid "item set"
-msgstr ""
-
-#: test\stubs\Controller\Admin\ItemSetController.php:180
 #, fuzzy
-msgid "Item set successfully deleted"
-msgstr "Tablero eliminado correctamente"
+#~ msgid "Item set successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
 
-#: test\stubs\Controller\Admin\ItemSetController.php:202
-msgid "You must select at least one item set to batch delete."
-msgstr ""
-
-#: test\stubs\Controller\Admin\ItemSetController.php:211
 #, fuzzy
-msgid "Item sets successfully deleted"
-msgstr "Tablero eliminado correctamente"
+#~ msgid "Item sets successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
 
-#: test\stubs\Controller\Admin\ItemSetController.php:244
-msgid "Deleting item sets. This may take a while."
-msgstr ""
-
-#: test\stubs\Controller\Admin\ItemSetController.php:263
-msgid "You must select at least one item set to batch edit."
-msgstr ""
-
-#: test\stubs\Controller\Admin\ItemSetController.php:287
-msgid "Item sets successfully edited"
-msgstr ""
-
-#: test\stubs\Controller\Admin\ItemSetController.php:350
-msgid "Editing item sets. This may take a while."
-msgstr ""
-
-#: test\stubs\Controller\Admin\JobController.php:27
-msgid "Attempt Stop"
-msgstr ""
-
-#: test\stubs\Controller\Admin\JobController.php:56
-msgid "Attempting to stop the job."
-msgstr ""
-
-#: test\stubs\Controller\Admin\JobController.php:58
 #, fuzzy
-msgid "The job could not be stopped."
-msgstr "No se pudo cargar el artículo"
+#~ msgid "The job could not be stopped."
+#~ msgstr "No se pudo cargar el artículo"
 
-#: test\stubs\Controller\Admin\MediaController.php:66
 #, fuzzy
-msgid "Media successfully updated"
-msgstr "Tablero actualizado correctamente"
+#~ msgid "Media successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
 
-#: test\stubs\Controller\Admin\MediaController.php:117
-msgid "media"
-msgstr ""
-
-#: test\stubs\Controller\Admin\MediaController.php:132
-#: test\stubs\Controller\Admin\MediaController.php:176
 #, fuzzy
-msgid "Media successfully deleted"
-msgstr "Tablero eliminado correctamente"
+#~ msgid "Media successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
 
-#: test\stubs\Controller\Admin\MediaController.php:167
-msgid "You must select at least one media to batch delete."
-msgstr ""
-
-#: test\stubs\Controller\Admin\MediaController.php:209
-msgid "Deleting media. This may take a while."
-msgstr ""
-
-#: test\stubs\Controller\Admin\MediaController.php:228
-msgid "You must select at least one media to batch edit."
-msgstr ""
-
-#: test\stubs\Controller\Admin\MediaController.php:252
 #, fuzzy
-msgid "Media successfully edited"
-msgstr "Tablero actualizado correctamente"
+#~ msgid "Media successfully edited"
+#~ msgstr "Tablero actualizado correctamente"
 
-#: test\stubs\Controller\Admin\MediaController.php:315
-msgid "Editing media. This may take a while."
-msgstr ""
-
-#: test\stubs\Controller\Admin\ModuleController.php:124
 #, fuzzy
-msgid "The module was successfully installed"
-msgstr "Traducir textos de módulos"
+#~ msgid "The module was successfully installed"
+#~ msgstr "Traducir textos de módulos"
 
-#: test\stubs\Controller\Admin\ModuleController.php:152
-msgid "Confirm uninstall"
-msgstr ""
-
-#: test\stubs\Controller\Admin\ModuleController.php:181
 #, fuzzy
-msgid "The module was successfully uninstalled"
-msgstr "Traducir textos de módulos"
+#~ msgid "The module was successfully uninstalled"
+#~ msgstr "Traducir textos de módulos"
 
-#: test\stubs\Controller\Admin\ModuleController.php:207
 #, fuzzy
-msgid "The module was successfully activated"
-msgstr "Traducir textos de módulos"
+#~ msgid "The module was successfully activated"
+#~ msgstr "Traducir textos de módulos"
 
-#: test\stubs\Controller\Admin\ModuleController.php:233
 #, fuzzy
-msgid "The module was successfully deactivated"
-msgstr "Traducir textos de módulos"
+#~ msgid "The module was successfully deactivated"
+#~ msgstr "Traducir textos de módulos"
 
-#: test\stubs\Controller\Admin\ModuleController.php:259
 #, fuzzy
-msgid "The module was successfully upgraded"
-msgstr "Traducir textos de módulos"
+#~ msgid "The module was successfully upgraded"
+#~ msgstr "Traducir textos de módulos"
 
-#: test\stubs\Controller\Admin\ModuleController.php:289
 #, fuzzy
-msgid "The module was successfully configured"
-msgstr "Traducir textos de módulos"
+#~ msgid "The module was successfully configured"
+#~ msgstr "Traducir textos de módulos"
 
-#: test\stubs\Controller\Admin\ModuleController.php:292
 #, fuzzy
-msgid "There was a problem during configuration"
-msgstr "Configuración de Decker"
+#~ msgid "There was a problem during configuration"
+#~ msgstr "Configuración de Decker"
 
-#: test\stubs\Controller\Admin\ResourceTemplateController.php:444
 #, fuzzy
-msgid "resource template"
-msgstr "No estás autorizado para acceder a este recurso."
+#~ msgid "resource template"
+#~ msgstr "No estás autorizado para acceder a este recurso."
 
-#: test\stubs\Controller\Admin\ResourceTemplateController.php:457
 #, fuzzy
-msgid "Resource template successfully deleted"
-msgstr "Tablero eliminado correctamente"
+#~ msgid "Resource template successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
 
-#: test\stubs\Controller\Admin\ResourceTemplateController.php:459
-#: test\stubs\Controller\Admin\ResourceTemplateController.php:462
-msgid "Resource template could not be deleted"
-msgstr ""
-
-#: test\stubs\Controller\Admin\ResourceTemplateController.php:519
 #, fuzzy
-msgid "Resource template successfully updated"
-msgstr "Tablero actualizado correctamente"
+#~ msgid "Resource template successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
 
-#: test\stubs\Controller\Admin\ResourceTemplateController.php:522
-#, php-format
-msgid "Resource template successfully created. %s"
-msgstr ""
-
-#: test\stubs\Controller\Admin\SettingController.php:27
 #, fuzzy
-msgid "Settings successfully updated"
-msgstr "Tablero actualizado correctamente"
+#~ msgid "Settings successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
 
-#: test\stubs\Controller\Admin\UserController.php:118
-msgid "Unable to send user activation email."
-msgstr ""
-
-#: test\stubs\Controller\Admin\UserController.php:121
 #, fuzzy, php-format
-msgid "User successfully created. %s"
-msgstr "Tablero creado correctamente"
+#~ msgid "User successfully created. %s"
+#~ msgstr "Tablero creado correctamente"
 
-#: test\stubs\Controller\Admin\UserController.php:201
 #, fuzzy
-msgid "User successfully updated"
-msgstr "Tablero actualizado correctamente"
+#~ msgid "User successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
 
-#: test\stubs\Controller\Admin\UserController.php:216
-msgid "The current password entered was invalid"
-msgstr ""
-
-#: test\stubs\Controller\Admin\UserController.php:220
 #, fuzzy
-msgid "Password successfully changed"
-msgstr "La tarea se ha archivado correctamente."
+#~ msgid "Password successfully changed"
+#~ msgstr "La tarea se ha archivado correctamente."
 
-#: test\stubs\Controller\Admin\UserController.php:248
 #, fuzzy
-msgid "Key(s) successfully deleted"
-msgstr "Tablero eliminado correctamente"
+#~ msgid "Key(s) successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
 
-#: test\stubs\Controller\Admin\UserController.php:256
-#, php-format
-msgid ""
-"API key successfully created.<br><br>Here is your key ID and credential for "
-"access to the API. WARNING: \"key_credential\" will be unretrievable after "
-"you navigate away from this page.<br><br><code>key_identity=%1$s</"
-"code><br><code>key_credential=%2$s</code>"
-msgstr ""
-
-#: test\stubs\Controller\Admin\UserController.php:283
 #, fuzzy
-msgid "user"
-msgstr "Usuario y Fecha de la Tarea"
+#~ msgid "user"
+#~ msgstr "Usuario y Fecha de la Tarea"
 
-#: test\stubs\Controller\Admin\UserController.php:296
 #, fuzzy
-msgid "User successfully deleted"
-msgstr "Tablero eliminado correctamente"
-
-#: test\stubs\Controller\Admin\UserController.php:318
-msgid "You must select at least one user to batch delete."
-msgstr ""
+#~ msgid "User successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
 
-#: test\stubs\Controller\Admin\UserController.php:325
-msgid "You can’t delete yourself."
-msgstr ""
-
-#: test\stubs\Controller\Admin\UserController.php:334
 #, fuzzy
-msgid "Users successfully deleted"
-msgstr "Tablero eliminado correctamente"
-
-#: test\stubs\Controller\Admin\UserController.php:367
-msgid "Deleting users. This may take a while."
-msgstr ""
-
-#: test\stubs\Controller\Admin\UserController.php:386
-msgid "You must select at least one user to batch edit."
-msgstr ""
-
-#: test\stubs\Controller\Admin\UserController.php:393
-msgid "For security reasons, you can’t batch edit yourself."
-msgstr ""
+#~ msgid "Users successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
 
-#: test\stubs\Controller\Admin\UserController.php:414
 #, fuzzy
-msgid "Users successfully edited"
-msgstr "Usuarios Ignorados"
+#~ msgid "Users successfully edited"
+#~ msgstr "Usuarios Ignorados"
 
-#: test\stubs\Controller\Admin\UserController.php:474
-msgid "Editing users. This may take a while."
-msgstr ""
-
-#: test\stubs\Controller\Admin\VocabularyController.php:58
-msgid "vocabulary"
-msgstr ""
-
-#: test\stubs\Controller\Admin\VocabularyController.php:92
-#, php-format
-msgid "Vocabulary successfully imported. %s"
-msgstr ""
-
-#: test\stubs\Controller\Admin\VocabularyController.php:162
 #, fuzzy
-msgid "Vocabulary successfully updated"
-msgstr "Tablero actualizado correctamente"
+#~ msgid "Vocabulary successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
 
-#: test\stubs\Controller\Admin\VocabularyController.php:167
-msgid "Please review these changes before you accept them."
-msgstr ""
-
-#: test\stubs\Controller\Admin\VocabularyController.php:192
-msgid "Changes to the vocabulary successfully made"
-msgstr ""
-
-#: test\stubs\Controller\Admin\VocabularyController.php:208
 #, fuzzy
-msgid "Vocabulary successfully deleted"
-msgstr "Tablero eliminado correctamente"
-
-#: test\stubs\Controller\InstallController.php:52
-msgid "Installation successful. Please log in."
-msgstr ""
-
-#: test\stubs\Controller\InstallController.php:56
-msgid "There were errors during installation."
-msgstr ""
+#~ msgid "Vocabulary successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
 
-#: test\stubs\Controller\LoginController.php:57
 #, fuzzy
-msgid "Successfully logged in"
-msgstr "Tablero actualizado correctamente"
+#~ msgid "Successfully logged in"
+#~ msgstr "Tablero actualizado correctamente"
 
-#: test\stubs\Controller\LoginController.php:69
 #, fuzzy
-msgid "Email or password is invalid"
-msgstr "Tipo de publicación inválido."
+#~ msgid "Email or password is invalid"
+#~ msgstr "Tipo de publicación inválido."
 
-#: test\stubs\Controller\LoginController.php:92
 #, fuzzy
-msgid "Successfully logged out"
-msgstr "La tarea se ha archivado correctamente."
+#~ msgid "Successfully logged out"
+#~ msgstr "La tarea se ha archivado correctamente."
 
-#: test\stubs\Controller\LoginController.php:108
-msgid "Invalid password creation key."
-msgstr ""
-
-#: test\stubs\Controller\LoginController.php:117
-msgid "Password creation key expired."
-msgstr ""
-
-#: test\stubs\Controller\LoginController.php:133
-msgid "Successfully created your password. Please log in."
-msgstr ""
-
-#: test\stubs\Controller\LoginController.php:136
-msgid "Password creation unsuccessful"
-msgstr ""
-
-#: test\stubs\Controller\LoginController.php:174
-msgid "Unable to send password reset email."
-msgstr ""
-
-#: test\stubs\Controller\LoginController.php:177
-msgid "Check your email for instructions on how to reset your password"
-msgstr ""
-
-#: test\stubs\Controller\LoginController.php:180
-msgid "Activation unsuccessful"
-msgstr ""
-
-#: test\stubs\Controller\MigrateController.php:40
-msgid "Migration successful"
-msgstr ""
-
-#: test\stubs\Controller\SiteAdmin\IndexController.php:79
 #, fuzzy
-msgid "Site successfully created"
-msgstr "Tablero creado correctamente"
+#~ msgid "Site successfully created"
+#~ msgstr "Tablero creado correctamente"
 
-#: test\stubs\Controller\SiteAdmin\IndexController.php:121
 #, fuzzy
-msgid "Site successfully updated"
-msgstr "Tablero actualizado correctamente"
+#~ msgid "Site successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
 
-#: test\stubs\Controller\SiteAdmin\IndexController.php:171
 #, fuzzy
-msgid "Page successfully created"
-msgstr "Tablero creado correctamente"
+#~ msgid "Page successfully created"
+#~ msgstr "Tablero creado correctamente"
 
-#: test\stubs\Controller\SiteAdmin\IndexController.php:200
-msgid "Homepage"
-msgstr ""
-
-#: test\stubs\Controller\SiteAdmin\IndexController.php:206
 #, fuzzy
-msgid "First page in navigation"
-msgstr "Navegación"
+#~ msgid "First page in navigation"
+#~ msgstr "Navegación"
 
-#: test\stubs\Controller\SiteAdmin\IndexController.php:222
 #, fuzzy
-msgid "Navigation successfully updated"
-msgstr "Tablero actualizado correctamente"
-
-#: test\stubs\Controller\SiteAdmin\IndexController.php:256
-msgid ""
-"Item assignment in progress. To see the new item count, refresh the page."
-msgstr ""
+#~ msgid "Navigation successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
 
-#: test\stubs\Controller\SiteAdmin\IndexController.php:260
 #, fuzzy
-msgid "Site resources successfully updated"
-msgstr "Tablero actualizado correctamente"
+#~ msgid "Site resources successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
 
-#: test\stubs\Controller\SiteAdmin\IndexController.php:308
 #, fuzzy
-msgid "User permissions successfully updated"
-msgstr "Tablero actualizado correctamente"
+#~ msgid "User permissions successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
 
-#: test\stubs\Controller\SiteAdmin\IndexController.php:345
 #, fuzzy
-msgid "Site theme successfully updated"
-msgstr "Tablero actualizado correctamente"
+#~ msgid "Site theme successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
 
-#: test\stubs\Controller\SiteAdmin\IndexController.php:420
 #, fuzzy
-msgid "Theme settings successfully updated"
-msgstr "Configuración del Tema"
+#~ msgid "Theme settings successfully updated"
+#~ msgstr "Configuración del Tema"
 
-#: test\stubs\Controller\SiteAdmin\IndexController.php:460
-msgid "Theme resource pages successfully updated"
-msgstr ""
-
-#: test\stubs\Controller\SiteAdmin\IndexController.php:483
 #, fuzzy
-msgid "Site successfully deleted"
-msgstr "Tablero eliminado correctamente"
+#~ msgid "Site successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
 
-#: test\stubs\Controller\SiteAdmin\IndexController.php:506
 #, fuzzy
-msgid "site"
-msgstr "Está ejecutando este sitio con datos de demostración."
+#~ msgid "site"
+#~ msgstr "Está ejecutando este sitio con datos de demostración."
 
-#: test\stubs\Controller\SiteAdmin\PageController.php:36
 #, fuzzy
-msgid "Page successfully updated"
-msgstr "Tablero actualizado correctamente"
+#~ msgid "Page successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
 
-#: test\stubs\Controller\SiteAdmin\PageController.php:125
 #, fuzzy
-msgid "page"
-msgstr "No tienes permiso para ver esta página."
+#~ msgid "page"
+#~ msgstr "No tienes permiso para ver esta página."
 
-#: test\stubs\Controller\SiteAdmin\PageController.php:142
 #, fuzzy
-msgid "Page successfully deleted"
-msgstr "Tablero eliminado correctamente"
-
-#: test\stubs\DataType\Literal.php:18
-msgid "Text"
-msgstr ""
+#~ msgid "Page successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
 
-#: test\stubs\DataType\Resource\AbstractResource.php:23
 #, fuzzy
-msgid "Resource"
-msgstr "No tienes permiso para acceder a este recurso."
+#~ msgid "Resource"
+#~ msgstr "No tienes permiso para acceder a este recurso."
 
-#: test\stubs\DataType\Resource\AbstractResource.php:77
-#, php-format
-msgid "Invalid value resource %s for type %s"
-msgstr ""
-
-#: test\stubs\DataType\Resource\All.php:15
 #, fuzzy
-msgid "All"
-msgstr "Borrar Todos los Datos"
+#~ msgid "All"
+#~ msgstr "Borrar Todos los Datos"
 
-#: test\stubs\DataType\Resource\Item.php:17
 #, fuzzy
-msgid "Item"
-msgstr "Limitar la lista de artículos sólo a los sitios autorizados"
-
-#: test\stubs\DataType\Resource\ItemSet.php:17
-msgid "Item Set"
-msgstr ""
+#~ msgid "Item"
+#~ msgstr "Limitar la lista de artículos sólo a los sitios autorizados"
 
-#: test\stubs\DataType\Resource\Media.php:17
-#: test\stubs\Site\BlockLayout\BrowsePreview.php:53
-#: test\stubs\View\Helper\UserBar.php:97
-msgid "Media"
-msgstr ""
-
-#: test\stubs\DataType\Uri.php:18
-msgid "URI"
-msgstr ""
-
-#: test\stubs\Entity\Job.php:23
-msgid "starting"
-msgstr ""
-
-#: test\stubs\Entity\Job.php:24
-msgid "stopping"
-msgstr ""
-
-#: test\stubs\Entity\Job.php:25
 #, fuzzy
-msgid "in_progress"
-msgstr "En Progreso"
+#~ msgid "in_progress"
+#~ msgstr "En Progreso"
 
-#: test\stubs\Entity\Job.php:26
 #, fuzzy
-msgid "completed"
-msgstr "Completado por %s"
-
-#: test\stubs\Entity\Job.php:27
-msgid "stopped"
-msgstr ""
+#~ msgid "completed"
+#~ msgstr "Completado por %s"
 
-#: test\stubs\Entity\Job.php:28
 #, fuzzy
-msgid "error"
-msgstr "Error"
-
-#: test\stubs\File\Downloader.php:73
-#, php-format
-msgid "Error downloading %1$s: %2$s"
-msgstr ""
-
-#: test\stubs\File\Downloader.php:87
-#, php-format
-msgid "Error downloading %1$s: %2$s %3$s"
-msgstr ""
+#~ msgid "error"
+#~ msgstr "Error"
 
-#: test\stubs\File\ThumbnailManager.php:102
 #, fuzzy
-msgid "Missing thumbnail configuration."
-msgstr "Configuración de Decker"
-
-#: test\stubs\File\ThumbnailManager.php:106
-msgid "Missing thumbnail types configuration."
-msgstr ""
-
-#: test\stubs\File\ThumbnailManager.php:109
-msgid "Missing the large, medium, or square thumbnail type configuration."
-msgstr ""
-
-#: test\stubs\File\ThumbnailManager.php:113
-msgid "Missing constraint for a thumbnail type configuration."
-msgstr ""
-
-#: test\stubs\File\ThumbnailManager.php:117
-msgid "Missing thumbnail fallbacks configuration."
-msgstr ""
-
-#: test\stubs\File\ThumbnailManager.php:120
-msgid "Missing default thumbnail fallback configuration."
-msgstr ""
-
-#: test\stubs\File\ThumbnailManager.php:123
-msgid "Missing thumbnail fallback configuration."
-msgstr ""
-
-#: test\stubs\File\ThumbnailManager.php:127
-msgid "Invalid thumbnail fallback configuration."
-msgstr ""
+#~ msgid "Missing thumbnail configuration."
+#~ msgstr "Configuración de Decker"
 
-#: test\stubs\File\Validator.php:65
-#, php-format
-msgid ""
-"Error validating \"%1$s\". Cannot store files with the media type \"%2$s\"."
-msgstr ""
+#~ msgid "Name"
+#~ msgstr "Nombre"
 
-#: test\stubs\File\Validator.php:79
-#, php-format
-msgid ""
-"Error validating \"%1$s\". Cannot store files with the resolved extension "
-"\"%2$s\"."
-msgstr ""
-
-#: test\stubs\Form\AssetEditForm.php:29
-msgid "Alt text"
-msgstr ""
-
-#: test\stubs\Form\BlockLayoutDataForm.php:45
-msgid "Alignment"
-msgstr ""
-
-#: test\stubs\Form\BlockLayoutDataForm.php:46
-msgid "Constraints"
-msgstr ""
-
-#: test\stubs\Form\BlockLayoutDataForm.php:47
-msgid "Padding"
-msgstr ""
-
-#: test\stubs\Form\BlockLayoutDataForm.php:48
-msgid "Background"
-msgstr ""
-
-#: test\stubs\Form\BlockLayoutDataForm.php:83
-msgid "Block alignment"
-msgstr ""
-
-#: test\stubs\Form\BlockLayoutDataForm.php:84
-#: test\stubs\Form\BlockLayoutDataForm.php:102
-#: test\stubs\Form\BlockLayoutDataForm.php:223
-#: test\stubs\Form\BlockLayoutDataForm.php:242
-#: test\stubs\Form\BlockLayoutDataForm.php:261
-#: test\stubs\Form\PageLayoutDataForm.php:30
-#: test\stubs\Service\Form\Element\LocaleSelectFactory.php:36
-#: test\stubs\View\Helper\Browse.php:205
-msgid "Default"
-msgstr "Predeterminado"
-
-#: test\stubs\Form\BlockLayoutDataForm.php:86
-#: test\stubs\Form\BlockLayoutDataForm.php:104
-#: test\stubs\Form\BlockLayoutDataForm.php:183
-#: test\stubs\Form\BlockLayoutDataForm.php:244
 #, fuzzy
-msgid "Left"
-msgstr ""
-"¡ADVERTENCIA: ¡Eliminar un tablero es peligroso! Todas las tareas asignadas "
-"a este tablero se quedarán sin tablero."
+#~ msgid "Class"
+#~ msgstr "Archivado <span class=\"count\">(%s)</span>"
 
-#: test\stubs\Form\BlockLayoutDataForm.php:87
-#: test\stubs\Form\BlockLayoutDataForm.php:106
-#: test\stubs\Form\BlockLayoutDataForm.php:157
-#: test\stubs\Form\BlockLayoutDataForm.php:246
-msgid "Right"
-msgstr ""
+#~ msgid "Default"
+#~ msgstr "Predeterminado"
 
-#: test\stubs\Form\BlockLayoutDataForm.php:88
-#: test\stubs\Form\BlockLayoutDataForm.php:105
-#: test\stubs\Form\BlockLayoutDataForm.php:226
-#: test\stubs\Form\BlockLayoutDataForm.php:245
 #, fuzzy
-msgid "Center"
-msgstr "Centro de formación"
-
-#: test\stubs\Form\BlockLayoutDataForm.php:101
-msgid "Text alignment"
-msgstr ""
-
-#: test\stubs\Form\BlockLayoutDataForm.php:107
-msgid "Justify"
-msgstr ""
+#~ msgid "Left"
+#~ msgstr ""
+#~ "¡ADVERTENCIA: ¡Eliminar un tablero es peligroso! Todas las tareas "
+#~ "asignadas a este tablero se quedarán sin tablero."
 
-#: test\stubs\Form\BlockLayoutDataForm.php:120
 #, fuzzy
-msgid "Maximum width"
-msgstr "MÁXIMA PRIORIDAD"
+#~ msgid "Center"
+#~ msgstr "Centro de formación"
 
-#: test\stubs\Form\BlockLayoutDataForm.php:132
 #, fuzzy
-msgid "Minimum height"
-msgstr "Perfil de Usuario Mínimo"
+#~ msgid "Maximum width"
+#~ msgstr "MÁXIMA PRIORIDAD"
 
-#: test\stubs\Form\BlockLayoutDataForm.php:144
-#: test\stubs\Form\BlockLayoutDataForm.php:225
 #, fuzzy
-msgid "Top"
-msgstr "Sin artículo principal (nivel superior)"
+#~ msgid "Minimum height"
+#~ msgstr "Perfil de Usuario Mínimo"
 
-#: test\stubs\Form\BlockLayoutDataForm.php:170
-#: test\stubs\Form\BlockLayoutDataForm.php:227
-msgid "Bottom"
-msgstr ""
-
-#: test\stubs\Form\BlockLayoutDataForm.php:196
-msgid "Color"
-msgstr "Color"
+#, fuzzy
+#~ msgid "Top"
+#~ msgstr "Sin artículo principal (nivel superior)"
 
-#: test\stubs\Form\BlockLayoutDataForm.php:209
-msgid "Image"
-msgstr ""
+#~ msgid "Color"
+#~ msgstr "Color"
 
-#: test\stubs\Form\BlockLayoutDataForm.php:222
 #, fuzzy
-msgid "Vertical anchor position"
-msgstr "Vertical"
+#~ msgid "Vertical anchor position"
+#~ msgstr "Vertical"
 
-#: test\stubs\Form\BlockLayoutDataForm.php:241
 #, fuzzy
-msgid "Horizontal anchor position"
-msgstr "Horizontal"
-
-#: test\stubs\Form\BlockLayoutDataForm.php:263
-msgid "Cover"
-msgstr ""
-
-#: test\stubs\Form\BlockLayoutDataForm.php:264
-msgid "Contain"
-msgstr ""
+#~ msgid "Horizontal anchor position"
+#~ msgstr "Horizontal"
 
-#: test\stubs\Form\ConfirmForm.php:17
 #, fuzzy
-msgid "Confirm"
-msgstr ""
-"Para confirmar la eliminación, por favor introduce el slug del término:"
+#~ msgid "Confirm"
+#~ msgstr ""
+#~ "Para confirmar la eliminación, por favor introduce el slug del término:"
 
-#: test\stubs\Form\Element\ColorPicker.php:10
-msgid "three- or six-digit hexadecimal color, or \"transparent\""
-msgstr ""
-
-#: test\stubs\Form\Element\ColorPicker.php:29
 #, fuzzy
-msgid "Invalid color format"
-msgstr "Editar el contenido en formato HTML"
-
-#: test\stubs\Form\Element\PasswordConfirm.php:72
-#: test\stubs\Form\LoginForm.php:26
-msgid "Password"
-msgstr ""
-
-#: test\stubs\Form\Element\PasswordConfirm.php:84
-msgid "Confirm password"
-msgstr ""
+#~ msgid "Invalid color format"
+#~ msgstr "Editar el contenido en formato HTML"
 
-#: test\stubs\Form\Element\PasswordConfirm.php:103
 #, fuzzy
-msgid "The password is invalid"
-msgstr "Tipo de publicación inválido."
+#~ msgid "The password is invalid"
+#~ msgstr "Tipo de publicación inválido."
 
-#: test\stubs\Form\Element\PasswordConfirm.php:118
-msgid "The passwords did not match"
-msgstr ""
-
-#: test\stubs\Form\Element\Recaptcha.php:99
-msgid "You must verify that you are human by completing the CAPTCHA."
-msgstr ""
-
-#: test\stubs\Form\Element\Recaptcha.php:108
-msgid "Could not verify that you are a human."
-msgstr ""
-
-#: test\stubs\Form\Element\RestoreTextarea.php:27
 #, fuzzy
-msgid "Restore"
-msgstr "Esta acción restaurará la tarea."
-
-#: test\stubs\Form\Initializer\Csrf.php:35
-msgid "Invalid or missing CSRF token"
-msgstr ""
+#~ msgid "Restore"
+#~ msgstr "Esta acción restaurará la tarea."
 
-#: test\stubs\Form\InstallationForm.php:19
 #, fuzzy
-msgid "Create the first user"
-msgstr "-- Seleccionar Usuario --"
+#~ msgid "Email"
+#~ msgstr "Permitir notificaciones por correo electrónico"
 
-#: test\stubs\Form\InstallationForm.php:26
-msgid "Settings"
-msgstr "Configuraciones"
+#, fuzzy
+#~ msgid "Create the first user"
+#~ msgstr "-- Seleccionar Usuario --"
 
-#: test\stubs\Form\InstallationForm.php:33
-msgid "Submit"
-msgstr ""
+#~ msgid "Settings"
+#~ msgstr "Configuraciones"
 
-#: test\stubs\Form\InstallationForm.php:52
 #, fuzzy
-msgid "Confirm email"
-msgstr "Permitir notificaciones por correo electrónico"
+#~ msgid "Confirm email"
+#~ msgstr "Permitir notificaciones por correo electrónico"
 
-#: test\stubs\Form\InstallationForm.php:63 test\stubs\Form\UserForm.php:87
 #, fuzzy
-msgid "Display name"
-msgstr "Nombre"
+#~ msgid "Display name"
+#~ msgstr "Nombre"
 
-#: test\stubs\Form\InstallationForm.php:80 test\stubs\Form\SettingForm.php:135
 #, fuzzy
-msgid "Installation title"
-msgstr "Título"
+#~ msgid "Installation title"
+#~ msgstr "Título"
 
-#: test\stubs\Form\InstallationForm.php:98 test\stubs\Form\SettingForm.php:151
 #, fuzzy
-msgid "Time zone"
-msgstr "Hora de Fin:"
-
-#: test\stubs\Form\InstallationForm.php:112 test\stubs\Form\SettingForm.php:166
-#: test\stubs\Form\SiteSettingsForm.php:149 test\stubs\Form\UserForm.php:141
-msgid "Locale"
-msgstr ""
-
-#: test\stubs\Form\InstallationForm.php:128
-msgid "The emails did not match"
-msgstr ""
-
-#: test\stubs\Form\LoginForm.php:37
-msgid "Log in"
-msgstr ""
-
-#: test\stubs\Form\ModuleStateChangeForm.php:37
-msgid "Install"
-msgstr ""
-
-#: test\stubs\Form\ModuleStateChangeForm.php:46
-msgid "Activate"
-msgstr ""
-
-#: test\stubs\Form\ModuleStateChangeForm.php:55
-msgid "Deactivate"
-msgstr ""
+#~ msgid "Time zone"
+#~ msgstr "Hora de Fin:"
 
-#: test\stubs\Form\ModuleStateChangeForm.php:64
-msgid "Upgrade"
-msgstr ""
-
-#: test\stubs\Form\ResourceBatchUpdateForm.php:37
-msgid "Set visibility"
-msgstr ""
-
-#: test\stubs\Form\ResourceBatchUpdateForm.php:41
-#: test\stubs\Form\ResourceBatchUpdateForm.php:58
-#: test\stubs\Form\ResourceBatchUpdateForm.php:78
-#: test\stubs\Form\ResourceBatchUpdateForm.php:101
-#: test\stubs\Form\ResourceBatchUpdateForm.php:115
-#: test\stubs\Form\UserBatchUpdateForm.php:31
-#: test\stubs\Form\UserBatchUpdateForm.php:43
-#: test\stubs\Form\UserBatchUpdateForm.php:60
-#: test\stubs\Form\UserBatchUpdateForm.php:77
-#: test\stubs\Form\UserBatchUpdateForm.php:92
-msgid "[No change]"
-msgstr ""
-
-#: test\stubs\Form\ResourceBatchUpdateForm.php:54
-msgid "Set openness"
-msgstr ""
-
-#: test\stubs\Form\ResourceBatchUpdateForm.php:56
-msgid "Open"
-msgstr ""
-
-#: test\stubs\Form\ResourceBatchUpdateForm.php:57
-msgid "Not open"
-msgstr ""
-
-#: test\stubs\Form\ResourceBatchUpdateForm.php:73
-#: test\stubs\Form\ResourceForm.php:38 test\stubs\Form\UserForm.php:156
 #, fuzzy
-msgid "Select a template"
-msgstr "-- Seleccionar Usuario --"
-
-#: test\stubs\Form\ResourceBatchUpdateForm.php:77
-msgid "Set template"
-msgstr ""
+#~ msgid "Select a template"
+#~ msgstr "-- Seleccionar Usuario --"
 
-#: test\stubs\Form\ResourceBatchUpdateForm.php:79
-msgid "[Unset template]"
-msgstr ""
-
-#: test\stubs\Form\ResourceBatchUpdateForm.php:96
-#: test\stubs\Form\ResourceForm.php:63
 #, fuzzy
-msgid "Select a class"
-msgstr "-- Seleccionar Usuario --"
-
-#: test\stubs\Form\ResourceBatchUpdateForm.php:99
-msgid "Set class"
-msgstr ""
-
-#: test\stubs\Form\ResourceBatchUpdateForm.php:100
-msgid "[Unset class]"
-msgstr ""
+#~ msgid "Select a class"
+#~ msgstr "-- Seleccionar Usuario --"
 
-#: test\stubs\Form\ResourceBatchUpdateForm.php:114
-msgid "Set owner"
-msgstr ""
-
-#: test\stubs\Form\ResourceBatchUpdateForm.php:136
-#: test\stubs\Form\ResourceBatchUpdateForm.php:150
-#: test\stubs\Form\UserForm.php:179
 #, fuzzy
-msgid "Select item sets"
-msgstr "-- Seleccionar Usuario --"
+#~ msgid "Select item sets"
+#~ msgstr "-- Seleccionar Usuario --"
 
-#: test\stubs\Form\ResourceBatchUpdateForm.php:139
 #, fuzzy
-msgid "Add to item sets"
-msgstr "Agregar Relación"
-
-#: test\stubs\Form\ResourceBatchUpdateForm.php:153
-msgid "Remove from item sets"
-msgstr ""
+#~ msgid "Add to item sets"
+#~ msgstr "Agregar Relación"
 
-#: test\stubs\Form\ResourceBatchUpdateForm.php:164
-#: test\stubs\Form\ResourceBatchUpdateForm.php:178
-#: test\stubs\Form\UserForm.php:195
 #, fuzzy
-msgid "Select sites"
-msgstr "-- Seleccionar Usuario --"
+#~ msgid "Select sites"
+#~ msgstr "-- Seleccionar Usuario --"
 
-#: test\stubs\Form\ResourceBatchUpdateForm.php:167
 #, fuzzy
-msgid "Add to sites"
-msgstr "Agregar Relación"
+#~ msgid "Add to sites"
+#~ msgstr "Agregar Relación"
 
-#: test\stubs\Form\ResourceBatchUpdateForm.php:181
 #, fuzzy
-msgid "Remove from sites"
-msgstr "Eliminar"
+#~ msgid "Remove from sites"
+#~ msgstr "Eliminar"
 
-#: test\stubs\Form\ResourceBatchUpdateForm.php:191
 #, fuzzy
-msgid "Clear language"
-msgstr "Borrar Todos los Datos"
+#~ msgid "Clear language"
+#~ msgstr "Borrar Todos los Datos"
 
-#: test\stubs\Form\ResourceBatchUpdateForm.php:202
-msgid "Set language"
-msgstr ""
-
-#: test\stubs\Form\ResourceBatchUpdateForm.php:215
 #, fuzzy
-msgid "Select properties"
-msgstr "-- Seleccionar Usuario --"
+#~ msgid "Select properties"
+#~ msgstr "-- Seleccionar Usuario --"
 
-#: test\stubs\Form\ResourceBatchUpdateForm.php:218
 #, fuzzy
-msgid "Clear property values"
-msgstr "Borrar Todos los Datos"
-
-#: test\stubs\Form\ResourceForm.php:43
-msgid "A pre-defined template for resource creation."
-msgstr ""
+#~ msgid "Clear property values"
+#~ msgstr "Borrar Todos los Datos"
 
-#: test\stubs\Form\ResourceForm.php:67
-msgid ""
-"A type for the resource. Different types have different default properties "
-"attached to them."
-msgstr ""
+#~ msgid "Label"
+#~ msgstr "Etiqueta"
 
-#: test\stubs\Form\ResourceForm.php:76 test\stubs\Form\SiteForm.php:53
-#: test\stubs\Site\BlockLayout\BrowsePreview.php:95
-msgid "Thumbnail"
-msgstr ""
-
-#: test\stubs\Form\ResourceForm.php:77
-msgid ""
-"Omeka S automatically selects a thumbnail from among attached media for a "
-"resource. You may use an image of your choice instead by choosing an asset "
-"here."
-msgstr ""
-
-#: test\stubs\Form\ResourceForm.php:92
-msgid "[No owner]"
-msgstr ""
-
-#: test\stubs\Form\ResourceTemplateForm.php:15
-#: test\stubs\Form\ResourceTemplateReviewImportForm.php:21
-#: test\stubs\Form\VocabularyForm.php:49
-msgid "Label"
-msgstr "Etiqueta"
-
-#: test\stubs\Form\ResourceTemplateForm.php:27
-msgid "Suggested class"
-msgstr ""
-
-#: test\stubs\Form\ResourceTemplateImportForm.php:14
 #, fuzzy
-msgid "Resource template file"
-msgstr "Exportar archivo .ics"
+#~ msgid "Resource template file"
+#~ msgstr "Exportar archivo .ics"
 
-#: test\stubs\Form\SettingForm.php:107 test\stubs\Form\SiteSettingsForm.php:31
-msgid "General"
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:108
 #, fuzzy
-msgid "Display"
-msgstr ""
-"Ingrese el mensaje de alerta para mostrar como un banner. Soporta HTML. Deje "
-"vacío para ocultar."
-
-#: test\stubs\Form\SettingForm.php:109
-msgid "Editing"
-msgstr ""
+#~ msgid "Display"
+#~ msgstr ""
+#~ "Ingrese el mensaje de alerta para mostrar como un banner. Soporta HTML. "
+#~ "Deje vacío para ocultar."
 
-#: test\stubs\Form\SettingForm.php:111
-msgid "Security"
-msgstr ""
+#~ msgid "Search"
+#~ msgstr "Buscar"
 
-#: test\stubs\Form\SettingForm.php:121
 #, fuzzy
-msgid "Administrator email"
-msgstr "Notificaciones por correo electrónico"
+#~ msgid "Administrator email"
+#~ msgstr "Notificaciones por correo electrónico"
 
-#: test\stubs\Form\SettingForm.php:167 test\stubs\Form\UserForm.php:142
-msgid "Global locale/language code for all interfaces."
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:181
 #, fuzzy
-msgid "Enable version notifications"
-msgstr "Versión"
-
-#: test\stubs\Form\SettingForm.php:182
-msgid ""
-"Enable notifications when a new version of Omeka S, modules, or themes are "
-"available."
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:195
-msgid "Disable JSON-LD @reverse"
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:196
-msgid "Disable JSON-LD reverse properties in the API output for resources."
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:209 test\stubs\Form\SiteSettingsForm.php:117
-msgid "Favicon"
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:224 test\stubs\Form\SiteSettingsForm.php:205
-msgid "Results per page"
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:225
-msgid "The maximum number of results per page on browse pages."
-msgstr ""
+#~ msgid "Enable version notifications"
+#~ msgstr "Versión"
 
-#: test\stubs\Form\SettingForm.php:239 test\stubs\Form\SiteSettingsForm.php:284
 #, fuzzy
-msgid "Property label information"
-msgstr "Información"
+#~ msgid "Property label information"
+#~ msgstr "Información"
 
-#: test\stubs\Form\SettingForm.php:240 test\stubs\Form\SiteSettingsForm.php:285
-msgid "The additional information that accompanies labels on resource pages."
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:242 test\stubs\Form\SiteSettingsForm.php:287
-#: test\stubs\Site\BlockLayout\PageDateTime.php:44
-#: test\stubs\Site\BlockLayout\PageDateTime.php:58
-msgid "None"
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:243 test\stubs\Form\SiteSettingsForm.php:288
 #, fuzzy
-msgid "Show Vocabulary"
-msgstr "Mostrar Todos los Tableros"
+#~ msgid "Show Vocabulary"
+#~ msgstr "Mostrar Todos los Tableros"
 
-#: test\stubs\Form\SettingForm.php:244 test\stubs\Form\SiteSettingsForm.php:289
 #, fuzzy
-msgid "Show Term"
-msgstr "Editar Término"
+#~ msgid "Show Term"
+#~ msgstr "Editar Término"
 
-#: test\stubs\Form\SettingForm.php:258
 #, fuzzy
-msgid "Default site"
-msgstr "Predeterminado"
-
-#: test\stubs\Form\SettingForm.php:259
-msgid ""
-"Select which site should appear when users go to the front page of the "
-"installation."
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:264
-msgid "No default (show index of sites)"
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:276 test\stubs\Form\SiteSettingsForm.php:104
-msgid "Disable JSON-LD embed"
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:277 test\stubs\Form\SiteSettingsForm.php:105
-msgid ""
-"By default, Omeka embeds JSON-LD in resource browse and show pages for the "
-"purpose of machine-readable metadata discovery. Check this to disable "
-"embedding."
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:292
-msgid "Default content visibility to Private"
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:293
-msgid ""
-"If checked, all items, item sets and sites newly created will have their "
-"visibility set to private by default."
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:306
-msgid "Suggested languages for values"
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:307
-msgid ""
-"List of languages to facilitate filling of the values in the resource form. "
-"List them one by line. The label displayed for a language may be appended "
-"with a \"=\"."
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:321
-msgid "Media alt text property"
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:322
-msgid "Media property to use as alt text if no alt text is explicitly set."
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:323
-msgid "[None]"
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:340
-msgid "Index full-text search"
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:355
-msgid "Use HTMLPurifier"
-msgstr ""
+#~ msgid "Default site"
+#~ msgstr "Predeterminado"
 
-#: test\stubs\Form\SettingForm.php:356
-msgid "Clean up user-entered HTML."
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:369
 #, fuzzy
-msgid "Disable file validation"
-msgstr "Por favor, seleccione un archivo para subir."
-
-#: test\stubs\Form\SettingForm.php:370
-msgid "Check this to disable file media type and extension validation."
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:379
-msgid "Allowed media types"
-msgstr ""
+#~ msgid "Disable file validation"
+#~ msgstr "Por favor, seleccione un archivo para subir."
 
-#: test\stubs\Form\SettingForm.php:380
-msgid "A comma-separated list of allowed media types for file uploads."
-msgstr ""
-
-#: test\stubs\Form\SettingForm.php:393
 #, fuzzy
-msgid "Allowed file extensions"
-msgstr "Por favor, seleccione un archivo para subir."
-
-#: test\stubs\Form\SettingForm.php:394
-msgid "A comma-separated list of allowed file extensions for file uploads."
-msgstr ""
+#~ msgid "Allowed file extensions"
+#~ msgstr "Por favor, seleccione un archivo para subir."
 
-#: test\stubs\Form\SettingForm.php:410
 #, fuzzy
-msgid "reCAPTCHA site key"
-msgstr "Clave Compartida"
+#~ msgid "reCAPTCHA site key"
+#~ msgstr "Clave Compartida"
 
-#: test\stubs\Form\SettingForm.php:422
 #, fuzzy
-msgid "reCAPTCHA secret key"
-msgstr "Clave Compartida"
-
-#: test\stubs\Form\SiteForm.php:20 test\stubs\Form\SitePageForm.php:19
-#: test\stubs\View\Helper\Media.php:68
-msgid "Title"
-msgstr "Título"
-
-#: test\stubs\Form\SiteForm.php:42
-msgid "Summary"
-msgstr ""
+#~ msgid "reCAPTCHA secret key"
+#~ msgstr "Clave Compartida"
 
-#: test\stubs\Form\SiteForm.php:54
-msgid "Choose or upload a thumbnail to display with site."
-msgstr ""
+#~ msgid "Title"
+#~ msgstr "Título"
 
-#: test\stubs\Form\SitePageForm.php:42
 #, fuzzy
-msgid "Add to navigation"
-msgstr "Navegación"
+#~ msgid "Add to navigation"
+#~ msgstr "Navegación"
 
-#: test\stubs\Form\SiteResourcesForm.php:15
 #, fuzzy
-msgid "Manage current items"
-msgstr "Mis tareas por Estado"
+#~ msgid "Manage current items"
+#~ msgstr "Mis tareas por Estado"
 
-#: test\stubs\Form\SiteResourcesForm.php:17
 #, fuzzy
-msgid "Do nothing"
-msgstr "Por Hacer"
+#~ msgid "Do nothing"
+#~ msgstr "Por Hacer"
 
-#: test\stubs\Form\SiteResourcesForm.php:18
-msgid "Add - keep existing items and assign items from a new search query"
-msgstr ""
-
-#: test\stubs\Form\SiteResourcesForm.php:19
-msgid "Replace - unassign all items and assign items from a new search query"
-msgstr ""
-
-#: test\stubs\Form\SiteResourcesForm.php:20
-msgid "Remove - unassign items from a new search query"
-msgstr ""
-
-#: test\stubs\Form\SiteResourcesForm.php:21
-msgid "Remove all - unassign all items"
-msgstr ""
-
-#: test\stubs\Form\SiteResourcesForm.php:36
-#: test\stubs\Site\BlockLayout\BrowsePreview.php:64
 #, fuzzy
-msgid "Search query"
-msgstr "Buscar..."
-
-#: test\stubs\Form\SiteSettingsForm.php:32
-msgid "Language"
-msgstr ""
+#~ msgid "Search query"
+#~ msgstr "Buscar..."
 
-#: test\stubs\Form\SiteSettingsForm.php:33
-#: test\stubs\Site\Navigation\Link\Browse.php:20
-msgid "Browse"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:34
 #, fuzzy
-msgid "Show"
-msgstr "Mostrar Todos los Tableros"
-
-#: test\stubs\Form\SiteSettingsForm.php:45
-msgid "Auto-assign new items"
-msgstr ""
+#~ msgid "Show"
+#~ msgstr "Mostrar Todos los Tableros"
 
-#: test\stubs\Form\SiteSettingsForm.php:46
-msgid ""
-"Select this if you want new items to be automatically assigned to this site. "
-"Note that item owners may unassign their items at any time."
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:58
 #, fuzzy
-msgid "Attachment link type"
-msgstr "Tipo de publicación inválido."
-
-#: test\stubs\Form\SiteSettingsForm.php:60
-msgid "Item page"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:61
-msgid "Media page"
-msgstr ""
+#~ msgid "Attachment link type"
+#~ msgstr "Tipo de publicación inválido."
 
-#: test\stubs\Form\SiteSettingsForm.php:62
 #, fuzzy
-msgid "Direct link to file"
-msgstr "Exportar archivo .ics"
+#~ msgid "Direct link to file"
+#~ msgstr "Exportar archivo .ics"
 
-#: test\stubs\Form\SiteSettingsForm.php:75
 #, fuzzy
-msgid "Show page pagination"
-msgstr "Mostrar Todos los Tableros"
-
-#: test\stubs\Form\SiteSettingsForm.php:76
-msgid ""
-"Show pagination that helps users follow a linear narrative through a site."
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:88
-msgid "Show user bar on public views"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:90
-msgid "Never"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:91
-msgid "When logged in"
-msgstr ""
+#~ msgid "Show page pagination"
+#~ msgstr "Mostrar Todos los Tableros"
 
-#: test\stubs\Form\SiteSettingsForm.php:92
-msgid "Always"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:129
-msgid "Page subnavigation display"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:130
-msgid "Hide on leaf pages (default)"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:132
 #, fuzzy
-msgid "Hide on all pages"
-msgstr "Todas las Acciones"
+#~ msgid "Hide on all pages"
+#~ msgstr "Todas las Acciones"
 
-#: test\stubs\Form\SiteSettingsForm.php:133
 #, fuzzy
-msgid "Show on all pages"
-msgstr "Mostrar Todos los Tableros"
+#~ msgid "Show on all pages"
+#~ msgstr "Mostrar Todos los Tableros"
 
-#: test\stubs\Form\SiteSettingsForm.php:150
-msgid ""
-"Locale/language code for this site. Leave blank to use the global locale "
-"setting."
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:164
-msgid "Filter values based on site locale"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:165
-msgid ""
-"Show only values matching the site language setting and values without "
-"locale ID."
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:178
 #, fuzzy
-msgid "Show language labels for values"
-msgstr "Mostrar Todas las Etiquetas"
-
-#: test\stubs\Form\SiteSettingsForm.php:179
-msgid "Show a label indicating the language of each value on show pages."
-msgstr ""
+#~ msgid "Show language labels for values"
+#~ msgstr "Mostrar Todas las Etiquetas"
 
-#: test\stubs\Form\SiteSettingsForm.php:193
-msgid "Restrict browse to attached items"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:206
-msgid ""
-"The maximum number of results per page on browse pages. Leave blank to use "
-"the global setting."
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:212
-msgid "Use global setting"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:221
-msgid "Browse heading property"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:222
-msgid ""
-"Use this property for the heading of each resource on a browse page. Keep "
-"unselected to use the default title property of each resource."
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:230
-#: test\stubs\Form\SiteSettingsForm.php:248
 #, fuzzy
-msgid "Select a property"
-msgstr "-- Seleccionar Usuario --"
-
-#: test\stubs\Form\SiteSettingsForm.php:239
-msgid "Browse body property"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:240
-msgid ""
-"Use this property for the body of each resource on a browse page. Keep "
-"unselected to use the default description property of each resource."
-msgstr ""
+#~ msgid "Select a property"
+#~ msgstr "-- Seleccionar Usuario --"
 
-#: test\stubs\Form\SiteSettingsForm.php:256 test\stubs\Form\UserForm.php:262
-msgid "Item browse defaults"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:271
 #, fuzzy
-msgid "Show attached pages"
-msgstr "Mostrar Barra Lateral Completa"
-
-#: test\stubs\Form\SiteSettingsForm.php:272
-msgid ""
-"Show site pages to which an item is attached on the public item show page."
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:302
-msgid "Value annotations"
-msgstr ""
+#~ msgid "Show attached pages"
+#~ msgstr "Mostrar Barra Lateral Completa"
 
-#: test\stubs\Form\SiteSettingsForm.php:303
-msgid "Hide value annotations"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:305
-msgid "Show value annotations (collapsed)"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:306
-msgid "Show value annotations (expanded)"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:319
 #, fuzzy
-msgid "Exclude resources not in site"
-msgstr "Está ejecutando este sitio con datos de demostración."
-
-#: test\stubs\Form\SiteSettingsForm.php:320
-msgid "Exclude resources that are not assigned to this site."
-msgstr ""
+#~ msgid "Exclude resources not in site"
+#~ msgstr "Está ejecutando este sitio con datos de demostración."
 
-#: test\stubs\Form\SiteSettingsForm.php:332
-msgid "Embed media on item pages (legacy)"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:346
 #, fuzzy
-msgid "Search type"
-msgstr "Tipo de publicación inválido."
+#~ msgid "Search type"
+#~ msgstr "Tipo de publicación inválido."
 
-#: test\stubs\Form\SiteSettingsForm.php:347
-msgid "Select the type of search the main search field will perform"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:349
 #, fuzzy
-msgid "This site"
-msgstr "Está ejecutando este sitio con datos de demostración."
+#~ msgid "This site"
+#~ msgstr "Está ejecutando este sitio con datos de demostración."
 
-#: test\stubs\Form\SiteSettingsForm.php:350
 #, fuzzy
-msgid "All sites"
-msgstr "Todas las Acciones"
-
-#: test\stubs\Form\SiteSettingsForm.php:360
-#: test\stubs\Site\ResourcePageBlockLayout\SitePages.php:11
-msgid "Site pages"
-msgstr ""
+#~ msgid "All sites"
+#~ msgstr "Todas las Acciones"
 
-#: test\stubs\Form\SiteSettingsForm.php:361
-#: test\stubs\Site\BlockLayout\BrowsePreview.php:51
-#: test\stubs\View\Helper\UserBar.php:95
 #, fuzzy
-msgid "Items"
-msgstr ""
-"Si esta opción está seleccionada, los elementos y conjuntos de elementos "
-"mostrados en la vista de administrador se limitan a los asignados a los "
-"sitios en los que el usuario tiene permisos"
+#~ msgid "Items"
+#~ msgstr ""
+#~ "Si esta opción está seleccionada, los elementos y conjuntos de elementos "
+#~ "mostrados en la vista de administrador se limitan a los asignados a los "
+#~ "sitios en los que el usuario tiene permisos"
 
-#: test\stubs\Form\SiteSettingsForm.php:362
-#: test\stubs\Site\BlockLayout\BrowsePreview.php:52
-#: test\stubs\Site\ResourcePageBlockLayout\ItemSets.php:11
-#: test\stubs\View\Helper\UserBar.php:96
-msgid "Item sets"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:369
 #, fuzzy
-msgid "Search resources"
-msgstr "Buscar..."
-
-#: test\stubs\Form\SiteSettingsForm.php:370
-msgid ""
-"Customize which types of resources will be searchable in the main search "
-"field."
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:385
-msgid "Advanced search vocabulary members"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:386
-msgid "Limit the search options for property and class"
-msgstr ""
+#~ msgid "Search resources"
+#~ msgstr "Buscar..."
 
-#: test\stubs\Form\SiteSettingsForm.php:387
 #, fuzzy
-msgid "All vocabulary members"
-msgstr "Borrar Todos los Datos"
+#~ msgid "All vocabulary members"
+#~ msgstr "Borrar Todos los Datos"
 
-#: test\stubs\Form\SiteSettingsForm.php:389
 #, fuzzy
-msgid "Used by resources in this site"
-msgstr "Está ejecutando este sitio con datos de demostración."
+#~ msgid "Used by resources in this site"
+#~ msgstr "Está ejecutando este sitio con datos de demostración."
 
-#: test\stubs\Form\SiteSettingsForm.php:390
-msgid "Used by any resource in the installation"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:404
-msgid "Templates"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:405
-msgid "Select which templates to apply to the advanced search form."
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:410
 #, fuzzy
-msgid "Select templates"
-msgstr "Seleccionar etiquetas..."
+#~ msgid "Select templates"
+#~ msgstr "Seleccionar etiquetas..."
 
-#: test\stubs\Form\SiteSettingsForm.php:419
-msgid "Restrict to templates"
-msgstr ""
-
-#: test\stubs\Form\SiteSettingsForm.php:420
-msgid "Restrict search results to resources of the selected templates."
-msgstr ""
-
-#: test\stubs\Form\UserBatchUpdateForm.php:27 test\stubs\Form\UserForm.php:103
-#: test\stubs\Service\Form\Element\RoleSelectFactory.php:16
-#: test\stubs\View\Helper\RoleSelect.php:39
 #, fuzzy
-msgid "Select role…"
-msgstr "Seleccionar fecha"
-
-#: test\stubs\Form\UserBatchUpdateForm.php:30
-msgid "Set role"
-msgstr ""
-
-#: test\stubs\Form\UserBatchUpdateForm.php:39
-msgid "Set activity"
-msgstr ""
+#~ msgid "Select role…"
+#~ msgstr "Seleccionar fecha"
 
-#: test\stubs\Form\UserBatchUpdateForm.php:41
 #, fuzzy
-msgid "Active"
-msgstr "Tareas Activas"
+#~ msgid "Active"
+#~ msgstr "Tareas Activas"
 
-#: test\stubs\Form\UserBatchUpdateForm.php:42
 #, fuzzy
-msgid "Not active"
-msgstr "Tareas Activas"
+#~ msgid "Not active"
+#~ msgstr "Tareas Activas"
 
-#: test\stubs\Form\UserBatchUpdateForm.php:55
-#: test\stubs\Form\UserBatchUpdateForm.php:72
 #, fuzzy
-msgid "Select sites…"
-msgstr "-- Seleccionar Usuario --"
+#~ msgid "Select sites…"
+#~ msgstr "-- Seleccionar Usuario --"
 
-#: test\stubs\Form\UserBatchUpdateForm.php:59
-msgid "Remove from site permission"
-msgstr ""
-
-#: test\stubs\Form\UserBatchUpdateForm.php:61
-#: test\stubs\Form\UserBatchUpdateForm.php:78
 #, fuzzy
-msgid "[All sites]"
-msgstr "Todas las Acciones"
+#~ msgid "[All sites]"
+#~ msgstr "Todas las Acciones"
 
-#: test\stubs\Form\UserBatchUpdateForm.php:76
 #, fuzzy
-msgid "Add to site permission"
-msgstr "Agregar Relación"
+#~ msgid "Add to site permission"
+#~ msgstr "Agregar Relación"
 
-#: test\stubs\Form\UserBatchUpdateForm.php:87
 #, fuzzy
-msgid "Select permission…"
-msgstr "-- Seleccionar Usuario --"
+#~ msgid "Select permission…"
+#~ msgstr "-- Seleccionar Usuario --"
 
-#: test\stubs\Form\UserBatchUpdateForm.php:91
 #, fuzzy
-msgid "Add to site permission as"
-msgstr "Agregar Relación"
-
-#: test\stubs\Form\UserBatchUpdateForm.php:94
-msgid "Viewer"
-msgstr ""
-
-#: test\stubs\Form\UserBatchUpdateForm.php:95
-msgid "Creator"
-msgstr ""
+#~ msgid "Add to site permission as"
+#~ msgstr "Agregar Relación"
 
-#: test\stubs\Form\UserBatchUpdateForm.php:96
-msgid "Manager"
-msgstr ""
-
-#: test\stubs\Form\UserForm.php:134
-msgid "Admin browse columns"
-msgstr ""
-
-#: test\stubs\Form\UserForm.php:135
-msgid "Admin browse defaults"
-msgstr ""
-
-#: test\stubs\Form\UserForm.php:160
 #, fuzzy
-msgid "Default resource template"
-msgstr "Predeterminado"
-
-#: test\stubs\Form\UserForm.php:184
-msgid "Default item sets for items"
-msgstr ""
+#~ msgid "Is active"
+#~ msgstr "Tareas Activas"
 
-#: test\stubs\Form\UserForm.php:200
 #, fuzzy
-msgid "Default sites for items"
-msgstr "Predeterminado"
+#~ msgid "Default resource template"
+#~ msgstr "Predeterminado"
 
-#: test\stubs\Form\UserForm.php:218
-msgid "Item browse columns"
-msgstr ""
-
-#: test\stubs\Form\UserForm.php:229
-msgid "Item set browse columns"
-msgstr ""
-
-#: test\stubs\Form\UserForm.php:240
-msgid "Media browse columns"
-msgstr ""
-
-#: test\stubs\Form\UserForm.php:251
 #, fuzzy
-msgid "Site browse columns"
-msgstr "Está ejecutando este sitio con datos de demostración."
+#~ msgid "Default sites for items"
+#~ msgstr "Predeterminado"
 
-#: test\stubs\Form\UserForm.php:276
-msgid "Item set browse defaults"
-msgstr ""
-
-#: test\stubs\Form\UserForm.php:290
-msgid "Media browse defaults"
-msgstr ""
-
-#: test\stubs\Form\UserForm.php:304
 #, fuzzy
-msgid "Site browse defaults"
-msgstr "Está ejecutando este sitio con datos de demostración."
+#~ msgid "Site browse columns"
+#~ msgstr "Está ejecutando este sitio con datos de demostración."
 
-#: test\stubs\Form\UserForm.php:320
-msgid "Current password"
-msgstr ""
-
-#: test\stubs\Form\UserForm.php:332
 #, fuzzy
-msgid "New password"
-msgstr "Nuevo artículo"
+#~ msgid "Site browse defaults"
+#~ msgstr "Está ejecutando este sitio con datos de demostración."
 
-#: test\stubs\Form\UserForm.php:333
 #, fuzzy
-msgid "Confirm new password"
-msgstr "Nueva tarea"
+#~ msgid "New password"
+#~ msgstr "Nuevo artículo"
 
-#: test\stubs\Form\UserForm.php:342
 #, fuzzy
-msgid "New key label"
-msgstr "Agregar Nueva Etiqueta"
+#~ msgid "Confirm new password"
+#~ msgstr "Nueva tarea"
 
-#: test\stubs\Form\VocabularyForm.php:27
 #, fuzzy
-msgid "Basic info"
-msgstr "Información"
+#~ msgid "New key label"
+#~ msgstr "Agregar Nueva Etiqueta"
 
-#: test\stubs\Form\VocabularyForm.php:34
 #, fuzzy
-msgid "File"
-msgstr "Exportar archivo .ics"
-
-#: test\stubs\Form\VocabularyForm.php:50
-msgid "Enter a human-readable title of the vocabulary."
-msgstr ""
+#~ msgid "Basic info"
+#~ msgstr "Información"
 
-#: test\stubs\Form\VocabularyForm.php:61
-msgid "Comment"
-msgstr "Comentar"
-
-#: test\stubs\Form\VocabularyForm.php:62
-msgid "Enter a human-readable description of the vocabulary."
-msgstr ""
-
-#: test\stubs\Form\VocabularyForm.php:72
-msgid "Namespace URI"
-msgstr ""
-
-#: test\stubs\Form\VocabularyForm.php:73
-msgid ""
-"Enter the unique namespace URI used to identify the classes and properties "
-"of the vocabulary."
-msgstr ""
-
-#: test\stubs\Form\VocabularyForm.php:89
-msgid "Namespace prefix"
-msgstr ""
+#, fuzzy
+#~ msgid "File"
+#~ msgstr "Exportar archivo .ics"
 
-#: test\stubs\Form\VocabularyForm.php:90
-msgid ""
-"Enter a concise vocabulary identifier used as a shorthand for the namespace "
-"URI."
-msgstr ""
+#~ msgid "Comment"
+#~ msgstr "Comentar"
 
-#: test\stubs\Form\VocabularyForm.php:102
 #, fuzzy
-msgid "Import type"
-msgstr "Seleccionar tareas para importar"
+#~ msgid "Import type"
+#~ msgstr "Seleccionar tareas para importar"
 
-#: test\stubs\Form\VocabularyForm.php:104
-#: test\stubs\Media\Ingester\Upload.php:24
-msgid "Upload"
-msgstr "Subir"
+#~ msgid "Upload"
+#~ msgstr "Subir"
 
-#: test\stubs\Form\VocabularyForm.php:105 test\stubs\Media\Ingester\Url.php:26
-#: test\stubs\Media\Ingester\Url.php:79
 #, fuzzy
-msgid "URL"
-msgstr "URL:"
+#~ msgid "URL"
+#~ msgstr "URL:"
 
-#: test\stubs\Form\VocabularyForm.php:117
 #, fuzzy
-msgid "File upload"
-msgstr "Por favor, seleccione un archivo para subir."
+#~ msgid "File upload"
+#~ msgstr "Por favor, seleccione un archivo para subir."
 
-#: test\stubs\Form\VocabularyForm.php:118
-msgid "Choose a RDF vocabulary file."
-msgstr ""
-
-#: test\stubs\Form\VocabularyForm.php:128
 #, fuzzy
-msgid "File URL"
-msgstr "URL:"
-
-#: test\stubs\Form\VocabularyForm.php:129
-msgid "Enter a URL to a RDF vocabulary file."
-msgstr ""
+#~ msgid "File URL"
+#~ msgstr "URL:"
 
-#: test\stubs\Form\VocabularyForm.php:139
 #, fuzzy
-msgid "File format"
-msgstr "Por favor, seleccione un archivo para subir."
-
-#: test\stubs\Form\VocabularyForm.php:141
-msgid "[Autodetect]"
-msgstr ""
-
-#: test\stubs\Form\VocabularyForm.php:142
-msgid "JSON-LD (.jsonld)"
-msgstr ""
-
-#: test\stubs\Form\VocabularyForm.php:143
-msgid "N-Triples (.nt)"
-msgstr ""
-
-#: test\stubs\Form\VocabularyForm.php:144
-msgid "RDF/XML (.rdf)"
-msgstr ""
-
-#: test\stubs\Form\VocabularyForm.php:145
-msgid "Turtle (.ttl)"
-msgstr ""
-
-#: test\stubs\Form\VocabularyForm.php:148
-msgid "Notation3 (.n3)"
-msgstr ""
-
-#: test\stubs\Form\VocabularyForm.php:161
-msgid "Preferred language"
-msgstr ""
+#~ msgid "File format"
+#~ msgstr "Por favor, seleccione un archivo para subir."
 
-#: test\stubs\Form\VocabularyForm.php:162
-msgid ""
-"Enter the preferred language of the labels and comments using an <a target="
-"\"_blank\" href=\"https://www.w3.org/International/articles/language-tags/"
-"\">IETF language tag</a>. Defaults to the first available."
-msgstr ""
-
-#: test\stubs\Form\VocabularyForm.php:173
 #, fuzzy
-msgid "Label property"
-msgstr "Etiqueta"
+#~ msgid "Label property"
+#~ msgstr "Etiqueta"
 
-#: test\stubs\Form\VocabularyForm.php:174
-msgid ""
-"Enter the label property. This is typically only needed if the vocabulary "
-"uses an unconventional property for labels. Please use the full property URI "
-"enclosed in angle brackets."
-msgstr ""
-
-#: test\stubs\Form\VocabularyForm.php:184
 #, fuzzy
-msgid "Comment property"
-msgstr "Comentar"
-
-#: test\stubs\Form\VocabularyForm.php:185
-msgid ""
-"Enter the comment property. This is typically only needed if the vocabulary "
-"uses an unconventional property for comments. Please use the full property "
-"URI enclosed in angle brackets."
-msgstr ""
+#~ msgid "Comment property"
+#~ msgstr "Comentar"
 
-#: test\stubs\Media\Ingester\Html.php:36 test\stubs\Media\Ingester\Html.php:79
-#: test\stubs\Site\BlockLayout\Html.php:28
 #, fuzzy
-msgid "HTML"
-msgstr "Mostrar código fuente HTML"
+#~ msgid "HTML"
+#~ msgstr "Mostrar código fuente HTML"
 
-#: test\stubs\Media\Ingester\Html.php:80
 #, fuzzy
-msgid "HTML or plain text."
-msgstr "Mostrar código fuente HTML"
+#~ msgid "HTML or plain text."
+#~ msgstr "Mostrar código fuente HTML"
 
-#: test\stubs\Media\Ingester\IIIF.php:33
-msgid "IIIF image"
-msgstr ""
-
-#: test\stubs\Media\Ingester\IIIF.php:107
 #, fuzzy
-msgid "IIIF image URL"
-msgstr "URL:"
-
-#: test\stubs\Media\Ingester\IIIF.php:108
-msgid ""
-"Enter the URL to a IIIF image information file (ending with /info.json)."
-msgstr ""
+#~ msgid "IIIF image URL"
+#~ msgstr "URL:"
 
-#: test\stubs\Media\Ingester\IiifPresentation.php:27
 #, fuzzy
-msgid "IIIF presentation"
-msgstr "Presentación al cliente"
+#~ msgid "IIIF presentation"
+#~ msgstr "Presentación al cliente"
 
-#: test\stubs\Media\Ingester\IiifPresentation.php:39
 #, fuzzy
-msgid "IIIF presentation URL"
-msgstr "Presentación al cliente"
-
-#: test\stubs\Media\Ingester\IiifPresentation.php:40
-msgid "Enter the URL to a IIIF collection or manifest."
-msgstr ""
-
-#: test\stubs\Media\Ingester\OEmbed.php:30
-#: test\stubs\Site\BlockLayout\Oembed.php:29
-msgid "oEmbed"
-msgstr ""
+#~ msgid "IIIF presentation URL"
+#~ msgstr "Presentación al cliente"
 
-#: test\stubs\Media\Ingester\OEmbed.php:66
-#: test\stubs\Site\BlockLayout\Oembed.php:57
 #, fuzzy
-msgid "oEmbed URL"
-msgstr "URL:"
+#~ msgid "oEmbed URL"
+#~ msgstr "URL:"
 
-#: test\stubs\Media\Ingester\OEmbed.php:67
 #, fuzzy
-msgid "URL for the media to embed."
-msgstr "URL del Evento"
+#~ msgid "URL for the media to embed."
+#~ msgstr "URL del Evento"
 
-#: test\stubs\Media\Ingester\Url.php:80
 #, fuzzy
-msgid "A URL to the media."
-msgstr "URL del Evento"
+#~ msgid "A URL to the media."
+#~ msgstr "URL del Evento"
 
-#: test\stubs\Media\Ingester\Youtube.php:27
-msgid "YouTube"
-msgstr ""
-
-#: test\stubs\Media\Ingester\Youtube.php:90
 #, fuzzy
-msgid "Video URL"
-msgstr "URL:"
+#~ msgid "Video URL"
+#~ msgstr "URL:"
 
-#: test\stubs\Media\Ingester\Youtube.php:91
 #, fuzzy
-msgid "URL for the video to embed."
-msgstr "URL del Evento"
-
-#: test\stubs\Media\Ingester\Youtube.php:99
-msgid "Start"
-msgstr "Inicio"
-
-#: test\stubs\Media\Ingester\Youtube.php:100
-msgid ""
-"Begin playing the video at the given number of seconds from the start of the "
-"video."
-msgstr ""
-
-#: test\stubs\Media\Ingester\Youtube.php:104
-msgid "End"
-msgstr "Fin"
-
-#: test\stubs\Media\Ingester\Youtube.php:105
-msgid ""
-"End playing the video at the given number of seconds from the start of the "
-"video."
-msgstr ""
-
-#: test\stubs\Mvc\MvcListeners.php:326
-#, php-format
-msgid "The current theme is not active. Its current state is \"%s\"."
-msgstr ""
-
-#: test\stubs\Permissions\Acl.php:21
-msgid "Global Administrator"
-msgstr ""
+#~ msgid "URL for the video to embed."
+#~ msgstr "URL del Evento"
 
-#: test\stubs\Permissions\Acl.php:22
-msgid "Supervisor"
-msgstr ""
+#~ msgid "Start"
+#~ msgstr "Inicio"
 
-#: test\stubs\Permissions\Acl.php:23
-msgid "Editor"
-msgstr ""
+#~ msgid "End"
+#~ msgstr "Fin"
 
-#: test\stubs\Permissions\Acl.php:24
-msgid "Reviewer"
-msgstr ""
+#~ msgid "Author"
+#~ msgstr "Autor"
 
-#: test\stubs\Permissions\Acl.php:25
-msgid "Author"
-msgstr "Autor"
-
-#: test\stubs\Permissions\Acl.php:26
-msgid "Researcher"
-msgstr ""
-
-#: test\stubs\Service\CliFactory.php:31
-msgid "Neither \"proc_open()\" nor \"exec()\" are available."
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\Asset.php:16
-msgid "Asset"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\BlockGroup.php:15
-msgid "Block group"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\BrowsePreview.php:16
-msgid "Browse preview"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\BrowsePreview.php:39
 #, fuzzy
-msgid "Browse all"
-msgstr "Todos los Tableros"
+#~ msgid "Browse all"
+#~ msgstr "Todos los Tableros"
 
-#: test\stubs\Site\BlockLayout\BrowsePreview.php:49
 #, fuzzy
-msgid "Resource type"
-msgstr "No estás autorizado para acceder a este recurso."
-
-#: test\stubs\Site\BlockLayout\BrowsePreview.php:65
-msgid "Display resources using this search query"
-msgstr ""
+#~ msgid "Resource type"
+#~ msgstr "No estás autorizado para acceder a este recurso."
 
-#: test\stubs\Site\BlockLayout\BrowsePreview.php:74
 #, fuzzy
-msgid "Limit"
-msgstr "Limitar la lista de artículos sólo a los sitios autorizados"
+#~ msgid "Limit"
+#~ msgstr "Limitar la lista de artículos sólo a los sitios autorizados"
 
-#: test\stubs\Site\BlockLayout\BrowsePreview.php:75
-msgid "Maximum number of resources to display in the preview."
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\BrowsePreview.php:82
-msgid "Components"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\BrowsePreview.php:83
-msgid ""
-"Components to display for each resource. If not set in Site Settings, "
-"Heading defaults to resource Title and Body to resource Description"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\BrowsePreview.php:87
-msgid "Heading"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\BrowsePreview.php:91
-msgid "Body"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\BrowsePreview.php:104
 #, fuzzy
-msgid "Preview title"
-msgstr "Título"
-
-#: test\stubs\Site\BlockLayout\BrowsePreview.php:105
-msgid "Heading above resource list, if any."
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\BrowsePreview.php:112
-msgid "Link text"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\BrowsePreview.php:113
-msgid "Text for link to full browse view, if any."
-msgstr ""
+#~ msgid "Preview title"
+#~ msgstr "Título"
 
-#: test\stubs\Site\BlockLayout\Fallback.php:29
-#: test\stubs\Site\ResourcePageBlockLayout\Fallback.php:18
 #, fuzzy, php-format
-msgid "Unknown [%s]"
-msgstr "en %s"
+#~ msgid "Unknown [%s]"
+#~ msgstr "en %s"
 
-#: test\stubs\Site\BlockLayout\ItemWithMetadata.php:13
-msgid "Item with metadata"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\ItemWithMetadata.php:29
-msgid "No item selected"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\LineBreak.php:14
-msgid "Line break"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\LineBreak.php:37
-msgid "Transparent"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\LineBreak.php:38
-msgid "Opaque"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\ListOfPages.php:32
 #, fuzzy
-msgid "List of pages"
-msgstr "Lista"
+#~ msgid "List of pages"
+#~ msgstr "Lista"
 
-#: test\stubs\Site\BlockLayout\ListOfSites.php:24
 #, fuzzy
-msgid "List of sites"
-msgstr "Limitar la lista de artículos sólo a los sitios autorizados"
+#~ msgid "List of sites"
+#~ msgstr "Limitar la lista de artículos sólo a los sitios autorizados"
 
-#: test\stubs\Site\BlockLayout\ListOfSites.php:40
-msgid "Sort"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\ListOfSites.php:42
-msgid "Alphabetical"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\ListOfSites.php:43
-msgid "Oldest first"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\ListOfSites.php:44
-msgid "Newest first"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\ListOfSites.php:55
 #, fuzzy
-msgid "Max number of sites"
-msgstr "Máxima Prioridad"
+#~ msgid "Max number of sites"
+#~ msgstr "Máxima Prioridad"
 
-#: test\stubs\Site\BlockLayout\ListOfSites.php:56
-msgid "An empty value means no limit."
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\ListOfSites.php:60
-msgid "Unlimited"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\ListOfSites.php:68
-msgid "Pagination"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\ListOfSites.php:69
-msgid "Show pagination (only if a limit is set)"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\ListOfSites.php:79
 #, fuzzy
-msgid "Show summaries"
-msgstr "Mostrar Todos los Tableros"
+#~ msgid "Show summaries"
+#~ msgstr "Mostrar Todos los Tableros"
 
-#: test\stubs\Site\BlockLayout\ListOfSites.php:89
 #, fuzzy
-msgid "Show thumbnails"
-msgstr "Mostrar Todos los Tableros"
+#~ msgid "Show thumbnails"
+#~ msgstr "Mostrar Todos los Tableros"
 
-#: test\stubs\Site\BlockLayout\ListOfSites.php:99
 #, fuzzy
-msgid "Exclude current site"
-msgstr "Mis tareas por Estado"
+#~ msgid "Exclude current site"
+#~ msgstr "Mis tareas por Estado"
 
-#: test\stubs\Site\BlockLayout\Media.php:14
-msgid "Media embed"
-msgstr ""
+#~ msgid "Vertical"
+#~ msgstr "Vertical"
 
-#: test\stubs\Site\BlockLayout\Media.php:26
-msgid "Vertical"
-msgstr "Vertical"
+#~ msgid "Horizontal"
+#~ msgstr "Horizontal"
 
-#: test\stubs\Site\BlockLayout\Media.php:28
-msgid "Horizontal"
-msgstr "Horizontal"
-
-#: test\stubs\Site\BlockLayout\Media.php:36
-msgid "Embed media"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\Media.php:38
-msgid "Thumbnail only"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\PageDateTime.php:20
 #, fuzzy
-msgid "Page date/time"
-msgstr "Por favor, selecciona una fecha y hora de inicio."
+#~ msgid "Page date/time"
+#~ msgstr "Por favor, selecciona una fecha y hora de inicio."
 
-#: test\stubs\Site\BlockLayout\PageDateTime.php:30
 #, fuzzy
-msgid "Display date/time"
-msgstr "Fecha y Hora de Fin"
+#~ msgid "Display date/time"
+#~ msgstr "Fecha y Hora de Fin"
 
-#: test\stubs\Site\BlockLayout\PageDateTime.php:32
 #, fuzzy
-msgid "Created & modified"
-msgstr "Creado"
+#~ msgid "Created & modified"
+#~ msgstr "Creado"
 
-#: test\stubs\Site\BlockLayout\PageDateTime.php:42
 #, fuzzy
-msgid "Date format"
-msgstr "Fecha"
+#~ msgid "Date format"
+#~ msgstr "Fecha"
 
-#: test\stubs\Site\BlockLayout\PageDateTime.php:45
-#: test\stubs\Site\BlockLayout\PageDateTime.php:59
-msgid "Short"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\PageDateTime.php:46
-#: test\stubs\Site\BlockLayout\PageDateTime.php:60
-msgid "Medium"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\PageDateTime.php:47
-#: test\stubs\Site\BlockLayout\PageDateTime.php:61
-msgid "Long"
-msgstr ""
-
-#: test\stubs\Site\BlockLayout\PageDateTime.php:48
-#: test\stubs\Site\BlockLayout\PageDateTime.php:62
 #, fuzzy
-msgid "Full"
-msgstr "Mostrar Barra Lateral Completa"
+#~ msgid "Full"
+#~ msgstr "Mostrar Barra Lateral Completa"
 
-#: test\stubs\Site\BlockLayout\PageDateTime.php:56
 #, fuzzy
-msgid "Time format"
-msgstr "Tiempo Restante"
+#~ msgid "Time format"
+#~ msgstr "Tiempo Restante"
 
-#: test\stubs\Site\BlockLayout\PageTitle.php:13
 #, fuzzy
-msgid "Page title"
-msgstr "Título"
+#~ msgid "Page title"
+#~ msgstr "Título"
 
-#: test\stubs\Site\BlockLayout\TableOfContents.php:15
-msgid "Table of contents"
-msgstr ""
-
-#: test\stubs\Site\Navigation\Link\BrowseItemSets.php:20
-msgid "Browse item sets"
-msgstr ""
-
-#: test\stubs\Site\Navigation\Link\Page.php:11
 #, fuzzy
-msgid "Page"
-msgstr "No tienes permiso para ver esta página."
+#~ msgid "Page"
+#~ msgstr "No tienes permiso para ver esta página."
 
-#: test\stubs\Site\Navigation\Link\Url.php:11
 #, fuzzy
-msgid "Custom URL"
-msgstr "URL:"
+#~ msgid "Custom URL"
+#~ msgstr "URL:"
 
-#: test\stubs\Site\ResourcePageBlockLayout\LightboxGallery.php:13
-msgid "Lightbox gallery"
-msgstr ""
-
-#: test\stubs\Site\ResourcePageBlockLayout\LinkedResources.php:11
-msgid "Linked resources"
-msgstr ""
-
-#: test\stubs\Site\ResourcePageBlockLayout\Manager.php:211
 #, fuzzy
-msgid "Main"
-msgstr "Oficina principal"
+#~ msgid "Main"
+#~ msgstr "Oficina principal"
 
-#: test\stubs\Site\ResourcePageBlockLayout\MediaEmbeds.php:11
-msgid "Media embeds"
-msgstr ""
-
-#: test\stubs\Site\ResourcePageBlockLayout\MediaList.php:11
 #, fuzzy
-msgid "Media list"
-msgstr "Lista"
+#~ msgid "Media list"
+#~ msgstr "Lista"
 
-#: test\stubs\Site\ResourcePageBlockLayout\MediaRender.php:11
-msgid "Media render"
-msgstr ""
-
-#: test\stubs\Site\ResourcePageBlockLayout\Values.php:11
 #, fuzzy
-msgid "Values"
-msgstr "La pila no es válida. Valores permitidos: pendiente, en curso, hecho."
+#~ msgid "Values"
+#~ msgstr ""
+#~ "La pila no es válida. Valores permitidos: pendiente, en curso, hecho."
 
-#: test\stubs\Stdlib\Browse.php:124
 #, fuzzy, php-format
-msgid "Custom (%s)"
-msgstr "en %s"
+#~ msgid "Custom (%s)"
+#~ msgstr "en %s"
 
-#: test\stubs\Stdlib\Cli.php:105 test\stubs\Stdlib\Cli.php:160
-#, php-format
-msgid "Command \"%s\" failed with status code %s."
-msgstr ""
-
-#: test\stubs\Stdlib\Environment.php:54
-msgid "Omeka requires the PHP extension json, but it is not loaded."
-msgstr ""
-
-#: test\stubs\Stdlib\Environment.php:62
-#, php-format
-msgid ""
-"You must upgrade Omeka S to at least version 1.0.0 before upgrading to "
-"version %1$s. You are currently on version %2$s."
-msgstr ""
-
-#: test\stubs\Stdlib\Environment.php:69
-#, php-format
-msgid ""
-"The installed PHP version (%1$s) is too low. Omeka requires at least version "
-"%2$s."
-msgstr ""
-
-#: test\stubs\Stdlib\Environment.php:77
-#, php-format
-msgid "Omeka requires the PHP extension %s, but it is not loaded."
-msgstr ""
-
-#: test\stubs\Stdlib\Environment.php:96
-#, php-format
-msgid ""
-"The installed MySQL version (%1$s) is too low. Omeka requires at least "
-"version %2$s."
-msgstr ""
-
-#: test\stubs\Stdlib\Environment.php:104
-#, php-format
-msgid ""
-"The installed MariaDB version (%1$s) is too low. Omeka requires at least "
-"version %2$s."
-msgstr ""
-
-#: test\stubs\View\Helper\BlockShowTitleSelect.php:24
 #, fuzzy
-msgid "item title"
-msgstr "Título"
+#~ msgid "item title"
+#~ msgstr "Título"
 
-#: test\stubs\View\Helper\BlockShowTitleSelect.php:25
 #, fuzzy
-msgid "media title"
-msgstr "Título"
+#~ msgid "media title"
+#~ msgstr "Título"
 
-#: test\stubs\View\Helper\BlockShowTitleSelect.php:26
 #, fuzzy
-msgid "no title"
-msgstr "Título"
+#~ msgid "no title"
+#~ msgstr "Título"
 
-#: test\stubs\View\Helper\BlockThumbnailTypeSelect.php:42
 #, fuzzy
-msgid "Image type"
-msgstr "Tipo de publicación inválido."
+#~ msgid "Image type"
+#~ msgstr "Tipo de publicación inválido."
 
-#: test\stubs\View\Helper\Browse.php:57
-msgid "Relevance"
-msgstr ""
-
-#: test\stubs\View\Helper\Browse.php:164
 #, fuzzy
-msgid "Add a column…"
-msgstr "Agregar Relación"
+#~ msgid "Add a column…"
+#~ msgstr "Agregar Relación"
 
-#: test\stubs\View\Helper\Browse.php:183
 #, fuzzy
-msgid "Column type"
-msgstr "Tipo de publicación inválido."
+#~ msgid "Column type"
+#~ msgstr "Tipo de publicación inválido."
 
-#: test\stubs\View\Helper\Browse.php:194
 #, fuzzy
-msgid "Header"
-msgstr ""
-"Proporcione el token Bearer en el encabezado de autorización para el "
-"endpoint de correo a publicación. Solicitud de ejemplo:"
+#~ msgid "Header"
+#~ msgstr ""
+#~ "Proporcione el token Bearer en el encabezado de autorización para el "
+#~ "endpoint de correo a publicación. Solicitud de ejemplo:"
 
-#: test\stubs\View\Helper\ItemSetSelect.php:39
 #, fuzzy
-msgid "Select item set…"
-msgstr "-- Seleccionar Usuario --"
+#~ msgid "Select item set…"
+#~ msgstr "-- Seleccionar Usuario --"
 
-#: test\stubs\View\Helper\PropertySelect.php:39
 #, fuzzy
-msgid "Select property…"
-msgstr "Seleccionar etiquetas..."
+#~ msgid "Select property…"
+#~ msgstr "Seleccionar etiquetas..."
 
-#: test\stubs\View\Helper\ResourceClassSelect.php:39
 #, fuzzy
-msgid "Select class…"
-msgstr "-- Seleccionar Usuario --"
+#~ msgid "Select class…"
+#~ msgstr "-- Seleccionar Usuario --"
 
-#: test\stubs\View\Helper\ResourceTemplateSelect.php:39
 #, fuzzy
-msgid "Select template…"
-msgstr "Seleccionar etiquetas..."
+#~ msgid "Select template…"
+#~ msgstr "Seleccionar etiquetas..."
 
-#: test\stubs\View\Helper\SiteSelect.php:39
-msgid "Select site…"
-msgstr ""
-
-#: test\stubs\View\Helper\UserBar.php:98
-msgid "Pages"
-msgstr ""
-
-#: test\stubs\View\Helper\UserSelect.php:39
 #, fuzzy
-msgid "Select user…"
-msgstr "-- Seleccionar Usuario --"
+#~ msgid "Select user…"
+#~ msgstr "-- Seleccionar Usuario --"
+
+#, fuzzy
+#~ msgid "This layout is invalid."
+#~ msgstr "Tipo de publicación inválido."
+
+#, fuzzy
+#~ msgid "Break type"
+#~ msgstr "Tipo de publicación inválido."
+
+#, fuzzy
+#~ msgid "Add pages"
+#~ msgstr "Añadir Nuevo"
+
+#, fuzzy, php-format
+#~ msgid "User activation for %s"
+#~ msgstr "en %s"
+
+#, fuzzy
+#~ msgid "Show attachment title"
+#~ msgstr "El título es obligatorio."
+
+#~ msgid "Cancel"
+#~ msgstr "Cancelar"
+
+#, fuzzy
+#~ msgid "does not start with"
+#~ msgstr "Inicio"
+
+#, fuzzy
+#~ msgid "does not end with"
+#~ msgstr "Fecha de Fin:"
+
+#, fuzzy
+#~ msgid "is resource with ID"
+#~ msgstr "ID de Tarjeta de Nextcloud"
+
+#, fuzzy
+#~ msgid "is not resource with ID"
+#~ msgstr "No estás autorizado para acceder a este recurso."
+
+#, fuzzy
+#~ msgid "has any value"
+#~ msgstr "La tarea se ha archivado correctamente."
+
+#, fuzzy
+#~ msgid "Search full-text"
+#~ msgstr "Diseño Completo"
+
+#, fuzzy
+#~ msgid "Unknown class"
+#~ msgstr "Usuario Desconocido"
+
+#, fuzzy
+#~ msgid "Unknown property"
+#~ msgstr "Usuario Desconocido"
+
+#, fuzzy
+#~ msgid "Unknown template"
+#~ msgstr "Usuario Desconocido"
+
+#, fuzzy
+#~ msgid "Unknown item set"
+#~ msgstr "Usuario Desconocido"
+
+#, fuzzy
+#~ msgid "User"
+#~ msgstr "Usuario y Fecha de la Tarea"
+
+#~ msgid "Unknown user"
+#~ msgstr "Usuario desconocido"
+
+#, fuzzy
+#~ msgid "Site"
+#~ msgstr "Está ejecutando este sitio con datos de demostración."
+
+#, fuzzy
+#~ msgid "Unknown site"
+#~ msgstr "Usuario Desconocido"
+
+#, fuzzy
+#~ msgid "Unknown role"
+#~ msgstr "Usuario Desconocido"
+
+#, fuzzy
+#~ msgid "yes"
+#~ msgstr "Sí"
+
+#, fuzzy
+#~ msgid "Has permission in site"
+#~ msgstr "La tarea se ha archivado correctamente."
+
+#~ msgid "Edit"
+#~ msgstr "Editar"
+
+#, fuzzy
+#~ msgid "View"
+#~ msgstr "Ver Tarea"
 
 #, fuzzy
 #~ msgid "Traslate module texts"
