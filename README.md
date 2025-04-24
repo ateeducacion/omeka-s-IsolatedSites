@@ -1,12 +1,10 @@
 # IsolatedSites Module for Omeka S
 
-
 ## Features
-- By default, items and item sets assigned to sites where the logged in user has no role are filtered out from the admin browse page
-- By default, assets which do not belong to the user logged in are filtered out from the admin browse page
-- In Profiles->User Settings: "limit to granted sites" checkbox allow users checked by admin user to view all the items in admin browse page.
-- In Profiles->User Settings: "limit to own assets" checkbox allow users checked by admin user to view all the items in admin browse page.
-
+**- In Profiles->User Settings:** 
+  - if "limit to granted sites" checkbox items and item sets assigned to sites where the logged in user has no role are filtered out from the admin browse page
+  - if "limit to own assets" checkbox assets which do not belong to the user logged in are filtered out from the admin browse page
+  - if user is global admin the above checkboxs do not apply
 
 ## Installation
 
