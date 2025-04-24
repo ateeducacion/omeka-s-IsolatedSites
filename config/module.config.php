@@ -13,6 +13,7 @@ use Doctrine\DBAL\Connection;
 use IsolatedSites\Listener\ModifyUserSettingsFormListener;
 use IsolatedSites\Listener\ModifyQueryListener;
 use IsolatedSites\Listener\ModifyItemSetQueryListener;
+use IsolatedSites\Listener\ModifyAssetQueryListener;
 
 return [
     'view_manager' => [
@@ -58,6 +59,12 @@ return [
                     $services->get('Omeka\AuthenticationService'),
                     $services->get('Omeka\Settings\User'),
                     $services->get('Omeka\Connection')
+                );
+            },
+            ModifyAssetQueryListener::class => function ($services) {
+                return new ModifyAssetQueryListener(
+                    $services->get('Omeka\AuthenticationService'),
+                    $services->get('Omeka\Settings\User')
                 );
             },
         ],

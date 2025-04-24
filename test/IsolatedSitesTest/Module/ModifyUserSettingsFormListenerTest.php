@@ -29,13 +29,11 @@ class ModifyUserSettingsFormListenerTest extends TestCase
 
     protected function setUp(): void
     {
-        // Create mocks for dependencies
         $this->acl = $this->createMock(Acl::class);
         $this->entityManager = $this->createMock(EntityManager::class);
         $this->userSettings = $this->createMock(UserSettings::class);
         $this->auth = $this->createMock(AuthenticationService::class);
         
-        // Create the listener
         $this->listener = new ModifyUserSettingsFormListener(
             $this->acl,
             $this->entityManager,
@@ -43,7 +41,6 @@ class ModifyUserSettingsFormListenerTest extends TestCase
             $this->auth
         );
 
-        // Create mock form, event, and other common objects
         $this->form = $this->createMock(Form::class);
         $this->event = $this->createMock(Event::class);
         $this->user = $this->createMock(User::class);
@@ -53,12 +50,10 @@ class ModifyUserSettingsFormListenerTest extends TestCase
 
     public function testInvokeForGlobalAdminUser()
     {
-        // Setup storage and identity
         $storage = $this->createMock(StorageInterface::class);
         $storage->method('read')->willReturn((object)['id' => 1]);
         $this->auth->method('getStorage')->willReturn($storage);
         
-        // Setup current user as editor
         $this->auth->method('getIdentity')->willReturn($this->currentUser);
         $this->currentUser->method('getRole')->willReturn('global_admin');
         $this->currentUser->method('getId')->willReturn(1);
@@ -72,12 +67,12 @@ class ModifyUserSettingsFormListenerTest extends TestCase
                     return $this->user;
                 }
                 return null;
-        });
+            });
     
         $this->acl->method('isAdminRole')
             ->willReturnCallback(function ($role) {
                 return $role === 'global_admin';
-        });
+            });
     
         $this->event->expects($this->once())
             ->method('getTarget')
@@ -85,7 +80,7 @@ class ModifyUserSettingsFormListenerTest extends TestCase
 
         $this->form->expects($this->once())
             ->method('getOption')
-            ->with('user_id')->willreturn(2);
+            ->with('user_id')->willReturn(2);
 
         $this->user->expects($this->once())
             ->method('getRole')
@@ -95,22 +90,30 @@ class ModifyUserSettingsFormListenerTest extends TestCase
             ->method('get')
             ->with('user-settings')->willReturn($this->fieldset);
     
-        $this->userSettings->expects($this->once())
-            ->method('get')
-            ->with('limit_to_granted_sites', false)
-            ->willReturn(false);
+        $this->userSettings->method('get')
+            ->willReturnMap([
+                ['limit_to_granted_sites', false, false],
+                ['limit_to_own_assets', false, false]
+            ]);
     
         $this->userSettings->expects($this->once())
             ->method('setTargetId')
             ->with(2);
     
-        // Check that the field is added without disabled/readonly attributes
-        $this->fieldset->expects($this->once())
+        $this->fieldset->expects($this->exactly(2))
             ->method('add')
-            ->with($this->callback(function($params) {
-                return (!isset($params['attributes']['disabled']) || $params['attributes']['disabled'] === false)
-                    && (!isset($params['attributes']['readonly']) || $params['attributes']['readonly'] === false);
-            }));
+            ->withConsecutive(
+                [$this->callback(function($params) {
+                    return $params['name'] === 'limit_to_granted_sites' 
+                        && (!isset($params['attributes']['disabled']) || $params['attributes']['disabled'] === false)
+                        && (!isset($params['attributes']['readonly']) || $params['attributes']['readonly'] === false);
+                })],
+                [$this->callback(function($params) {
+                    return $params['name'] === 'limit_to_own_assets'
+                        && (!isset($params['attributes']['disabled']) || $params['attributes']['disabled'] === false)
+                        && (!isset($params['attributes']['readonly']) || $params['attributes']['readonly'] === false);
+                })]
+            );
     
         $this->user->method('getId')->willReturn(2);
         $this->listener->__invoke($this->event);
@@ -118,16 +121,13 @@ class ModifyUserSettingsFormListenerTest extends TestCase
 
     public function testInvokeForNonGlobalAdminUser()
     {
-        // Setup storage and identity
         $storage = $this->createMock(StorageInterface::class);
         $storage->method('read')->willReturn((object)['id' => 1]);
         $this->auth->method('getStorage')->willReturn($storage);
 
-        // Setup current user as editor
         $this->auth->method('getIdentity')->willReturn($this->currentUser);
         $this->currentUser->method('getRole')->willReturn('editor');
         $this->currentUser->method('getId')->willReturn(1);
-
 
         $this->entityManager->method('find')
             ->willReturnCallback(function($class, $id) {
@@ -138,12 +138,12 @@ class ModifyUserSettingsFormListenerTest extends TestCase
                     return $this->user;
                 }
                 return null;
-        });
+            });
 
         $this->acl->method('isAdminRole')
             ->willReturnCallback(function ($role) {
                 return $role === 'global_admin';
-        });
+            });
 
         $this->event->expects($this->once())
             ->method('getTarget')
@@ -151,7 +151,7 @@ class ModifyUserSettingsFormListenerTest extends TestCase
 
         $this->form->expects($this->once())
             ->method('getOption')
-            ->with('user_id')->willreturn(2);
+            ->with('user_id')->willReturn(2);
 
         $this->user->expects($this->once())
             ->method('getRole')
@@ -161,42 +161,42 @@ class ModifyUserSettingsFormListenerTest extends TestCase
             ->method('get')
             ->with('user-settings')->willReturn($this->fieldset);
     
-        $this->userSettings->expects($this->once())
-            ->method('get')
-            ->with('limit_to_granted_sites', false)
-            ->willReturn(false);
+        $this->userSettings->method('get')
+            ->willReturnMap([
+                ['limit_to_granted_sites', false, false],
+                ['limit_to_own_assets', false, false]
+            ]);
     
         $this->userSettings->expects($this->once())
             ->method('setTargetId')
             ->with(2);
 
-        $this->userSettings->method('get')
-            ->with('limit_to_granted_sites', false)
-            ->willReturn(false);
-
-        // Check that the field is added with disabled/readonly attributes
-        $this->fieldset->expects($this->once())
+        $this->fieldset->expects($this->exactly(2))
             ->method('add')
-            ->with($this->callback(function($params) {
-                return $params['attributes']['disabled'] === true 
-                    && $params['attributes']['readonly'] === true;
-            }));
+            ->withConsecutive(
+                [$this->callback(function($params) {
+                    return $params['name'] === 'limit_to_granted_sites'
+                        && $params['attributes']['disabled'] === true 
+                        && $params['attributes']['readonly'] === true;
+                })],
+                [$this->callback(function($params) {
+                    return $params['name'] === 'limit_to_own_assets'
+                        && $params['attributes']['disabled'] === true 
+                        && $params['attributes']['readonly'] === true;
+                })]
+            );
 
         $this->listener->__invoke($this->event);
     }
-
-    public function testHandleUserSettingsAsGlobalAdmin()
+public function testHandleUserSettingsAsGlobalAdmin()
     {
-        // Setup storage and identity
         $storage = $this->createMock(StorageInterface::class);
         $storage->method('read')->willReturn((object)['id' => 1]);
         $this->auth->method('getStorage')->willReturn($storage);
     
-        // Setup current user as editor
         $this->auth->method('getIdentity')->willReturn($this->currentUser);
         $this->currentUser->method('getRole')->willReturn('global_admin');
         $this->currentUser->method('getId')->willReturn(1);
-
 
         $this->entityManager->method('find')
             ->willReturnCallback(function($class, $id) {
@@ -207,16 +207,18 @@ class ModifyUserSettingsFormListenerTest extends TestCase
                     return $this->user;
                 }
                 return null;
-        });
+            });
     
         $this->acl->method('isAdminRole')
             ->willReturnCallback(function ($role) {
                 return $role === 'global_admin';
-        });
+            });
 
-        $formData = ['limit_to_granted_sites' => true];
+        $formData = [
+            'limit_to_granted_sites' => true,
+            'limit_to_own_assets' => true
+        ];
         
-        // Setup the event to return the form
         $this->event->expects($this->once())
             ->method('getTarget')
             ->willReturn($this->form);
@@ -230,30 +232,29 @@ class ModifyUserSettingsFormListenerTest extends TestCase
             ->with('user_id')
             ->willReturn(2);
     
-        // Verify that settings are changed
         $this->userSettings->expects($this->once())
             ->method('setTargetId')
             ->with(2);
     
-        $this->userSettings->expects($this->once())
+        $this->userSettings->expects($this->exactly(2))
             ->method('set')
-            ->with('limit_to_granted_sites', true);
+            ->withConsecutive(
+                ['limit_to_granted_sites', true],
+                ['limit_to_own_assets', true]
+            );
     
         $this->listener->handleUserSettings($this->event);
     }
 
     public function testHandleUserSettingsAsNonGlobalAdmin()
     {
-        // Setup storage and identity
         $storage = $this->createMock(StorageInterface::class);
         $storage->method('read')->willReturn((object)['id' => 1]);
         $this->auth->method('getStorage')->willReturn($storage);
     
-        // Setup current user as editor
         $this->auth->method('getIdentity')->willReturn($this->currentUser);
         $this->currentUser->method('getRole')->willReturn('editor');
         $this->currentUser->method('getId')->willReturn(1);
-
 
         $this->entityManager->method('find')
             ->willReturnCallback(function($class, $id) {
@@ -264,16 +265,18 @@ class ModifyUserSettingsFormListenerTest extends TestCase
                     return $this->user;
                 }
                 return null;
-        });
+            });
     
         $this->acl->method('isAdminRole')
             ->willReturnCallback(function ($role) {
                 return $role === 'global_admin';
-        });
+            });
     
-        $formData = ['limit_to_granted_sites' => true];
+        $formData = [
+            'limit_to_granted_sites' => true,
+            'limit_to_own_assets' => true
+        ];
         
-        // Setup the event to return the form
         $this->event->expects($this->once())
             ->method('getTarget')
             ->willReturn($this->form);
@@ -287,19 +290,13 @@ class ModifyUserSettingsFormListenerTest extends TestCase
             ->with('user_id')
             ->willReturn(2);
     
-        // Get existing setting
         $this->userSettings->expects($this->once())
             ->method('setTargetId')
             ->with(2);
     
-        $this->userSettings->method('get')
-            ->with('limit_to_granted_sites', false)
-            ->willReturn(false);
-    
-        // Verify that original setting is preserved
+        // Verify that no settings are changed
         $this->userSettings->expects($this->never())
-            ->method('set')
-            ->with('limit_to_granted_sites', false);
+            ->method('set');
     
         $this->listener->handleUserSettings($this->event);
     }
@@ -316,14 +313,22 @@ class ModifyUserSettingsFormListenerTest extends TestCase
             ->method('getInputFilter')
             ->willReturn($inputFilter);
 
-        $inputFilter->expects($this->once())
+        $inputFilter->expects($this->exactly(2))
             ->method('add')
-            ->with($this->callback(function($params) {
-                return $params['name'] === 'limit_to_granted_sites'
-                    && $params['required'] === false
-                    && isset($params['filters'])
-                    && $params['filters'][0]['name'] === 'Boolean';
-            }));
+            ->withConsecutive(
+                [$this->callback(function($params) {
+                    return $params['name'] === 'limit_to_granted_sites'
+                        && $params['required'] === false
+                        && isset($params['filters'])
+                        && $params['filters'][0]['name'] === 'Boolean';
+                })],
+                [$this->callback(function($params) {
+                    return $params['name'] === 'limit_to_own_assets'
+                        && $params['required'] === false
+                        && isset($params['filters'])
+                        && $params['filters'][0]['name'] === 'Boolean';
+                })]
+            );
 
         $this->listener->addInputFilters($this->event);
     }

@@ -91,7 +91,7 @@ package:
 # Generate .pot template from translate() and // @translate
 generate-pot:
 	@echo "Extracting strings using xgettext..."
-	find . -path ./vendor -prune -o \( -name '*.php' -o -name '*.phtml' \) -print \
+	find . \( -path ./vendor -o -path ./test/stubs \) -prune -o \( -name '*.php' -o -name '*.phtml' \) -print \
 	| xargs xgettext \
 	    --language=PHP \
 	    --from-code=utf-8 \

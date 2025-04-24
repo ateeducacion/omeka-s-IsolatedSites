@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ThreeDViewer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-10 13:08+0100\n"
-"PO-Revision-Date: 2025-04-10 13:10+0100\n"
+"POT-Creation-Date: 2025-04-24 07:51+0100\n"
+"PO-Revision-Date: 2025-04-23 13:37+0100\n"
 "Last-Translator: Área de Tecnología Educativa <ate@gobiernodecanarias.org>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -13,20 +13,1065 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.4.2\n"
 
-#: language/empty.php:1
-#, fuzzy
-msgid "Traslate module texts"
-msgstr "Traducir textos de módulos"
-
-#: src\Listener\ModifyUserSettingsFormListener.php:56
+#: src/Listener/ModifyUserSettingsFormListener.php:76
 msgid "Limit item list to granted sites only"
 msgstr "Limitar la lista de recursos digitales sólo a los sitios autorizados"
 
-#: src\Listener\ModifyUserSettingsFormListener.php:60
-msgid ""
-"If checked, items and itemsets shown in admin view are limited to those "
-"assigned to sites where the user has permissions"
+#: src\Listener\ModifyUserSettingsFormListener.php:80
+#, fuzzy
+msgid "If checked, items and itemsets shown in admin "
 msgstr ""
-"Si esta opción está seleccionada, los recursos digitales y conjuntos de "
-"recursos digitales mostrados en la vista de administrador se limitan a los "
-"asignados a los sitios en los que el usuario tiene permisos"
+"Si esta opción está seleccionada, los elementos y conjuntos de elementos "
+"mostrados en la vista de administrador se limitan a los asignados a los "
+"sitios en los que el usuario tiene permisos"
+
+#: src\Listener\ModifyUserSettingsFormListener.php:81
+#, fuzzy
+msgid ""
+"view are limited to those assigned to sites where the user has permissions"
+msgstr ""
+"Si esta opción está seleccionada, los elementos y conjuntos de elementos "
+"mostrados en la vista de administrador se limitan a los asignados a los "
+"sitios en los que el usuario tiene permisos"
+
+#: src\Listener\ModifyUserSettingsFormListener.php:94
+#, fuzzy
+msgid "Limit assets to owned assets only"
+msgstr "Limitar la lista de recursos digitales sólo a los sitios autorizados"
+
+#: src\Listener\ModifyUserSettingsFormListener.php:98
+msgid "If checked, assets shown in admin "
+msgstr ""
+"Si esta opción está seleccionada, los recursos mostrados en la vista de "
+"administrador "
+
+#: src\Listener\ModifyUserSettingsFormListener.php:99
+msgid "view are limited to those owned by the user"
+msgstr "se limitan a los que son propiedad del usuario"
+
+#, fuzzy
+#~ msgid "Media must be an array"
+#~ msgstr "El tablero es obligatorio y debe ser un número entero positivo."
+
+#, fuzzy
+#~ msgid "The local name cannot be empty."
+#~ msgstr "Dejar vacío para generación automática desde el nombre"
+
+#, fuzzy
+#~ msgid "The label cannot be empty."
+#~ msgstr "Editar Etiqueta"
+
+#, fuzzy
+#~ msgid "A vocabulary must be set."
+#~ msgstr "El tablero es obligatorio y debe ser un número entero positivo."
+
+#, fuzzy
+#~ msgid "The label is already taken."
+#~ msgstr "Esta combinación de usuario y fecha ya existe."
+
+#, fuzzy
+#~ msgid "The slug cannot be empty."
+#~ msgstr "Slug"
+
+#, fuzzy
+#~ msgid "A page must have a title."
+#~ msgstr "No tienes permiso para ver esta página."
+
+#, fuzzy
+#~ msgid "The name cannot be empty."
+#~ msgstr "Nombre"
+
+#, fuzzy
+#~ msgid "Classes must be an array"
+#~ msgstr "El tablero es obligatorio y debe ser un número entero positivo."
+
+#, fuzzy
+#~ msgid "Properties must be an array"
+#~ msgstr "El tablero es obligatorio y debe ser un número entero positivo."
+
+#, fuzzy, php-format
+#~ msgid "The prefix \"%s\" is reserved."
+#~ msgstr "Completado por %s"
+
+#~ msgid "In Progress"
+#~ msgstr "En Progreso"
+
+#, fuzzy
+#~ msgid "Completed"
+#~ msgstr "Completado por %s"
+
+#~ msgid "Error"
+#~ msgstr "Error"
+
+#~ msgid "Created"
+#~ msgstr "Creado"
+
+#, fuzzy
+#~ msgid "ID"
+#~ msgstr "ID de Tarjeta de Nextcloud"
+
+#, fuzzy
+#~ msgid "Media type"
+#~ msgstr "Tipo de publicación inválido."
+
+#, fuzzy
+#~ msgid "Resource class"
+#~ msgstr "No estás autorizado para acceder a este recurso."
+
+#, fuzzy
+#~ msgid "Resource template"
+#~ msgstr "No estás autorizado para acceder a este recurso."
+
+#, fuzzy
+#~ msgid "Size"
+#~ msgstr "Tamaño de la Barra Lateral"
+
+#, fuzzy
+#~ msgid "URL slug"
+#~ msgstr "Slug"
+
+#, fuzzy
+#~ msgid "Theme"
+#~ msgstr "Modo de Tema"
+
+#, fuzzy
+#~ msgid "[Unknown]"
+#~ msgstr "Usuario Desconocido"
+
+#, fuzzy
+#~ msgid "Unknown column data"
+#~ msgstr "Usuario Desconocido"
+
+#, fuzzy
+#~ msgid "Max values"
+#~ msgstr "Máxima Prioridad"
+
+#, fuzzy
+#~ msgid "Asset successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
+
+#, fuzzy
+#~ msgid "Asset successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
+
+#, fuzzy
+#~ msgid "Confirm Delete"
+#~ msgstr "Eliminar"
+
+#, fuzzy
+#~ msgid "item"
+#~ msgstr "Limitar la lista de artículos sólo a los sitios autorizados"
+
+#, fuzzy
+#~ msgid "Item successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
+
+#, fuzzy
+#~ msgid "Items successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
+
+#, fuzzy, php-format
+#~ msgid "Item successfully created. %s"
+#~ msgstr "Tablero creado correctamente"
+
+#, fuzzy
+#~ msgid "Item successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
+
+#, fuzzy
+#~ msgid "Items successfully edited"
+#~ msgstr "Tablero actualizado correctamente"
+
+#, fuzzy
+#~ msgid "Item set successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
+
+#, fuzzy
+#~ msgid "Item set successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
+
+#, fuzzy
+#~ msgid "Item sets successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
+
+#, fuzzy
+#~ msgid "The job could not be stopped."
+#~ msgstr "No se pudo cargar el artículo"
+
+#, fuzzy
+#~ msgid "Media successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
+
+#, fuzzy
+#~ msgid "Media successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
+
+#, fuzzy
+#~ msgid "Media successfully edited"
+#~ msgstr "Tablero actualizado correctamente"
+
+#, fuzzy
+#~ msgid "The module was successfully installed"
+#~ msgstr "Traducir textos de módulos"
+
+#, fuzzy
+#~ msgid "The module was successfully uninstalled"
+#~ msgstr "Traducir textos de módulos"
+
+#, fuzzy
+#~ msgid "The module was successfully activated"
+#~ msgstr "Traducir textos de módulos"
+
+#, fuzzy
+#~ msgid "The module was successfully deactivated"
+#~ msgstr "Traducir textos de módulos"
+
+#, fuzzy
+#~ msgid "The module was successfully upgraded"
+#~ msgstr "Traducir textos de módulos"
+
+#, fuzzy
+#~ msgid "The module was successfully configured"
+#~ msgstr "Traducir textos de módulos"
+
+#, fuzzy
+#~ msgid "There was a problem during configuration"
+#~ msgstr "Configuración de Decker"
+
+#, fuzzy
+#~ msgid "resource template"
+#~ msgstr "No estás autorizado para acceder a este recurso."
+
+#, fuzzy
+#~ msgid "Resource template successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
+
+#, fuzzy
+#~ msgid "Resource template successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
+
+#, fuzzy
+#~ msgid "Settings successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
+
+#, fuzzy, php-format
+#~ msgid "User successfully created. %s"
+#~ msgstr "Tablero creado correctamente"
+
+#, fuzzy
+#~ msgid "User successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
+
+#, fuzzy
+#~ msgid "Password successfully changed"
+#~ msgstr "La tarea se ha archivado correctamente."
+
+#, fuzzy
+#~ msgid "Key(s) successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
+
+#, fuzzy
+#~ msgid "user"
+#~ msgstr "Usuario y Fecha de la Tarea"
+
+#, fuzzy
+#~ msgid "User successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
+
+#, fuzzy
+#~ msgid "Users successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
+
+#, fuzzy
+#~ msgid "Users successfully edited"
+#~ msgstr "Usuarios Ignorados"
+
+#, fuzzy
+#~ msgid "Vocabulary successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
+
+#, fuzzy
+#~ msgid "Vocabulary successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
+
+#, fuzzy
+#~ msgid "Successfully logged in"
+#~ msgstr "Tablero actualizado correctamente"
+
+#, fuzzy
+#~ msgid "Email or password is invalid"
+#~ msgstr "Tipo de publicación inválido."
+
+#, fuzzy
+#~ msgid "Successfully logged out"
+#~ msgstr "La tarea se ha archivado correctamente."
+
+#, fuzzy
+#~ msgid "Site successfully created"
+#~ msgstr "Tablero creado correctamente"
+
+#, fuzzy
+#~ msgid "Site successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
+
+#, fuzzy
+#~ msgid "Page successfully created"
+#~ msgstr "Tablero creado correctamente"
+
+#, fuzzy
+#~ msgid "First page in navigation"
+#~ msgstr "Navegación"
+
+#, fuzzy
+#~ msgid "Navigation successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
+
+#, fuzzy
+#~ msgid "Site resources successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
+
+#, fuzzy
+#~ msgid "User permissions successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
+
+#, fuzzy
+#~ msgid "Site theme successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
+
+#, fuzzy
+#~ msgid "Theme settings successfully updated"
+#~ msgstr "Configuración del Tema"
+
+#, fuzzy
+#~ msgid "Site successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
+
+#, fuzzy
+#~ msgid "site"
+#~ msgstr "Está ejecutando este sitio con datos de demostración."
+
+#, fuzzy
+#~ msgid "Page successfully updated"
+#~ msgstr "Tablero actualizado correctamente"
+
+#, fuzzy
+#~ msgid "page"
+#~ msgstr "No tienes permiso para ver esta página."
+
+#, fuzzy
+#~ msgid "Page successfully deleted"
+#~ msgstr "Tablero eliminado correctamente"
+
+#, fuzzy
+#~ msgid "Resource"
+#~ msgstr "No tienes permiso para acceder a este recurso."
+
+#, fuzzy
+#~ msgid "All"
+#~ msgstr "Borrar Todos los Datos"
+
+#, fuzzy
+#~ msgid "Item"
+#~ msgstr "Limitar la lista de artículos sólo a los sitios autorizados"
+
+#, fuzzy
+#~ msgid "in_progress"
+#~ msgstr "En Progreso"
+
+#, fuzzy
+#~ msgid "completed"
+#~ msgstr "Completado por %s"
+
+#, fuzzy
+#~ msgid "error"
+#~ msgstr "Error"
+
+#, fuzzy
+#~ msgid "Missing thumbnail configuration."
+#~ msgstr "Configuración de Decker"
+
+#~ msgid "Name"
+#~ msgstr "Nombre"
+
+#, fuzzy
+#~ msgid "Class"
+#~ msgstr "Archivado <span class=\"count\">(%s)</span>"
+
+#~ msgid "Default"
+#~ msgstr "Predeterminado"
+
+#, fuzzy
+#~ msgid "Left"
+#~ msgstr ""
+#~ "¡ADVERTENCIA: ¡Eliminar un tablero es peligroso! Todas las tareas "
+#~ "asignadas a este tablero se quedarán sin tablero."
+
+#, fuzzy
+#~ msgid "Center"
+#~ msgstr "Centro de formación"
+
+#, fuzzy
+#~ msgid "Maximum width"
+#~ msgstr "MÁXIMA PRIORIDAD"
+
+#, fuzzy
+#~ msgid "Minimum height"
+#~ msgstr "Perfil de Usuario Mínimo"
+
+#, fuzzy
+#~ msgid "Top"
+#~ msgstr "Sin artículo principal (nivel superior)"
+
+#~ msgid "Color"
+#~ msgstr "Color"
+
+#, fuzzy
+#~ msgid "Vertical anchor position"
+#~ msgstr "Vertical"
+
+#, fuzzy
+#~ msgid "Horizontal anchor position"
+#~ msgstr "Horizontal"
+
+#, fuzzy
+#~ msgid "Confirm"
+#~ msgstr ""
+#~ "Para confirmar la eliminación, por favor introduce el slug del término:"
+
+#, fuzzy
+#~ msgid "Invalid color format"
+#~ msgstr "Editar el contenido en formato HTML"
+
+#, fuzzy
+#~ msgid "The password is invalid"
+#~ msgstr "Tipo de publicación inválido."
+
+#, fuzzy
+#~ msgid "Restore"
+#~ msgstr "Esta acción restaurará la tarea."
+
+#, fuzzy
+#~ msgid "Email"
+#~ msgstr "Permitir notificaciones por correo electrónico"
+
+#, fuzzy
+#~ msgid "Create the first user"
+#~ msgstr "-- Seleccionar Usuario --"
+
+#~ msgid "Settings"
+#~ msgstr "Configuraciones"
+
+#, fuzzy
+#~ msgid "Confirm email"
+#~ msgstr "Permitir notificaciones por correo electrónico"
+
+#, fuzzy
+#~ msgid "Display name"
+#~ msgstr "Nombre"
+
+#, fuzzy
+#~ msgid "Installation title"
+#~ msgstr "Título"
+
+#, fuzzy
+#~ msgid "Time zone"
+#~ msgstr "Hora de Fin:"
+
+#, fuzzy
+#~ msgid "Select a template"
+#~ msgstr "-- Seleccionar Usuario --"
+
+#, fuzzy
+#~ msgid "Select a class"
+#~ msgstr "-- Seleccionar Usuario --"
+
+#, fuzzy
+#~ msgid "Select item sets"
+#~ msgstr "-- Seleccionar Usuario --"
+
+#, fuzzy
+#~ msgid "Add to item sets"
+#~ msgstr "Agregar Relación"
+
+#, fuzzy
+#~ msgid "Select sites"
+#~ msgstr "-- Seleccionar Usuario --"
+
+#, fuzzy
+#~ msgid "Add to sites"
+#~ msgstr "Agregar Relación"
+
+#, fuzzy
+#~ msgid "Remove from sites"
+#~ msgstr "Eliminar"
+
+#, fuzzy
+#~ msgid "Clear language"
+#~ msgstr "Borrar Todos los Datos"
+
+#, fuzzy
+#~ msgid "Select properties"
+#~ msgstr "-- Seleccionar Usuario --"
+
+#, fuzzy
+#~ msgid "Clear property values"
+#~ msgstr "Borrar Todos los Datos"
+
+#~ msgid "Label"
+#~ msgstr "Etiqueta"
+
+#, fuzzy
+#~ msgid "Resource template file"
+#~ msgstr "Exportar archivo .ics"
+
+#, fuzzy
+#~ msgid "Display"
+#~ msgstr ""
+#~ "Ingrese el mensaje de alerta para mostrar como un banner. Soporta HTML. "
+#~ "Deje vacío para ocultar."
+
+#~ msgid "Search"
+#~ msgstr "Buscar"
+
+#, fuzzy
+#~ msgid "Administrator email"
+#~ msgstr "Notificaciones por correo electrónico"
+
+#, fuzzy
+#~ msgid "Enable version notifications"
+#~ msgstr "Versión"
+
+#, fuzzy
+#~ msgid "Property label information"
+#~ msgstr "Información"
+
+#, fuzzy
+#~ msgid "Show Vocabulary"
+#~ msgstr "Mostrar Todos los Tableros"
+
+#, fuzzy
+#~ msgid "Show Term"
+#~ msgstr "Editar Término"
+
+#, fuzzy
+#~ msgid "Default site"
+#~ msgstr "Predeterminado"
+
+#, fuzzy
+#~ msgid "Disable file validation"
+#~ msgstr "Por favor, seleccione un archivo para subir."
+
+#, fuzzy
+#~ msgid "Allowed file extensions"
+#~ msgstr "Por favor, seleccione un archivo para subir."
+
+#, fuzzy
+#~ msgid "reCAPTCHA site key"
+#~ msgstr "Clave Compartida"
+
+#, fuzzy
+#~ msgid "reCAPTCHA secret key"
+#~ msgstr "Clave Compartida"
+
+#~ msgid "Title"
+#~ msgstr "Título"
+
+#, fuzzy
+#~ msgid "Add to navigation"
+#~ msgstr "Navegación"
+
+#, fuzzy
+#~ msgid "Manage current items"
+#~ msgstr "Mis tareas por Estado"
+
+#, fuzzy
+#~ msgid "Do nothing"
+#~ msgstr "Por Hacer"
+
+#, fuzzy
+#~ msgid "Search query"
+#~ msgstr "Buscar..."
+
+#, fuzzy
+#~ msgid "Show"
+#~ msgstr "Mostrar Todos los Tableros"
+
+#, fuzzy
+#~ msgid "Attachment link type"
+#~ msgstr "Tipo de publicación inválido."
+
+#, fuzzy
+#~ msgid "Direct link to file"
+#~ msgstr "Exportar archivo .ics"
+
+#, fuzzy
+#~ msgid "Show page pagination"
+#~ msgstr "Mostrar Todos los Tableros"
+
+#, fuzzy
+#~ msgid "Hide on all pages"
+#~ msgstr "Todas las Acciones"
+
+#, fuzzy
+#~ msgid "Show on all pages"
+#~ msgstr "Mostrar Todos los Tableros"
+
+#, fuzzy
+#~ msgid "Show language labels for values"
+#~ msgstr "Mostrar Todas las Etiquetas"
+
+#, fuzzy
+#~ msgid "Select a property"
+#~ msgstr "-- Seleccionar Usuario --"
+
+#, fuzzy
+#~ msgid "Show attached pages"
+#~ msgstr "Mostrar Barra Lateral Completa"
+
+#, fuzzy
+#~ msgid "Exclude resources not in site"
+#~ msgstr "Está ejecutando este sitio con datos de demostración."
+
+#, fuzzy
+#~ msgid "Search type"
+#~ msgstr "Tipo de publicación inválido."
+
+#, fuzzy
+#~ msgid "This site"
+#~ msgstr "Está ejecutando este sitio con datos de demostración."
+
+#, fuzzy
+#~ msgid "All sites"
+#~ msgstr "Todas las Acciones"
+
+#, fuzzy
+#~ msgid "Items"
+#~ msgstr ""
+#~ "Si esta opción está seleccionada, los elementos y conjuntos de elementos "
+#~ "mostrados en la vista de administrador se limitan a los asignados a los "
+#~ "sitios en los que el usuario tiene permisos"
+
+#, fuzzy
+#~ msgid "Search resources"
+#~ msgstr "Buscar..."
+
+#, fuzzy
+#~ msgid "All vocabulary members"
+#~ msgstr "Borrar Todos los Datos"
+
+#, fuzzy
+#~ msgid "Used by resources in this site"
+#~ msgstr "Está ejecutando este sitio con datos de demostración."
+
+#, fuzzy
+#~ msgid "Select templates"
+#~ msgstr "Seleccionar etiquetas..."
+
+#, fuzzy
+#~ msgid "Select role…"
+#~ msgstr "Seleccionar fecha"
+
+#, fuzzy
+#~ msgid "Active"
+#~ msgstr "Tareas Activas"
+
+#, fuzzy
+#~ msgid "Not active"
+#~ msgstr "Tareas Activas"
+
+#, fuzzy
+#~ msgid "Select sites…"
+#~ msgstr "-- Seleccionar Usuario --"
+
+#, fuzzy
+#~ msgid "[All sites]"
+#~ msgstr "Todas las Acciones"
+
+#, fuzzy
+#~ msgid "Add to site permission"
+#~ msgstr "Agregar Relación"
+
+#, fuzzy
+#~ msgid "Select permission…"
+#~ msgstr "-- Seleccionar Usuario --"
+
+#, fuzzy
+#~ msgid "Add to site permission as"
+#~ msgstr "Agregar Relación"
+
+#, fuzzy
+#~ msgid "Is active"
+#~ msgstr "Tareas Activas"
+
+#, fuzzy
+#~ msgid "Default resource template"
+#~ msgstr "Predeterminado"
+
+#, fuzzy
+#~ msgid "Default sites for items"
+#~ msgstr "Predeterminado"
+
+#, fuzzy
+#~ msgid "Site browse columns"
+#~ msgstr "Está ejecutando este sitio con datos de demostración."
+
+#, fuzzy
+#~ msgid "Site browse defaults"
+#~ msgstr "Está ejecutando este sitio con datos de demostración."
+
+#, fuzzy
+#~ msgid "New password"
+#~ msgstr "Nuevo artículo"
+
+#, fuzzy
+#~ msgid "Confirm new password"
+#~ msgstr "Nueva tarea"
+
+#, fuzzy
+#~ msgid "New key label"
+#~ msgstr "Agregar Nueva Etiqueta"
+
+#, fuzzy
+#~ msgid "Basic info"
+#~ msgstr "Información"
+
+#, fuzzy
+#~ msgid "File"
+#~ msgstr "Exportar archivo .ics"
+
+#~ msgid "Comment"
+#~ msgstr "Comentar"
+
+#, fuzzy
+#~ msgid "Import type"
+#~ msgstr "Seleccionar tareas para importar"
+
+#~ msgid "Upload"
+#~ msgstr "Subir"
+
+#, fuzzy
+#~ msgid "URL"
+#~ msgstr "URL:"
+
+#, fuzzy
+#~ msgid "File upload"
+#~ msgstr "Por favor, seleccione un archivo para subir."
+
+#, fuzzy
+#~ msgid "File URL"
+#~ msgstr "URL:"
+
+#, fuzzy
+#~ msgid "File format"
+#~ msgstr "Por favor, seleccione un archivo para subir."
+
+#, fuzzy
+#~ msgid "Label property"
+#~ msgstr "Etiqueta"
+
+#, fuzzy
+#~ msgid "Comment property"
+#~ msgstr "Comentar"
+
+#, fuzzy
+#~ msgid "HTML"
+#~ msgstr "Mostrar código fuente HTML"
+
+#, fuzzy
+#~ msgid "HTML or plain text."
+#~ msgstr "Mostrar código fuente HTML"
+
+#, fuzzy
+#~ msgid "IIIF image URL"
+#~ msgstr "URL:"
+
+#, fuzzy
+#~ msgid "IIIF presentation"
+#~ msgstr "Presentación al cliente"
+
+#, fuzzy
+#~ msgid "IIIF presentation URL"
+#~ msgstr "Presentación al cliente"
+
+#, fuzzy
+#~ msgid "oEmbed URL"
+#~ msgstr "URL:"
+
+#, fuzzy
+#~ msgid "URL for the media to embed."
+#~ msgstr "URL del Evento"
+
+#, fuzzy
+#~ msgid "A URL to the media."
+#~ msgstr "URL del Evento"
+
+#, fuzzy
+#~ msgid "Video URL"
+#~ msgstr "URL:"
+
+#, fuzzy
+#~ msgid "URL for the video to embed."
+#~ msgstr "URL del Evento"
+
+#~ msgid "Start"
+#~ msgstr "Inicio"
+
+#~ msgid "End"
+#~ msgstr "Fin"
+
+#~ msgid "Author"
+#~ msgstr "Autor"
+
+#, fuzzy
+#~ msgid "Browse all"
+#~ msgstr "Todos los Tableros"
+
+#, fuzzy
+#~ msgid "Resource type"
+#~ msgstr "No estás autorizado para acceder a este recurso."
+
+#, fuzzy
+#~ msgid "Limit"
+#~ msgstr "Limitar la lista de artículos sólo a los sitios autorizados"
+
+#, fuzzy
+#~ msgid "Preview title"
+#~ msgstr "Título"
+
+#, fuzzy, php-format
+#~ msgid "Unknown [%s]"
+#~ msgstr "en %s"
+
+#, fuzzy
+#~ msgid "List of pages"
+#~ msgstr "Lista"
+
+#, fuzzy
+#~ msgid "List of sites"
+#~ msgstr "Limitar la lista de artículos sólo a los sitios autorizados"
+
+#, fuzzy
+#~ msgid "Max number of sites"
+#~ msgstr "Máxima Prioridad"
+
+#, fuzzy
+#~ msgid "Show summaries"
+#~ msgstr "Mostrar Todos los Tableros"
+
+#, fuzzy
+#~ msgid "Show thumbnails"
+#~ msgstr "Mostrar Todos los Tableros"
+
+#, fuzzy
+#~ msgid "Exclude current site"
+#~ msgstr "Mis tareas por Estado"
+
+#~ msgid "Vertical"
+#~ msgstr "Vertical"
+
+#~ msgid "Horizontal"
+#~ msgstr "Horizontal"
+
+#, fuzzy
+#~ msgid "Page date/time"
+#~ msgstr "Por favor, selecciona una fecha y hora de inicio."
+
+#, fuzzy
+#~ msgid "Display date/time"
+#~ msgstr "Fecha y Hora de Fin"
+
+#, fuzzy
+#~ msgid "Created & modified"
+#~ msgstr "Creado"
+
+#, fuzzy
+#~ msgid "Date format"
+#~ msgstr "Fecha"
+
+#, fuzzy
+#~ msgid "Full"
+#~ msgstr "Mostrar Barra Lateral Completa"
+
+#, fuzzy
+#~ msgid "Time format"
+#~ msgstr "Tiempo Restante"
+
+#, fuzzy
+#~ msgid "Page title"
+#~ msgstr "Título"
+
+#, fuzzy
+#~ msgid "Page"
+#~ msgstr "No tienes permiso para ver esta página."
+
+#, fuzzy
+#~ msgid "Custom URL"
+#~ msgstr "URL:"
+
+#, fuzzy
+#~ msgid "Main"
+#~ msgstr "Oficina principal"
+
+#, fuzzy
+#~ msgid "Media list"
+#~ msgstr "Lista"
+
+#, fuzzy
+#~ msgid "Values"
+#~ msgstr ""
+#~ "La pila no es válida. Valores permitidos: pendiente, en curso, hecho."
+
+#, fuzzy, php-format
+#~ msgid "Custom (%s)"
+#~ msgstr "en %s"
+
+#, fuzzy
+#~ msgid "item title"
+#~ msgstr "Título"
+
+#, fuzzy
+#~ msgid "media title"
+#~ msgstr "Título"
+
+#, fuzzy
+#~ msgid "no title"
+#~ msgstr "Título"
+
+#, fuzzy
+#~ msgid "Image type"
+#~ msgstr "Tipo de publicación inválido."
+
+#, fuzzy
+#~ msgid "Add a column…"
+#~ msgstr "Agregar Relación"
+
+#, fuzzy
+#~ msgid "Column type"
+#~ msgstr "Tipo de publicación inválido."
+
+#, fuzzy
+#~ msgid "Header"
+#~ msgstr ""
+#~ "Proporcione el token Bearer en el encabezado de autorización para el "
+#~ "endpoint de correo a publicación. Solicitud de ejemplo:"
+
+#, fuzzy
+#~ msgid "Select item set…"
+#~ msgstr "-- Seleccionar Usuario --"
+
+#, fuzzy
+#~ msgid "Select property…"
+#~ msgstr "Seleccionar etiquetas..."
+
+#, fuzzy
+#~ msgid "Select class…"
+#~ msgstr "-- Seleccionar Usuario --"
+
+#, fuzzy
+#~ msgid "Select template…"
+#~ msgstr "Seleccionar etiquetas..."
+
+#, fuzzy
+#~ msgid "Select user…"
+#~ msgstr "-- Seleccionar Usuario --"
+
+#, fuzzy
+#~ msgid "This layout is invalid."
+#~ msgstr "Tipo de publicación inválido."
+
+#, fuzzy
+#~ msgid "Break type"
+#~ msgstr "Tipo de publicación inválido."
+
+#, fuzzy
+#~ msgid "Add pages"
+#~ msgstr "Añadir Nuevo"
+
+#, fuzzy, php-format
+#~ msgid "User activation for %s"
+#~ msgstr "en %s"
+
+#, fuzzy
+#~ msgid "Show attachment title"
+#~ msgstr "El título es obligatorio."
+
+#~ msgid "Cancel"
+#~ msgstr "Cancelar"
+
+#, fuzzy
+#~ msgid "does not start with"
+#~ msgstr "Inicio"
+
+#, fuzzy
+#~ msgid "does not end with"
+#~ msgstr "Fecha de Fin:"
+
+#, fuzzy
+#~ msgid "is resource with ID"
+#~ msgstr "ID de Tarjeta de Nextcloud"
+
+#, fuzzy
+#~ msgid "is not resource with ID"
+#~ msgstr "No estás autorizado para acceder a este recurso."
+
+#, fuzzy
+#~ msgid "has any value"
+#~ msgstr "La tarea se ha archivado correctamente."
+
+#, fuzzy
+#~ msgid "Search full-text"
+#~ msgstr "Diseño Completo"
+
+#, fuzzy
+#~ msgid "Unknown class"
+#~ msgstr "Usuario Desconocido"
+
+#, fuzzy
+#~ msgid "Unknown property"
+#~ msgstr "Usuario Desconocido"
+
+#, fuzzy
+#~ msgid "Unknown template"
+#~ msgstr "Usuario Desconocido"
+
+#, fuzzy
+#~ msgid "Unknown item set"
+#~ msgstr "Usuario Desconocido"
+
+#, fuzzy
+#~ msgid "User"
+#~ msgstr "Usuario y Fecha de la Tarea"
+
+#~ msgid "Unknown user"
+#~ msgstr "Usuario desconocido"
+
+#, fuzzy
+#~ msgid "Site"
+#~ msgstr "Está ejecutando este sitio con datos de demostración."
+
+#, fuzzy
+#~ msgid "Unknown site"
+#~ msgstr "Usuario Desconocido"
+
+#, fuzzy
+#~ msgid "Unknown role"
+#~ msgstr "Usuario Desconocido"
+
+#, fuzzy
+#~ msgid "yes"
+#~ msgstr "Sí"
+
+#, fuzzy
+#~ msgid "Has permission in site"
+#~ msgstr "La tarea se ha archivado correctamente."
+
+#~ msgid "Edit"
+#~ msgstr "Editar"
+
+#, fuzzy
+#~ msgid "View"
+#~ msgstr "Ver Tarea"
+
+#, fuzzy
+#~ msgid "Traslate module texts"
+#~ msgstr "Traducir textos de módulos"

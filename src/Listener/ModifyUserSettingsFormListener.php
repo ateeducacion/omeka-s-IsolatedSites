@@ -24,8 +24,8 @@ class ModifyUserSettingsFormListener
         AuthenticationService $auth
     ) {
         $this->acl = $acl;
-        $this->entityManager=$entityManager;
-        $this->userSettingsService=$userSettingsService;
+        $this->entityManager = $entityManager;
+        $this->userSettingsService = $userSettingsService;
         $this->auth = $auth;
     }
 
@@ -64,10 +64,10 @@ class ModifyUserSettingsFormListener
 
             $isCurrentUserGlobalAdmin = $currentUser && $this->acl->isAdminRole($currentUser->getRole());
     
-
             // Get the user settings
             $this->userSettingsService->setTargetId($userId);
             $limitToGrantedSites = $this->userSettingsService->get('limit_to_granted_sites', false);
+            $limitToOwnAssets = $this->userSettingsService->get('limit_to_own_assets', false);
 
             $fieldset->add([
                 'name' => 'limit_to_granted_sites',
@@ -86,24 +86,51 @@ class ModifyUserSettingsFormListener
                     'readonly' => !$isCurrentUserGlobalAdmin,
                 ],
             ]);
+
+            $fieldset->add([
+                'name' => 'limit_to_own_assets',
+                'type' => 'Checkbox',
+                'options' => [
+                    'label' => 'Limit assets to owned assets only', // @translate
+                    'use_hidden_element' => true,
+                    'checked_value' => '1',
+                    'unchecked_value' => '0',
+                    'info' => 'If checked, assets shown in admin ' . // @translate
+                        'view are limited to those owned by the user', // @translate
+                ],
+                'attributes' => [
+                    'value' => $limitToOwnAssets ? '1' : '0',
+                    'disabled' => !$isCurrentUserGlobalAdmin,
+                    'readonly' => !$isCurrentUserGlobalAdmin,
+                ],
+            ]);
         } catch (\Doctrine\ORM\ORMException $e) {
             throw $e;
         }
     }
+
     public function addInputFilters(Event $event)
     {
-        $form = $event->getTarget(); // Obtener el formulario
-        $inputFilter = $form->getInputFilter(); // Obtener el filtro de entrada
+        $form = $event->getTarget();
+        $inputFilter = $form->getInputFilter();
         
-        // Aquí puedes agregar tus filtros personalizados
         $inputFilter->add([
-            'name' => 'limit_to_granted_sites', // Nombre del campo en el formulario
-            'required' => false, // Si es obligatorio o no
+            'name' => 'limit_to_granted_sites',
+            'required' => false,
             'filters' => [
-                ['name' => 'Boolean'], // Si es un checkbox, convertirlo a booleano
+                ['name' => 'Boolean'],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name' => 'limit_to_own_assets',
+            'required' => false,
+            'filters' => [
+                ['name' => 'Boolean'],
             ],
         ]);
     }
+
     public function handleUserSettings(EventInterface $event)
     {
         try {
@@ -125,7 +152,6 @@ class ModifyUserSettingsFormListener
             $isCurrentUserGlobalAdmin = $currentUser && $this->acl->isAdminRole($currentUser->getRole());
     
             $this->userSettingsService->setTargetId($userId);
-            $limitToGrantedSites = $this->userSettingsService->get('limit_to_granted_sites', false);
 
             // Only allow changes if the current user is a global admin
             if ($isCurrentUserGlobalAdmin) {
@@ -133,13 +159,18 @@ class ModifyUserSettingsFormListener
                     ? (bool)$data['limit_to_granted_sites']
                     : false;
 
+                $limitToOwnAssets = isset($data['limit_to_own_assets'])
+                    ? (bool)$data['limit_to_own_assets']
+                    : false;
+
                 $this->userSettingsService->set('limit_to_granted_sites', $limitToGrantedSites);
+                $this->userSettingsService->set('limit_to_own_assets', $limitToOwnAssets);
             }
         } catch (\Exception $e) {
-            // Log error or handle appropriately
             throw $e;
         }
     }
+
     /**
      * Get the current logged-in user
      *
@@ -147,8 +178,6 @@ class ModifyUserSettingsFormListener
      */
     protected function getCurrentUser()
     {
-        // You'll need to implement this method based on your authentication system
-        // This is just a placeholder - implement according to your needs
         $identity = $this->auth->getIdentity();
         if ($identity) {
             return $this->entityManager->find(\Omeka\Entity\User::class, $identity->getId());

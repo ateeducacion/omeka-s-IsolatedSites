@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-10 13:08+0100\n"
+"POT-Creation-Date: 2025-04-24 07:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,27 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: language/empty.php:1
-msgid "Traslate module texts"
-msgstr ""
-
-#: src\Listener\ModifyUserSettingsFormListener.php:56
+#: src/Listener/ModifyUserSettingsFormListener.php:76
 msgid "Limit item list to granted sites only"
 msgstr ""
 
-#: src\Listener\ModifyUserSettingsFormListener.php:60
+#: src\Listener\ModifyUserSettingsFormListener.php:80
+msgid "If checked, items and itemsets shown in admin "
+msgstr ""
+
+#: src\Listener\ModifyUserSettingsFormListener.php:81
 msgid ""
-"If checked, items and itemsets shown in admin view are limited to those "
-"assigned to sites where the user has permissions"
+"view are limited to those assigned to sites where the user has permissions"
+msgstr ""
+
+#: src\Listener\ModifyUserSettingsFormListener.php:94
+msgid "Limit assets to owned assets only"
+msgstr ""
+
+#: src\Listener\ModifyUserSettingsFormListener.php:98
+msgid "If checked, assets shown in admin "
+msgstr ""
+
+#: src\Listener\ModifyUserSettingsFormListener.php:99
+msgid "view are limited to those owned by the user"
 msgstr ""
