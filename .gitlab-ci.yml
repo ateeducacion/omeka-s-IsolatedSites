@@ -8,8 +8,8 @@ variables:
   # Package version should match \A(\.?[\w\+-]+\.?)+\z regular expresion.
   # See https://docs.gitlab.com/ee/user/packages/generic_packages/#publish-a-package-file
   PACKAGE_VERSION: "${CI_COMMIT_TAG}"
-  PACKAGE_BINARY: "decker-${PACKAGE_VERSION}"
-  PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/decker/${PACKAGE_VERSION}"
+  PACKAGE_BINARY: "omeka-s-IsolatedSites-${PACKAGE_VERSION}"
+  PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/omeka-s-IsolatedSites/${PACKAGE_VERSION}"
 
 # Disabled build and upload stages until get internet connection on Gitlab Runner
 # build:
@@ -21,10 +21,10 @@ variables:
 #     - composer --version
 #   script:
 #     - make package VERSION="${PACKAGE_VERSION}"
-#     - ls -lh "decker-${PACKAGE_VERSION}.zip"
+#     - ls -lh "omeka-s-IsolatedSites-${PACKAGE_VERSION}.zip"
 #   artifacts:
 #     paths:
-#       - "decker-${PACKAGE_VERSION}.zip"
+#       - "omeka-s-IsolatedSites-${PACKAGE_VERSION}.zip"
 #     expire_in: 1 week
 
 # upload:

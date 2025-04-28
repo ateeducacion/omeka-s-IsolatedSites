@@ -22,7 +22,7 @@ jobs:
       - name: Upload ZIP to the release
         uses: softprops/action-gh-release@v2
         with:
-          files: ThreeDViewer-${{ env.RELEASE_TAG }}.zip
+          files: IsolatedSites-${{ env.RELEASE_TAG }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
