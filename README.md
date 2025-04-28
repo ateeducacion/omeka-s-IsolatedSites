@@ -2,7 +2,9 @@
 
 ## Features
 **- In Profiles->User Settings:** 
-  - if "limit to granted sites" checkbox items and item sets assigned to sites where the logged in user has no role are filtered out from the admin browse page
+  - if "limit to granted sites" checkbox:
+       - items and item sets assigned to sites where the logged in user has no role are filtered out from the admin browse page
+       - Sites in admin dashboard and in admin/site route where user has no permissions are filtered out 
   - if "limit to own assets" checkbox assets which do not belong to the user logged in are filtered out from the admin browse page
   - if user is global admin the above checkboxs do not apply
 
