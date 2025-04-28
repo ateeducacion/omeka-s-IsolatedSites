@@ -77,6 +77,6 @@ class ModifySiteQueryListener
            ->where('sp.user_id = :userId')
            ->setParameter('userId', $userId);
 
-        return $qb->executeQuery()->fetchFirstColumn();
+        return $qb->execute()->fetchFirstColumn();
     }
 }

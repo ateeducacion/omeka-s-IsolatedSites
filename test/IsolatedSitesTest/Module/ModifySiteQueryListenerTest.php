@@ -133,7 +133,7 @@ class ModifySiteQueryListenerTest extends TestCase
             ->willReturnSelf();
 
         $grantedSitesQb->expects($this->once())
-            ->method('executeQuery')
+            ->method('execute')
             ->willReturn($statement);
 
         $statement->expects($this->once())
@@ -210,7 +210,7 @@ class ModifySiteQueryListenerTest extends TestCase
             ->willReturnSelf();
         
         $grantedSitesQb->expects($this->once())
-            ->method('executeQuery')
+            ->method('execute')
             ->willReturn($statement);
 
         $statement->expects($this->once())
