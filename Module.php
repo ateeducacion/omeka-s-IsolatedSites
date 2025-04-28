@@ -17,6 +17,7 @@ use IsolatedSites\Listener\ModifyQueryListener;
 use IsolatedSites\Listener\ModifyUserSettingsFormListener;
 use IsolatedSites\Listener\ModifyItemSetQueryListener;
 use IsolatedSites\Listener\ModifyAssetQueryListener;
+use IsolatedSites\Listener\ModifySiteQueryListener;
 
 /**
  * Main class for the IsoltatedSites module.
@@ -113,6 +114,12 @@ class Module extends AbstractModule
             'Omeka\Api\Adapter\AssetAdapter',
             'api.search.query',
             [$this->serviceLocator->get(ModifyAssetQueryListener::class), '__invoke']
+        );
+
+        $sharedEventManager->attach(
+            'Omeka\Api\Adapter\SiteAdapter',
+            'api.search.query',
+            [$this->serviceLocator->get(ModifySiteQueryListener::class), '__invoke']
         );
     }
     /**

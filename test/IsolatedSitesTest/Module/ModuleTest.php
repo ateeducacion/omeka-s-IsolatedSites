@@ -16,6 +16,7 @@ use IsolatedSites\Listener\ModifyQueryListener;
 use IsolatedSites\Listener\ModifyUserSettingsFormListener;
 use IsolatedSites\Listener\ModifyItemSetQueryListener;
 use IsolatedSites\Listener\ModifyAssetQueryListener;
+use IsolatedSites\Listener\ModifySiteQueryListener;
 
 class ModuleTest extends TestCase
 {
@@ -97,18 +98,23 @@ class ModuleTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $mockSiteQueryListener = $this->getMockBuilder(ModifySiteQueryListener::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         // Setup service locator to return our mock listeners
-        $this->serviceLocator->expects($this->exactly(6))
+        $this->serviceLocator->expects($this->exactly(7))
             ->method('get')
             ->willReturnMap([
                 [ModifyUserSettingsFormListener::class, $mockUserSettingsListener],
                 [ModifyQueryListener::class, $mockQueryListener],
                 [ModifyItemSetQueryListener::class, $mockItemSetQueryListener],
                 [ModifyAssetQueryListener::class, $mockAssetQueryListener],
+                [ModifySiteQueryListener::class, $mockSiteQueryListener],
             ]);
 
         // Test that all expected event listeners are attached
-        $this->sharedEventManager->expects($this->exactly(6))
+        $this->sharedEventManager->expects($this->exactly(7))
             ->method('attach')
             ->withConsecutive(
                 [
@@ -140,6 +146,11 @@ class ModuleTest extends TestCase
                     $this->equalTo('Omeka\Api\Adapter\AssetAdapter'),
                     $this->equalTo('api.search.query'),
                     $this->identicalTo([$mockAssetQueryListener, '__invoke'])
+                ],
+                [
+                    $this->equalTo('Omeka\Api\Adapter\SiteAdapter'),
+                    $this->equalTo('api.search.query'),
+                    $this->identicalTo([$mockSiteQueryListener, '__invoke'])
                 ]
             );
 

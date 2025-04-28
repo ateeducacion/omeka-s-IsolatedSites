@@ -27,7 +27,6 @@ class AddLimitToGrantedSitesFieldListener
     public function __invoke(EventInterface $event)
     {
         var_dump(get_class($event->getTarget()));
-        error_log("**** EVENTO LLAMADO******");
         /** @var \Laminas\Form\Form $form */
         $form = $event->getTarget();
         $fieldset = $form->get('user-settings');

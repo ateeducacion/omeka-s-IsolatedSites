@@ -14,6 +14,7 @@ use IsolatedSites\Listener\ModifyUserSettingsFormListener;
 use IsolatedSites\Listener\ModifyQueryListener;
 use IsolatedSites\Listener\ModifyItemSetQueryListener;
 use IsolatedSites\Listener\ModifyAssetQueryListener;
+use IsolatedSites\Listener\ModifySiteQueryListener;
 
 return [
     'view_manager' => [
@@ -65,6 +66,13 @@ return [
                 return new ModifyAssetQueryListener(
                     $services->get('Omeka\AuthenticationService'),
                     $services->get('Omeka\Settings\User')
+                );
+            },
+            ModifySiteQueryListener::class => function ($services) {
+                return new ModifySiteQueryListener(
+                    $services->get('Omeka\AuthenticationService'),
+                    $services->get('Omeka\Settings\User'),
+                    $services->get('Omeka\Connection')
                 );
             },
         ],
