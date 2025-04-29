@@ -1,4 +1,3 @@
-.aider*                  export-ignore
 .DS_Store                export-ignore
 /.distignore             export-ignore
 /.editorconfig           export-ignore
