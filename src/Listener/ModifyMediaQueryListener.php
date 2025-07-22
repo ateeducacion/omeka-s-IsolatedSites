@@ -6,8 +6,9 @@ use Laminas\EventManager\EventInterface;
 use Laminas\Authentication\AuthenticationService;
 use Omeka\Settings\UserSettings;
 use Doctrine\DBAL\Connection;
+use Laminas\Mvc\Application;
 
-class ModifyItemSetQueryListener
+class ModifyMediaQueryListener
 {
     private $authService;
     private $userSettings;
@@ -18,7 +19,7 @@ class ModifyItemSetQueryListener
         AuthenticationService $authService,
         UserSettings $userSettings,
         Connection $connection,
-        $application
+        Application $application
     ) {
         $this->authService = $authService;
         $this->userSettings = $userSettings;
@@ -27,7 +28,8 @@ class ModifyItemSetQueryListener
     }
 
     /**
-     * Modify the itemset query based on the user's role and site permissions.
+     * Modify the media query based on the user's role and site permissions.
+     * Only show media attached to items that are assigned to sites where the user has permissions.
      *
      * @param EventInterface $event
      */
@@ -54,7 +56,7 @@ class ModifyItemSetQueryListener
             $stmt = $this->connection->executeQuery($sql, ['user_id' => $user->getId()]);
             $siteIds = $stmt->fetchFirstColumn();
 
-            // If user has no site permissions, ensure they see no itemsets
+            // If user has no site permissions, ensure they see no media
             if (empty($siteIds)) {
                 $siteIds = [-1]; // Use an impossible ID to return no results
             }
@@ -62,13 +64,13 @@ class ModifyItemSetQueryListener
             $queryBuilder = $event->getParam('queryBuilder');
             $alias = $queryBuilder->getRootAliases()[0];
 
-            // Join with site_item_set table and filter by site IDs
+            // Join with the item that owns the media, then join with the sites that the item belongs to
             $queryBuilder->innerJoin(
-                "$alias.siteItemSets",
-                'sis'
+                "$alias.item",
+                'i'
             )
                 ->innerJoin(
-                    'sis.site',
+                    'i.sites',
                     'site'
                 )
                 ->andWhere('site.id IN (:siteIds)')

@@ -82,8 +82,6 @@ class ModifyUserSettingsFormListener
                 ],
                 'attributes' => [
                     'value' => $limitToGrantedSites ? '1' : '0',
-                    'disabled' => !$isCurrentUserGlobalAdmin,
-                    'readonly' => !$isCurrentUserGlobalAdmin,
                 ],
             ]);
 
@@ -100,8 +98,6 @@ class ModifyUserSettingsFormListener
                 ],
                 'attributes' => [
                     'value' => $limitToOwnAssets ? '1' : '0',
-                    'disabled' => !$isCurrentUserGlobalAdmin,
-                    'readonly' => !$isCurrentUserGlobalAdmin,
                 ],
             ]);
         } catch (\Doctrine\ORM\ORMException $e) {
@@ -134,37 +130,17 @@ class ModifyUserSettingsFormListener
     public function handleUserSettings(EventInterface $event)
     {
         try {
-            $form = $event->getTarget();
-            $data = $form->getData() ?? [];
-            $userId = $form->getOption('user_id');
-
-            if ($userId == null) {
+            // For cas.user.create.pre event, the user is the target
+            $user = $event->getTarget();
+            if (!$user instanceof \Omeka\Entity\User) {
                 return;
             }
-
-            $user = $this->entityManager->find(\Omeka\Entity\User::class, $userId);
-            if ($user == null) {
-                return;
-            }
-
-            // Get the current logged-in user's role
-            $currentUser = $this->getCurrentUser();
-            $isCurrentUserGlobalAdmin = $currentUser && $this->acl->isAdminRole($currentUser->getRole());
-    
-            $this->userSettingsService->setTargetId($userId);
-
-            // Only allow changes if the current user is a global admin
-            if ($isCurrentUserGlobalAdmin) {
-                $limitToGrantedSites = isset($data['limit_to_granted_sites'])
-                    ? (bool)$data['limit_to_granted_sites']
-                    : false;
-
-                $limitToOwnAssets = isset($data['limit_to_own_assets'])
-                    ? (bool)$data['limit_to_own_assets']
-                    : false;
-
-                $this->userSettingsService->set('limit_to_granted_sites', $limitToGrantedSites);
-                $this->userSettingsService->set('limit_to_own_assets', $limitToOwnAssets);
+            // Set the user settings to true by default
+            $userId = $user->getId();
+            if ($userId) {
+                $this->userSettingsService->setTargetId($userId);
+                $this->userSettingsService->set('limit_to_granted_sites', true);
+                $this->userSettingsService->set('limit_to_own_assets', true);
             }
         } catch (\Exception $e) {
             throw $e;

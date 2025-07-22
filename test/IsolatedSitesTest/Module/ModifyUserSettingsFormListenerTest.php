@@ -104,14 +104,10 @@ class ModifyUserSettingsFormListenerTest extends TestCase
             ->method('add')
             ->withConsecutive(
                 [$this->callback(function($params) {
-                    return $params['name'] === 'limit_to_granted_sites' 
-                        && (!isset($params['attributes']['disabled']) || $params['attributes']['disabled'] === false)
-                        && (!isset($params['attributes']['readonly']) || $params['attributes']['readonly'] === false);
+                    return $params['name'] === 'limit_to_granted_sites';
                 })],
                 [$this->callback(function($params) {
-                    return $params['name'] === 'limit_to_own_assets'
-                        && (!isset($params['attributes']['disabled']) || $params['attributes']['disabled'] === false)
-                        && (!isset($params['attributes']['readonly']) || $params['attributes']['readonly'] === false);
+                    return $params['name'] === 'limit_to_own_assets';
                 })]
             );
     
@@ -175,20 +171,42 @@ class ModifyUserSettingsFormListenerTest extends TestCase
             ->method('add')
             ->withConsecutive(
                 [$this->callback(function($params) {
-                    return $params['name'] === 'limit_to_granted_sites'
-                        && $params['attributes']['disabled'] === true 
-                        && $params['attributes']['readonly'] === true;
+                    return $params['name'] === 'limit_to_granted_sites';
                 })],
                 [$this->callback(function($params) {
-                    return $params['name'] === 'limit_to_own_assets'
-                        && $params['attributes']['disabled'] === true 
-                        && $params['attributes']['readonly'] === true;
+                    return $params['name'] === 'limit_to_own_assets';
                 })]
             );
 
         $this->listener->__invoke($this->event);
     }
-public function testHandleUserSettingsAsGlobalAdmin()
+public function testHandleCasUserCreatePreEvent()
+    {
+        // Mock a user object that will be the target of the event
+        $user = $this->createMock(User::class);
+        $user->method('getId')->willReturn(2);
+        
+        // Set up the event to return the user as the target
+        $this->event->expects($this->once())
+            ->method('getTarget')
+            ->willReturn($user);
+        
+        // Expect the user settings to be set to true by default
+        $this->userSettings->expects($this->once())
+            ->method('setTargetId')
+            ->with(2);
+        
+        $this->userSettings->expects($this->exactly(2))
+            ->method('set')
+            ->withConsecutive(
+                ['limit_to_granted_sites', true],
+                ['limit_to_own_assets', true]
+            );
+        
+        $this->listener->handleUserSettings($this->event);
+    }
+
+    public function testHandleUserSettingsAsGlobalAdmin()
     {
         $storage = $this->createMock(StorageInterface::class);
         $storage->method('read')->willReturn((object)['id' => 1]);
@@ -214,28 +232,20 @@ public function testHandleUserSettingsAsGlobalAdmin()
                 return $role === 'global_admin';
             });
 
-        $formData = [
-            'limit_to_granted_sites' => true,
-            'limit_to_own_assets' => true
-        ];
+        // Mock a user object that will be the target of the event
+        $user = $this->createMock(User::class);
+        $user->method('getId')->willReturn(2);
         
+        // Set up the event to return the user as the target
         $this->event->expects($this->once())
             ->method('getTarget')
-            ->willReturn($this->form);
-    
-        $this->form->expects($this->once())
-            ->method('getData')
-            ->willReturn($formData);
-            
-        $this->form->expects($this->once())
-            ->method('getOption')
-            ->with('user_id')
-            ->willReturn(2);
-    
+            ->willReturn($user);
+        
+        // Expect the user settings to be set to true by default
         $this->userSettings->expects($this->once())
             ->method('setTargetId')
             ->with(2);
-    
+        
         $this->userSettings->expects($this->exactly(2))
             ->method('set')
             ->withConsecutive(
@@ -272,31 +282,26 @@ public function testHandleUserSettingsAsGlobalAdmin()
                 return $role === 'global_admin';
             });
     
-        $formData = [
-            'limit_to_granted_sites' => true,
-            'limit_to_own_assets' => true
-        ];
+        // Mock a user object that will be the target of the event
+        $user = $this->createMock(User::class);
+        $user->method('getId')->willReturn(2);
         
+        // Set up the event to return the user as the target
         $this->event->expects($this->once())
             ->method('getTarget')
-            ->willReturn($this->form);
-    
-        $this->form->expects($this->once())
-            ->method('getData')
-            ->willReturn($formData);
-            
-        $this->form->expects($this->once())
-            ->method('getOption')
-            ->with('user_id')
-            ->willReturn(2);
-    
+            ->willReturn($user);
+        
+        // Expect the user settings to be set to true by default
         $this->userSettings->expects($this->once())
             ->method('setTargetId')
             ->with(2);
-    
-        // Verify that no settings are changed
-        $this->userSettings->expects($this->never())
-            ->method('set');
+        
+        $this->userSettings->expects($this->exactly(2))
+            ->method('set')
+            ->withConsecutive(
+                ['limit_to_granted_sites', true],
+                ['limit_to_own_assets', true]
+            );
     
         $this->listener->handleUserSettings($this->event);
     }

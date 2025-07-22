@@ -18,6 +18,7 @@ use IsolatedSites\Listener\ModifyUserSettingsFormListener;
 use IsolatedSites\Listener\ModifyItemSetQueryListener;
 use IsolatedSites\Listener\ModifyAssetQueryListener;
 use IsolatedSites\Listener\ModifySiteQueryListener;
+use IsolatedSites\Listener\ModifyMediaQueryListener;
 
 /**
  * Main class for the IsoltatedSites module.
@@ -90,8 +91,8 @@ class Module extends AbstractModule
         );
 
         $sharedEventManager->attach(
-            \Omeka\Form\UserForm::class,
-            'form.submit',
+            'CAS\Controller\LoginController',
+            'cas.user.create.post',
             [$this->serviceLocator->get(ModifyUserSettingsFormListener::class), 'handleUserSettings']
         );
 
@@ -120,6 +121,13 @@ class Module extends AbstractModule
             'Omeka\Api\Adapter\SiteAdapter',
             'api.search.query',
             [$this->serviceLocator->get(ModifySiteQueryListener::class), '__invoke']
+        );
+
+        // For limit the view of Media
+        $sharedEventManager->attach(
+            'Omeka\Api\Adapter\MediaAdapter',
+            'api.search.query',
+            [$this->serviceLocator->get(ModifyMediaQueryListener::class), '__invoke']
         );
     }
     /**

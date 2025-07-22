@@ -29,6 +29,14 @@ class ModifyItemSetQueryListenerTest extends TestCase
         $this->event = $this->createMock(EventInterface::class);
         $this->queryBuilder = $this->createMock(QueryBuilder::class);
         $this->user = $this->createMock(User::class);
+        $this->application = $this->createMock(\Laminas\Mvc\Application::class);
+        $this->mvcEvent = $this->createMock(\Laminas\Mvc\MvcEvent::class);
+        $this->routeMatch = $this->createMock(\Laminas\Router\RouteMatch::class);
+        
+        // Setup application mock to return MVC event
+        $this->application->method('getMvcEvent')->willReturn($this->mvcEvent);
+        $this->mvcEvent->method('getRouteMatch')->willReturn($this->routeMatch);
+        $this->routeMatch->method('getMatchedRouteName')->willReturn('admin/default');
     }
 
     public function testGlobalAdminBypassesFilter()
@@ -40,7 +48,8 @@ class ModifyItemSetQueryListenerTest extends TestCase
         $listener = new ModifyItemSetQueryListener(
             $this->authService,
             $this->userSettings,
-            $this->connection
+            $this->connection,
+            $this->application
         );
 
         // Event should not be modified
@@ -93,7 +102,8 @@ class ModifyItemSetQueryListenerTest extends TestCase
         $listener = new ModifyItemSetQueryListener(
             $this->authService,
             $this->userSettings,
-            $this->connection
+            $this->connection,
+            $this->application
         );
 
         $listener($this->event);
@@ -142,7 +152,8 @@ class ModifyItemSetQueryListenerTest extends TestCase
         $listener = new ModifyItemSetQueryListener(
             $this->authService,
             $this->userSettings,
-            $this->connection
+            $this->connection,
+            $this->application
         );
 
         $listener($this->event);

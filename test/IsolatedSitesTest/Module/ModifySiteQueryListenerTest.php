@@ -30,12 +30,21 @@ class ModifySiteQueryListenerTest extends TestCase
         $this->queryBuilder = $this->createMock(QueryBuilder::class);
         $this->event = $this->createMock(Event::class);
         $this->user = $this->createMock(User::class);
+        $this->application = $this->createMock(\Laminas\Mvc\Application::class);
+        $this->mvcEvent = $this->createMock(\Laminas\Mvc\MvcEvent::class);
+        $this->routeMatch = $this->createMock(\Laminas\Router\RouteMatch::class);
+        
+        // Setup application mock to return MVC event
+        $this->application->method('getMvcEvent')->willReturn($this->mvcEvent);
+        $this->mvcEvent->method('getRouteMatch')->willReturn($this->routeMatch);
+        $this->routeMatch->method('getMatchedRouteName')->willReturn('admin/default');
 
         // Create the listener
         $this->listener = new ModifySiteQueryListener(
             $this->auth,
             $this->userSettings,
-            $this->connection
+            $this->connection,
+            $this->application
         );
     }
 
@@ -75,7 +84,7 @@ class ModifySiteQueryListenerTest extends TestCase
         // Setup user settings
         $this->userSettings->expects($this->once())
             ->method('get')
-            ->with('limit_to_granted_sites', false)
+            ->with('limit_to_granted_sites', 1)
             ->willReturn(false);
 
         // QueryBuilder should not be modified when limit setting is false
@@ -103,7 +112,7 @@ class ModifySiteQueryListenerTest extends TestCase
         // Setup user settings
         $this->userSettings->expects($this->once())
             ->method('get')
-            ->with('limit_to_granted_sites', false)
+            ->with('limit_to_granted_sites', 1)
             ->willReturn(true);
 
         // Setup granted sites query
@@ -182,7 +191,7 @@ class ModifySiteQueryListenerTest extends TestCase
         // Setup user settings
         $this->userSettings->expects($this->once())
             ->method('get')
-            ->with('limit_to_granted_sites', false)
+            ->with('limit_to_granted_sites', 1)
             ->willReturn(true);
 
         // Setup granted sites query
