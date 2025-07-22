@@ -90,8 +90,8 @@ class Module extends AbstractModule
         );
 
         $sharedEventManager->attach(
-            \Omeka\Form\UserForm::class,
-            'form.submit',
+            'CAS\Controller\LoginController',
+            'cas.user.create.post',
             [$this->serviceLocator->get(ModifyUserSettingsFormListener::class), 'handleUserSettings']
         );
 

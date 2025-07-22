@@ -10,13 +10,16 @@ class ModifyAssetQueryListener
 {
     private $authService;
     private $userSettings;
+    private $application;
 
     public function __construct(
         AuthenticationService $authService,
-        UserSettings $userSettings
+        UserSettings $userSettings,
+        $application
     ) {
         $this->authService = $authService;
         $this->userSettings = $userSettings;
+        $this->application = $application;
     }
 
     /**
@@ -28,8 +31,13 @@ class ModifyAssetQueryListener
     {
         $user = $this->authService->getIdentity();
 
-        // Don't limit assets for global admins or public users
-        if (!$user || $user->getRole() === 'global_admin') {
+        // Check if we're in the admin interface
+        $routeMatch = $this->application->getMvcEvent()->getRouteMatch();
+        $routeName = $routeMatch ? $routeMatch->getMatchedRouteName() : '';
+        $isAdmin = strpos($routeName, 'admin') === 0;
+
+        // Only apply filtering in admin interface for non-global-admin users
+        if (!$isAdmin || !$user || $user->getRole() === 'global_admin') {
             return;
         }
 

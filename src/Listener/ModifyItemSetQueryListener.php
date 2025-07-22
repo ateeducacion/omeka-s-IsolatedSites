@@ -12,15 +12,18 @@ class ModifyItemSetQueryListener
     private $authService;
     private $userSettings;
     private $connection;
+    private $application;
 
     public function __construct(
         AuthenticationService $authService,
         UserSettings $userSettings,
-        Connection $connection
+        Connection $connection,
+        $application
     ) {
         $this->authService = $authService;
         $this->userSettings = $userSettings;
         $this->connection = $connection;
+        $this->application = $application;
     }
 
     /**
@@ -32,8 +35,13 @@ class ModifyItemSetQueryListener
     {
         $user = $this->authService->getIdentity();
 
-        // Not limit the view of itemsets to global_admins or not_logged users (public view)
-        if (!$user || $user->getRole() === 'global_admin') {
+        // Check if we're in the admin interface
+        $routeMatch = $this->application->getMvcEvent()->getRouteMatch();
+        $routeName = $routeMatch ? $routeMatch->getMatchedRouteName() : '';
+        $isAdmin = strpos($routeName, 'admin') === 0;
+
+        // Only apply filtering in admin interface for non-global-admin users
+        if (!$isAdmin || !$user || $user->getRole() === 'global_admin') {
             return;
         }
 
