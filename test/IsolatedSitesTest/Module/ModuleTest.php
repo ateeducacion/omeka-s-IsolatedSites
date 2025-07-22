@@ -17,6 +17,7 @@ use IsolatedSites\Listener\ModifyUserSettingsFormListener;
 use IsolatedSites\Listener\ModifyItemSetQueryListener;
 use IsolatedSites\Listener\ModifyAssetQueryListener;
 use IsolatedSites\Listener\ModifySiteQueryListener;
+use IsolatedSites\Listener\ModifyMediaQueryListener;
 
 class ModuleTest extends TestCase
 {
@@ -101,9 +102,13 @@ class ModuleTest extends TestCase
         $mockSiteQueryListener = $this->getMockBuilder(ModifySiteQueryListener::class)
             ->disableOriginalConstructor()
             ->getMock();
+            
+        $mockMediaQueryListener = $this->getMockBuilder(ModifyMediaQueryListener::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         // Setup service locator to return our mock listeners
-        $this->serviceLocator->expects($this->exactly(7))
+        $this->serviceLocator->expects($this->exactly(8))
             ->method('get')
             ->willReturnMap([
                 [ModifyUserSettingsFormListener::class, $mockUserSettingsListener],
@@ -111,10 +116,11 @@ class ModuleTest extends TestCase
                 [ModifyItemSetQueryListener::class, $mockItemSetQueryListener],
                 [ModifyAssetQueryListener::class, $mockAssetQueryListener],
                 [ModifySiteQueryListener::class, $mockSiteQueryListener],
+                [ModifyMediaQueryListener::class, $mockMediaQueryListener],
             ]);
 
         // Test that all expected event listeners are attached
-        $this->sharedEventManager->expects($this->exactly(7))
+        $this->sharedEventManager->expects($this->exactly(8))
             ->method('attach')
             ->withConsecutive(
                 [
@@ -151,6 +157,11 @@ class ModuleTest extends TestCase
                     $this->equalTo('Omeka\Api\Adapter\SiteAdapter'),
                     $this->equalTo('api.search.query'),
                     $this->identicalTo([$mockSiteQueryListener, '__invoke'])
+                ],
+                [
+                    $this->equalTo('Omeka\Api\Adapter\MediaAdapter'),
+                    $this->equalTo('api.search.query'),
+                    $this->identicalTo([$mockMediaQueryListener, '__invoke'])
                 ]
             );
 

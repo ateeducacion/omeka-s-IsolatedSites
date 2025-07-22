@@ -15,6 +15,7 @@ use IsolatedSites\Listener\ModifyQueryListener;
 use IsolatedSites\Listener\ModifyItemSetQueryListener;
 use IsolatedSites\Listener\ModifyAssetQueryListener;
 use IsolatedSites\Listener\ModifySiteQueryListener;
+use IsolatedSites\Listener\ModifyMediaQueryListener;
 use Laminas\Mvc\Application;
 
 return [
@@ -75,6 +76,14 @@ return [
             },
             ModifySiteQueryListener::class => function ($services) {
                 return new ModifySiteQueryListener(
+                    $services->get('Omeka\AuthenticationService'),
+                    $services->get('Omeka\Settings\User'),
+                    $services->get('Omeka\Connection'),
+                    $services->get('Application')
+                );
+            },
+            ModifyMediaQueryListener::class => function ($services) {
+                return new ModifyMediaQueryListener(
                     $services->get('Omeka\AuthenticationService'),
                     $services->get('Omeka\Settings\User'),
                     $services->get('Omeka\Connection'),
