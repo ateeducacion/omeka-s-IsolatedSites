@@ -125,8 +125,10 @@ class UserApiListener
         $this->userSettings->setTargetId($representation->id());
 
         // Add custom settings to JSON-LD
-        $jsonLd['o-module-isolatedsites:limit_to_granted_sites'] = (bool) $this->userSettings->get('limit_to_granted_sites', false);
-        $jsonLd['o-module-isolatedsites:limit_to_own_assets'] = (bool) $this->userSettings->get('limit_to_own_assets', false);
+        $jsonLd['o-module-isolatedsites:limit_to_granted_sites'] =
+            (bool) $this->userSettings->get('limit_to_granted_sites', false);
+        $jsonLd['o-module-isolatedsites:limit_to_own_assets'] =
+            (bool) $this->userSettings->get('limit_to_own_assets', false);
 
         // Set the modified JSON-LD back to the event
         $event->setParam('jsonLd', $jsonLd);
@@ -149,11 +151,17 @@ class UserApiListener
 
         // Add custom settings to batch data if present with validation
         if (isset($rawData['o-module-isolatedsites:limit_to_granted_sites'])) {
-            $value = $this->validateBooleanValue($rawData['o-module-isolatedsites:limit_to_granted_sites'], 'limit_to_granted_sites');
+            $value = $this->validateBooleanValue(
+                $rawData['o-module-isolatedsites:limit_to_granted_sites'],
+                'limit_to_granted_sites'
+            );
             $data['o-module-isolatedsites:limit_to_granted_sites'] = $value;
         }
         if (isset($rawData['o-module-isolatedsites:limit_to_own_assets'])) {
-            $value = $this->validateBooleanValue($rawData['o-module-isolatedsites:limit_to_own_assets'], 'limit_to_own_assets');
+            $value = $this->validateBooleanValue(
+                $rawData['o-module-isolatedsites:limit_to_own_assets'],
+                'limit_to_own_assets'
+            );
             $data['o-module-isolatedsites:limit_to_own_assets'] = $value;
         }
 
@@ -201,7 +209,8 @@ class UserApiListener
         
         // If we get here, the value is invalid
         throw new \Omeka\Api\Exception\ValidationException(sprintf(
-            'Invalid value for %s. Expected boolean value (true/false, 1/0, "true"/"false", "yes"/"no", "on"/"off"), got: %s',
+            'Invalid value for %s. Expected boolean value (true/false,'.
+            '1/0, "true"/"false", "yes"/"no", "on"/"off"), got: %s',
             $fieldName,
             is_string($value) ? '"' . $value . '"' : gettype($value) . '(' . var_export($value, true) . ')'
         ));
