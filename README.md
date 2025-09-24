@@ -76,13 +76,71 @@ Depending on the settings enabled, the admin interface will be dynamically filte
   - `limit_to_own_assets`
 - **Event Listeners**:
   - Listeners attached to `api.search.query` events filter the resources dynamically at query time.
+  - API event listeners handle custom settings in user API operations.
 - **Resource Filters**:
   - Items: Filtered based on granted sites.
   - Item Sets: Filtered based on granted sites.
   - Assets: Filtered based on ownership.
   - Sites: Filtered based on granted site permissions.
 - **Admin Users**: Administrators are exempt from restrictions.
-- **No API restrictions**: This module only changes **admin UI** visibility, it does not alter underlying Omeka S permission checks.
+- **API Integration**: Custom user settings are accessible through both REST API and PHP API.
+- **No Permission Changes**: This module only changes **admin UI** visibility and adds API access to custom settings, it does not alter underlying Omeka S permission checks.
+
+---
+
+## 🔌 API Integration
+
+The custom user settings (`limit_to_granted_sites`, `limit_to_own_assets`) are fully integrated with Omeka-S API:
+
+### REST API Usage
+
+**Reading user data** (GET `/api/users/{id}`):
+```json
+{
+  "o:id": 1,
+  "o:name": "John Doe",
+  "o:email": "john@example.com",
+  "o:role": "editor",
+  "o:is_active": true,
+  "o-module-isolatedsites:limit_to_granted_sites": true,
+  "o-module-isolatedsites:limit_to_own_assets": false
+}
+```
+
+**Updating user data** (PUT `/api/users/{id}`):
+```json
+{
+  "o:name": "Updated Name",
+  "o-module-isolatedsites:limit_to_granted_sites": false,
+  "o-module-isolatedsites:limit_to_own_assets": true
+}
+```
+
+### PHP API Usage
+
+**Reading settings**:
+```php
+$user = $api->read('users', 1)->getContent();
+
+// Method 1: Helper methods (recommended)
+$limitToGrantedSites = $user->limitToGrantedSites();
+$limitToOwnAssets = $user->limitToOwnAssets();
+
+// Method 2: JSON-LD data
+$jsonLd = $user->getJsonLd();
+$limitToGrantedSites = $jsonLd['o-module-isolatedsites:limit_to_granted_sites'];
+```
+
+**Updating settings**:
+```php
+$api->update('users', 1, [
+    'o:name' => 'Updated Name',
+    'o-module-isolatedsites:limit_to_granted_sites' => true,
+    'o-module-isolatedsites:limit_to_own_assets' => false
+]);
+```
+
+**Note**: For PHP API calls, custom settings must be accessed via `getJsonLd()` or helper methods. See [API_INTEGRATION_README.md](API_INTEGRATION_README.md) for complete documentation.
 
 ---
 
@@ -95,4 +153,3 @@ This module is released under the [GNU General Public License v3.0 (GPL-3.0)](ht
 ## 📬 Support
 
 For questions, suggestions, or contributions, please open an [Issue](https://github.com/ateeducacion/omeka-s-IsolatedSites/issues) or submit a Pull Request.
-
