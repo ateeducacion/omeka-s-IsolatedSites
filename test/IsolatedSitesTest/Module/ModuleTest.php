@@ -18,6 +18,7 @@ use IsolatedSites\Listener\ModifyItemSetQueryListener;
 use IsolatedSites\Listener\ModifyAssetQueryListener;
 use IsolatedSites\Listener\ModifySiteQueryListener;
 use IsolatedSites\Listener\ModifyMediaQueryListener;
+use IsolatedSites\Listener\UserApiListener;
 
 class ModuleTest extends TestCase
 {
@@ -107,8 +108,12 @@ class ModuleTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $mockUserApiListener = $this->getMockBuilder(UserApiListener::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         // Setup service locator to return our mock listeners
-        $this->serviceLocator->expects($this->exactly(8))
+        $this->serviceLocator->expects($this->exactly(12))
             ->method('get')
             ->willReturnMap([
                 [ModifyUserSettingsFormListener::class, $mockUserSettingsListener],
@@ -117,10 +122,11 @@ class ModuleTest extends TestCase
                 [ModifyAssetQueryListener::class, $mockAssetQueryListener],
                 [ModifySiteQueryListener::class, $mockSiteQueryListener],
                 [ModifyMediaQueryListener::class, $mockMediaQueryListener],
+                [UserApiListener::class, $mockUserApiListener],
             ]);
 
         // Test that all expected event listeners are attached
-        $this->sharedEventManager->expects($this->exactly(8))
+        $this->sharedEventManager->expects($this->exactly(12))
             ->method('attach')
             ->withConsecutive(
                 [
@@ -162,6 +168,26 @@ class ModuleTest extends TestCase
                     $this->equalTo('Omeka\Api\Adapter\MediaAdapter'),
                     $this->equalTo('api.search.query'),
                     $this->identicalTo([$mockMediaQueryListener, '__invoke'])
+                ],
+                [
+                    $this->equalTo('Omeka\Api\Adapter\UserAdapter'),
+                    $this->equalTo('api.hydrate.post'),
+                    $this->identicalTo([$mockUserApiListener, 'handleApiHydrate'])
+                ],
+                [
+                    $this->equalTo('Omeka\Api\Representation\UserRepresentation'),
+                    $this->equalTo('rep.resource.json'),
+                    $this->identicalTo([$mockUserApiListener, 'handleRepresentationJson'])
+                ],
+                [
+                    $this->equalTo('Omeka\Api\Adapter\UserAdapter'),
+                    $this->equalTo('api.create.post'),
+                    $this->identicalTo([$mockUserApiListener, 'handleApiCreate'])
+                ],
+                [
+                    $this->equalTo('Omeka\Api\Adapter\UserAdapter'),
+                    $this->equalTo('api.batch_update.pre'),
+                    $this->identicalTo([$mockUserApiListener, 'handleBatchUpdate'])
                 ]
             );
 
