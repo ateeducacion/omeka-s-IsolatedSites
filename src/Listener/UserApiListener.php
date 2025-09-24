@@ -162,7 +162,7 @@ class UserApiListener
 
     /**
      * Validate that a value is a proper boolean or can be converted to boolean
-     * 
+     *
      * @param mixed $value The value to validate
      * @param string $fieldName The field name for error messages
      * @return bool The validated boolean value
