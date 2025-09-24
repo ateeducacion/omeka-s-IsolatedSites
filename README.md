@@ -117,19 +117,15 @@ The custom user settings (`limit_to_granted_sites`, `limit_to_own_assets`) are f
 ```
 
 ### PHP API Usage
+Using Service Manager in $service and api in $api Omeka/ApiManager
+$response = $api->read('users', $ID);
+$user = $response->getContent();
+$userSettingsService = $services->get('Omeka\Settings\User');
+$userSettingsService->setTargetId($user->id());
 
-**Reading settings**:
-```php
-$user = $api->read('users', 1)->getContent();
+$userSettingsService->get('limit_to_granted_sites', false)
+$userSettingsService->get('limit_to_own_assets', false)
 
-// Method 1: Helper methods (recommended)
-$limitToGrantedSites = $user->limitToGrantedSites();
-$limitToOwnAssets = $user->limitToOwnAssets();
-
-// Method 2: JSON-LD data
-$jsonLd = $user->getJsonLd();
-$limitToGrantedSites = $jsonLd['o-module-isolatedsites:limit_to_granted_sites'];
-```
 
 **Updating settings**:
 ```php
@@ -137,7 +133,7 @@ $api->update('users', 1, [
     'o:name' => 'Updated Name',
     'o-module-isolatedsites:limit_to_granted_sites' => true,
     'o-module-isolatedsites:limit_to_own_assets' => false
-]);
+],[],'isPartial'=> true);
 ```
 
 **Note**: For PHP API calls, custom settings must be accessed via `getJsonLd()` or helper methods. See [API_INTEGRATION_README.md](API_INTEGRATION_README.md) for complete documentation.
