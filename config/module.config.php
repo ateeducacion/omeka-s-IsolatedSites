@@ -16,6 +16,7 @@ use IsolatedSites\Listener\ModifyItemSetQueryListener;
 use IsolatedSites\Listener\ModifyAssetQueryListener;
 use IsolatedSites\Listener\ModifySiteQueryListener;
 use IsolatedSites\Listener\ModifyMediaQueryListener;
+use IsolatedSites\Listener\UserApiListener;
 use Laminas\Mvc\Application;
 
 return [
@@ -88,6 +89,11 @@ return [
                     $services->get('Omeka\Settings\User'),
                     $services->get('Omeka\Connection'),
                     $services->get('Application')
+                );
+            },
+            UserApiListener::class => function ($services) {
+                return new UserApiListener(
+                    $services->get('Omeka\Settings\User')
                 );
             },
         ],

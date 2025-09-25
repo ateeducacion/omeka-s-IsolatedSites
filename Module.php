@@ -19,6 +19,7 @@ use IsolatedSites\Listener\ModifyItemSetQueryListener;
 use IsolatedSites\Listener\ModifyAssetQueryListener;
 use IsolatedSites\Listener\ModifySiteQueryListener;
 use IsolatedSites\Listener\ModifyMediaQueryListener;
+use IsolatedSites\Listener\UserApiListener;
 
 /**
  * Main class for the IsoltatedSites module.
@@ -128,6 +129,31 @@ class Module extends AbstractModule
             'Omeka\Api\Adapter\MediaAdapter',
             'api.search.query',
             [$this->serviceLocator->get(ModifyMediaQueryListener::class), '__invoke']
+        );
+
+        // API listeners for custom user settings
+        $sharedEventManager->attach(
+            'Omeka\Api\Adapter\UserAdapter',
+            'api.hydrate.post',
+            [$this->serviceLocator->get(UserApiListener::class), 'handleApiHydrate']
+        );
+
+        // This event is triggered for JSON-LD serialization (works for both REST and some PHP API cases)
+        $sharedEventManager->attach(
+            'Omeka\Api\Representation\UserRepresentation',
+            'rep.resource.json',
+            [$this->serviceLocator->get(UserApiListener::class), 'handleRepresentationJson']
+        );
+        $sharedEventManager->attach(
+            'Omeka\Api\Adapter\UserAdapter',
+            'api.create.post',
+            [$this->serviceLocator->get(UserApiListener::class), 'handleApiCreate']
+        );
+
+        $sharedEventManager->attach(
+            'Omeka\Api\Adapter\UserAdapter',
+            'api.batch_update.pre',
+            [$this->serviceLocator->get(UserApiListener::class), 'handleBatchUpdate']
         );
     }
     /**
