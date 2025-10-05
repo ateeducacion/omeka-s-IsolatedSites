@@ -20,12 +20,18 @@ use IsolatedSites\Listener\ModifyAssetQueryListener;
 use IsolatedSites\Listener\ModifySiteQueryListener;
 use IsolatedSites\Listener\ModifyMediaQueryListener;
 use IsolatedSites\Listener\UserApiListener;
+use Omeka\Permissions\Acl;
+use Omeka\Permissions\Assertion\IsSelfAssertion;
+use IsolatedSites\Assertion\HasAccessToItemSiteAssertion;
 
 /**
  * Main class for the IsoltatedSites module.
  */
 class Module extends AbstractModule
 {
+    /** Custom role for site editors with limited access to their granted sites */
+    const ROLE_SITE_EDITOR = 'site_editor';
+    
     /**
      * Retrieve the configuration array.
      *
@@ -69,7 +75,9 @@ class Module extends AbstractModule
         $this->serviceLocator = $event->getApplication()->getServiceManager();
         $sharedEventManager = $this->serviceLocator->get('SharedEventManager');
 
+        $this->addAclRoleAndRules();
         $this->attachListeners($sharedEventManager);
+        $this->filterAdminNavigationOnBootstrap($event);
     }
     /**
      * Register the file validator service and renderers.
@@ -150,11 +158,7 @@ class Module extends AbstractModule
             [$this->serviceLocator->get(UserApiListener::class), 'handleApiCreate']
         );
 
-        $sharedEventManager->attach(
-            'Omeka\Api\Adapter\UserAdapter',
-            'api.batch_update.pre',
-            [$this->serviceLocator->get(UserApiListener::class), 'handleBatchUpdate']
-        );
+
     }
     /**
      * Get the configuration form for this module.
@@ -195,6 +199,91 @@ class Module extends AbstractModule
         // Save configuration settings in omeka settings database
         $settings->set('activate_IsolatedSites', $value);
     }
+     /**
+     * Add ACL role and rules for this module.
+     */
+    protected function addAclRoleAndRules(): void
+    {
+        /** @var \Omeka\Permissions\Acl $acl */
+        $services = $this->getServiceLocator();
+        $acl = $services->get('Omeka\Acl');
+
+        // Add SITE_EDITOR role that inherits from EDITOR
+        $acl->addRole(self::ROLE_SITE_EDITOR, Acl::ROLE_EDITOR);
+         $acl->addRoleLabel(self::ROLE_SITE_EDITOR, 'Site Editor'); // @translate
+        // Get the site access assertion for item restrictions
+        $siteAccessAssertion = $services->get(HasAccessToItemSiteAssertion::class);
+
+        // Site editors have same permissions as editors, but limited to items in their granted sites
+        // We use allow with assertion to restrict access to items in granted sites only
+        $acl->allow(
+            self::ROLE_SITE_EDITOR,
+            [\Omeka\Entity\Item::class],
+            ['read', 'create', 'update', 'delete', 'browse'],
+            $siteAccessAssertion
+        );
+
+        // Allow site editors to manage themselves
+        $acl->allow(
+            self::ROLE_SITE_EDITOR,
+            [\Omeka\Entity\User::class],
+            ['read', 'update', 'change-password'],
+            new IsSelfAssertion
+        );
+    }
     
-    // /**
+    /**
+     * Filter admin navigation during bootstrap for specific roles.
+     *
+     * @param \Laminas\Mvc\MvcEvent $event
+     */
+    protected function filterAdminNavigationOnBootstrap($event)
+    {
+        $auth = $this->serviceLocator->get('Omeka\AuthenticationService');
+        $identity = $auth->getIdentity();
+   
+        if (!$identity) {
+            return;
+        }
+
+        $role = $identity->getRole();
+        
+        // Only filter navigation for site editor role
+        if ($role !== self::ROLE_SITE_EDITOR) {
+            return;
+        }
+        
+        // Site editors inherit editor permissions, so navigation is already appropriate
+        // No additional filtering needed
+    }
+    
+    /**
+     * Filter the admin navigation menu for specific roles.
+     *
+     * @param Event $event
+     */
+    public function filterAdminNavigation(Event $event)
+    {
+        // We only want this logic to run for the main admin layout
+        if ('layout/layout' !== $event->getTarget()->resolver()->getTemplate()) {
+            return;
+        }
+
+        $auth = $this->serviceLocator->get('Omeka\AuthenticationService');
+        $identity = $auth->getIdentity();
+        
+        if (!$identity) {
+            return;
+        }
+
+        $role = $identity->getRole();
+        
+        // Only filter navigation for site editor role
+        if ($role !== self::ROLE_SITE_EDITOR) {
+            return;
+        }
+        
+        // Site editors inherit editor permissions, so navigation is already appropriate
+        // No additional filtering needed
+    }
 }

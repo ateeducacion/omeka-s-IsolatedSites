@@ -17,6 +17,8 @@ use IsolatedSites\Listener\ModifyAssetQueryListener;
 use IsolatedSites\Listener\ModifySiteQueryListener;
 use IsolatedSites\Listener\ModifyMediaQueryListener;
 use IsolatedSites\Listener\UserApiListener;
+use IsolatedSites\Listener\FilterAdminNavigationListener;
+use IsolatedSites\Assertion\HasAccessToItemSiteAssertion;
 use Laminas\Mvc\Application;
 
 return [
@@ -94,6 +96,17 @@ return [
             UserApiListener::class => function ($services) {
                 return new UserApiListener(
                     $services->get('Omeka\Settings\User')
+                );
+            },
+            FilterAdminNavigationListener::class => function ($services) {
+                return new FilterAdminNavigationListener(
+                    $services->get('Omeka\AuthenticationService')
+                );
+            },
+            HasAccessToItemSiteAssertion::class => function ($services) {
+                return new HasAccessToItemSiteAssertion(
+                    $services->get('Omeka\Settings\User'),
+                    $services->get('Omeka\Connection')
                 );
             },
         ],
