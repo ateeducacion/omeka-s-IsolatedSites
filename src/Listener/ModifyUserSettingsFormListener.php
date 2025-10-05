@@ -62,12 +62,34 @@ class ModifyUserSettingsFormListener
                 return;
             }
 
-            $isCurrentUserGlobalAdmin = $currentUser && $this->acl->isAdminRole($currentUser->getRole());
+            // Check if current user is allowed to modify these settings
+            // Only global admins and supervisors can modify these settings
+            $currentUserRole = $currentUser->getRole();
+            $canModifySettings = $this->acl->isAdminRole($currentUserRole) || 
+                                 $currentUserRole === 'supervisor';
     
             // Get the user settings
             $this->userSettingsService->setTargetId($userId);
             $limitToGrantedSites = $this->userSettingsService->get('limit_to_granted_sites', false);
             $limitToOwnAssets = $this->userSettingsService->get('limit_to_own_assets', false);
+
+            // Build attributes for the fields
+            $limitToGrantedSitesAttributes = [
+                'value' => $limitToGrantedSites ? '1' : '0',
+            ];
+            $limitToOwnAssetsAttributes = [
+                'value' => $limitToOwnAssets ? '1' : '0',
+            ];
+
+            // If user cannot modify settings, make fields disabled
+            if (!$canModifySettings) {
+                $limitToGrantedSitesAttributes['disabled'] = 'disabled';
+                $limitToOwnAssetsAttributes['disabled'] = 'disabled';
+            }
+
+            $infoSuffix = !$canModifySettings 
+                ? ' (Only global administrators and supervisors can modify this setting)' // @translate
+                : '';
 
             $fieldset->add([
                 'name' => 'limit_to_granted_sites',
@@ -78,11 +100,10 @@ class ModifyUserSettingsFormListener
                     'checked_value' => '1',
                     'unchecked_value' => '0',
                     'info' => 'If checked, items and itemsets shown in admin ' . // @translate
-                        'view are limited to those assigned to sites where the user has permissions', //    @translate
+                        'view are limited to those assigned to sites where the user has permissions' . //    @translate
+                        $infoSuffix,
                 ],
-                'attributes' => [
-                    'value' => $limitToGrantedSites ? '1' : '0',
-                ],
+                'attributes' => $limitToGrantedSitesAttributes,
             ]);
 
             $fieldset->add([
@@ -94,11 +115,10 @@ class ModifyUserSettingsFormListener
                     'checked_value' => '1',
                     'unchecked_value' => '0',
                     'info' => 'If checked, assets shown in admin ' . // @translate
-                        'view are limited to those owned by the user', // @translate
+                        'view are limited to those owned by the user' . // @translate
+                        $infoSuffix,
                 ],
-                'attributes' => [
-                    'value' => $limitToOwnAssets ? '1' : '0',
-                ],
+                'attributes' => $limitToOwnAssetsAttributes,
             ]);
         } catch (\Doctrine\ORM\ORMException $e) {
             throw $e;
@@ -125,6 +145,49 @@ class ModifyUserSettingsFormListener
                 ['name' => 'Boolean'],
             ],
         ]);
+    }
+    
+    /**
+     * Handle form validation and prevent unauthorized changes
+     * This should be called after form validation but before saving
+     */
+    public function handleFormValidation(Event $event)
+    {
+        $form = $event->getTarget();
+        
+        // Get the current logged-in user
+        $currentUser = $this->getCurrentUser();
+        if ($currentUser == null) {
+            return;
+        }
+
+        // Check if current user is allowed to modify these settings
+        $currentUserRole = $currentUser->getRole();
+        $canModifySettings = $this->acl->isAdminRole($currentUserRole) || 
+                             $currentUserRole === 'supervisor';
+
+        // If the user cannot modify settings, restore the original values
+        if (!$canModifySettings) {
+            $userId = $form->getOption('user_id');
+            if ($userId) {
+                $this->userSettingsService->setTargetId($userId);
+                $existingLimitToGrantedSites = $this->userSettingsService->get('limit_to_granted_sites', false);
+                $existingLimitToOwnAssets = $this->userSettingsService->get('limit_to_own_assets', false);
+
+                // Get the fieldset and override the values
+                try {
+                    $fieldset = $form->get('user-settings');
+                    if ($fieldset->has('limit_to_granted_sites')) {
+                        $fieldset->get('limit_to_granted_sites')->setValue($existingLimitToGrantedSites ? '1' : '0');
+                    }
+                    if ($fieldset->has('limit_to_own_assets')) {
+                        $fieldset->get('limit_to_own_assets')->setValue($existingLimitToOwnAssets ? '1' : '0');
+                    }
+                } catch (\Exception $e) {
+                    // Fieldset not found, skip
+                }
+            }
+        }
     }
 
     public function handleUserSettings(EventInterface $event)
