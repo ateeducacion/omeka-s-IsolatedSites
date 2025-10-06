@@ -167,8 +167,6 @@ class Module extends AbstractModule
             'api.create.post',
             [$this->serviceLocator->get(UserApiListener::class), 'handleApiCreate']
         );
-
-
     }
     /**
      * Get the configuration form for this module.
@@ -249,7 +247,8 @@ class Module extends AbstractModule
         //Items permissions
         // Deny update if no access to any site of the item
         $itemResources = [
-            \Omeka\Entity\Item::class
+            \Omeka\Entity\Item::class,
+            \Omeka\Entity\Media::class,
         ];
         $acl->deny(
             self::ROLE_SITE_EDITOR,
@@ -263,6 +262,10 @@ class Module extends AbstractModule
             $itemResources,
             ['read', 'browse', 'show', 'index']
         );
+
+        // ItemSets permissions
+
+
         //Resource template permissions
         // Deny all resource template actions inherited from editor role
 
@@ -321,7 +324,6 @@ class Module extends AbstractModule
             self::ROLE_SITE_EDITOR,
             [\Omeka\Controller\Admin\SystemInfo::class],
         );
-
     }
     
     /**
@@ -343,7 +345,7 @@ class Module extends AbstractModule
         if ($role !== self::ROLE_SITE_EDITOR) {
             return;
         }
-        
+
         // Site editors inherit editor permissions, so navigation is already appropriate
         // No additional filtering needed
     }

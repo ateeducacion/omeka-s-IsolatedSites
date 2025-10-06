@@ -65,7 +65,7 @@ class ModifyUserSettingsFormListener
             // Check if current user is allowed to modify these settings
             // Only global admins and supervisors can modify these settings
             $currentUserRole = $currentUser->getRole();
-            $canModifySettings = $this->acl->isAdminRole($currentUserRole) || 
+            $canModifySettings = $this->acl->isAdminRole($currentUserRole) ||
                                  $currentUserRole === 'supervisor';
     
             // Get the user settings
@@ -87,7 +87,7 @@ class ModifyUserSettingsFormListener
                 $limitToOwnAssetsAttributes['disabled'] = 'disabled';
             }
 
-            $infoSuffix = !$canModifySettings 
+            $infoSuffix = !$canModifySettings
                 ? ' (Only global administrators and supervisors can modify this setting)' // @translate
                 : '';
 
@@ -163,7 +163,7 @@ class ModifyUserSettingsFormListener
 
         // Check if current user is allowed to modify these settings
         $currentUserRole = $currentUser->getRole();
-        $canModifySettings = $this->acl->isAdminRole($currentUserRole) || 
+        $canModifySettings = $this->acl->isAdminRole($currentUserRole) ||
                              $currentUserRole === 'supervisor';
 
         // If the user cannot modify settings, restore the original values
