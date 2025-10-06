@@ -12,7 +12,9 @@ use Laminas\Router\RouteMatch;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Omeka\Api\Exception\ExceptionInterface as ApiExceptionInterface;
 use Omeka\Api\Exception\NotFoundException;
+use Omeka\Api\Adapter\ItemAdapter;
 use Omeka\Api\Representation\ItemRepresentation;
+use Omeka\Controller\Admin\Item as AdminItemController;
 use Omeka\Entity\Item;
 use Omeka\Settings\UserSettings;
 
@@ -63,7 +65,6 @@ class HasAccessToItemSiteAssertion implements AssertionInterface
             if (!$this->shouldLimitToGrantedSites($userId)) {
                 return true;
             }
-            
             $item = $this->resolveItem($resource);
             if (!$item) {
                 return false;
@@ -84,7 +85,6 @@ class HasAccessToItemSiteAssertion implements AssertionInterface
             if (method_exists($resource, 'getEntity')) {
                 $entity = $resource->getEntity();
                 if ($entity instanceof Item) {
-
                     return $entity;
                 }
             }
@@ -92,21 +92,29 @@ class HasAccessToItemSiteAssertion implements AssertionInterface
                 $entity = $resource->resource();
                 if ($entity instanceof Item) {
                     return $entity;
-                    
                 }
             }
         }
-        echo "Resource class".get_class($resource) . "\n";
-        if ($resource === \Omeka\Api\Adapter\ItemAdapter::class || $resource === \Omeka\Controller\Admin\Item::class) {
-            echo "Resolving item from request or route...\n";
-            $itemId = $this->extractItemId();
-            if (!$itemId) {
-                return null;
-            }
-            return $this->fetchItem($itemId);
+        
+        if ($resource instanceof ItemAdapter || $resource === ItemAdapter::class) {
+            return $this->resolveFromRequestOrRoute();
+        }
+
+        if ($resource instanceof AdminItemController || $resource === AdminItemController::class) {
+            return $this->resolveFromRequestOrRoute();
         }
 
         return null;
+    }
+
+    private function resolveFromRequestOrRoute()
+    {
+        $itemId = $this->extractItemId();
+        if (!$itemId) {
+            return null;
+        }
+
+        return $this->fetchItem($itemId);
     }
 
     private function extractItemId(): ?int
@@ -131,8 +139,10 @@ class HasAccessToItemSiteAssertion implements AssertionInterface
         }
 
         $id = null;
+
         if (method_exists($request, 'getPost')) {
             $id = $request->getPost('id', null);
+            
         }
         if ((null === $id || '' === $id) && method_exists($request, 'getQuery')) {
             $id = $request->getQuery('id', null);

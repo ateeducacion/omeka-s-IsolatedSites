@@ -218,14 +218,10 @@ class Module extends AbstractModule
         $services = $this->getServiceLocator();
         $acl = $services->get('Omeka\Acl');
 
-        $acl->addRole(self::ROLE_SITE_EDITOR, Acl::ROLE_REVIEWER);
+        $acl->addRole(self::ROLE_SITE_EDITOR, Acl::ROLE_EDITOR);
         $acl->addRoleLabel(self::ROLE_SITE_EDITOR, 'Site Editor'); // @translate
 
-        $itemResources = [
-            \Omeka\Entity\Item::class,
-            \Omeka\Api\Adapter\ItemAdapter::class,
-            \Omeka\Controller\Admin\Item::class,
-        ];
+
 
         $siteAccessAssertion = $services->get(HasAccessToItemSiteAssertion::class);
         if (method_exists($siteAccessAssertion, 'setServiceLocator')) {
@@ -250,6 +246,11 @@ class Module extends AbstractModule
             }
         };
 
+        //Items permissions
+        // Deny update if no access to any site of the item
+        $itemResources = [
+            \Omeka\Entity\Item::class
+        ];
         $acl->deny(
             self::ROLE_SITE_EDITOR,
             $itemResources,
@@ -262,14 +263,49 @@ class Module extends AbstractModule
             $itemResources,
             ['read', 'browse', 'show', 'index']
         );
+        //Resource template permissions
 
+        $acl->deny(
+            self::ROLE_SITE_EDITOR,
+            [\Omeka\Entity\ResourceTemplate::class],
+            ['read', 'browse', 'show', 'index']
+        );
+
+        // User admin permissions
+        $isSelfAssertion = new IsSelfAssertion();
+
+        $acl->deny(
+            self::ROLE_SITE_EDITOR,
+            [
+                \Omeka\Entity\User::class,
+            ]
+        );
+
+        $acl->deny(
+            self::ROLE_SITE_EDITOR,
+            [\Omeka\Controller\Admin\User::class],
+            ['browse']
+        );
+
+        $acl->deny(
+            self::ROLE_SITE_EDITOR,
+            [\Omeka\Controller\Admin\SystemInfo::class],
+        );
+        
         $acl->allow(
             self::ROLE_SITE_EDITOR,
             [\Omeka\Entity\User::class],
             ['read', 'update', 'change-password'],
-            new IsSelfAssertion
+            $isSelfAssertion
         );
-        $acl->deny(self::ROLE_SITE_EDITOR, ['Omeka\Controller\Admin\User']);
+
+        $acl->allow(
+            self::ROLE_SITE_EDITOR,
+            [\Omeka\Controller\Admin\User::class],
+            ['show', 'edit'],
+            $isSelfAssertion
+        );
+
     }
     
     /**
