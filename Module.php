@@ -264,11 +264,20 @@ class Module extends AbstractModule
             ['read', 'browse', 'show', 'index']
         );
         //Resource template permissions
+        // Deny all resource template actions inherited from editor role
 
         $acl->deny(
             self::ROLE_SITE_EDITOR,
-            [\Omeka\Entity\ResourceTemplate::class],
-            ['read', 'browse', 'show', 'index']
+            [\Omeka\Entity\ResourceTemplate::class,
+            \Omeka\Controller\Admin\ResourceTemplate::class,
+            \Omeka\Api\Adapter\ResourceTemplateAdapter::class],
+        );
+
+        // Allow only specific read actions
+        $acl->allow(
+            self::ROLE_SITE_EDITOR,
+            [\Omeka\Controller\Admin\ResourceTemplate::class],
+            ['index', 'browse', 'show', 'show-details','table-templates']
         );
 
         // User admin permissions
@@ -286,11 +295,6 @@ class Module extends AbstractModule
             [\Omeka\Controller\Admin\User::class],
             ['browse']
         );
-
-        $acl->deny(
-            self::ROLE_SITE_EDITOR,
-            [\Omeka\Controller\Admin\SystemInfo::class],
-        );
         
         $acl->allow(
             self::ROLE_SITE_EDITOR,
@@ -304,6 +308,18 @@ class Module extends AbstractModule
             [\Omeka\Controller\Admin\User::class],
             ['show', 'edit'],
             $isSelfAssertion
+        );
+
+        //Other entities permissions
+        $acl->deny(
+            'site_editor',
+            'Omeka\Entity\Site',
+            'create'
+        );
+
+        $acl->deny(
+            self::ROLE_SITE_EDITOR,
+            [\Omeka\Controller\Admin\SystemInfo::class],
         );
 
     }
@@ -323,7 +339,6 @@ class Module extends AbstractModule
         }
 
         $role = $identity->getRole();
-        
         // Only filter navigation for site editor role
         if ($role !== self::ROLE_SITE_EDITOR) {
             return;
