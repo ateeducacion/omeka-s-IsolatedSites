@@ -3,14 +3,18 @@ declare(strict_types=1);
 
 namespace IsolatedSites\Assertion;
 
+use Doctrine\DBAL\Connection;
 use Laminas\Permissions\Acl\Acl;
 use Laminas\Permissions\Acl\Assertion\AssertionInterface;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Laminas\Permissions\Acl\Role\RoleInterface;
+use Laminas\Router\RouteMatch;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Omeka\Api\Exception\ExceptionInterface as ApiExceptionInterface;
+use Omeka\Api\Exception\NotFoundException;
+use Omeka\Api\Representation\ItemRepresentation;
 use Omeka\Entity\Item;
-use Omeka\Entity\User;
 use Omeka\Settings\UserSettings;
-use Doctrine\DBAL\Connection;
 
 /**
  * Assertion to check if a user has access to an item based on site permissions.
@@ -20,14 +24,17 @@ class HasAccessToItemSiteAssertion implements AssertionInterface
 {
     protected $userSettings;
     protected $connection;
-    
-    /** @var array Cache for user granted sites [userId => [siteIds]] */
+
+    /** @var ServiceLocatorInterface|null */
+    protected $services;
+
+    /** @var array<int, array<int>> Cache for user granted sites [userId => [siteIds]] */
     protected $grantedSitesCache = [];
-    
-    /** @var array Cache for item site assignments [itemId => [siteIds]] */
+
+    /** @var array<int, array<int>> Cache for item site assignments [itemId => [siteIds]] */
     protected $itemSitesCache = [];
-    
-    /** @var array Cache for user settings [userId => bool] */
+
+    /** @var array<int, bool> Cache for user settings [userId => bool] */
     protected $userSettingsCache = [];
 
     public function __construct(UserSettings $userSettings, Connection $connection)
@@ -36,89 +43,227 @@ class HasAccessToItemSiteAssertion implements AssertionInterface
         $this->connection = $connection;
     }
 
-    /**
-     * Assert whether to allow access to item based on site permissions.
-     * Returns true to ALLOW access, false to DENY access.
-     *
-     * @param Acl $acl
-     * @param RoleInterface $role
-     * @param ResourceInterface $resource
-     * @param string $privilege
-     * @return bool True to allow access, false to deny access
-     */
+    public function setServiceLocator(ServiceLocatorInterface $services): void
+    {
+        $this->services = $services;
+    }
+
     public function assert(Acl $acl, RoleInterface $role = null, ResourceInterface $resource = null, $privilege = null)
     {
-        // If no resource or role, deny access
-        if (!$resource || !$role) {
+        try {
+            if (!$resource || !$role || !method_exists($role, 'getId')) {
+                return false;
+            }
+            
+            $userId = (int) $role->getId();
+            if (!$userId) {
+                return false;
+            }
+
+            if (!$this->shouldLimitToGrantedSites($userId)) {
+                return true;
+            }
+            
+            $item = $this->resolveItem($resource);
+            if (!$item) {
+                return false;
+            }
+            return $this->userHasAccessToAnyItemSite($userId, $item);
+        } catch (\Throwable $e) {
             return false;
         }
+    }
 
-        // Get the user from the role
-        if (!method_exists($role, 'getId')) {
-            return false;
+    private function resolveItem($resource)
+    {
+        if ($resource instanceof Item || $resource instanceof ItemRepresentation) {
+            return $resource;
         }
 
-        $userId = $role->getId();
-        
-        // Check if user has limit_to_granted_sites setting enabled (with caching)
+        if (is_object($resource)) {
+            if (method_exists($resource, 'getEntity')) {
+                $entity = $resource->getEntity();
+                if ($entity instanceof Item) {
+
+                    return $entity;
+                }
+            }
+            if (method_exists($resource, 'resource')) {
+                $entity = $resource->resource();
+                if ($entity instanceof Item) {
+                    return $entity;
+                    
+                }
+            }
+        }
+        echo "Resource class".get_class($resource) . "\n";
+        if ($resource === \Omeka\Api\Adapter\ItemAdapter::class || $resource === \Omeka\Controller\Admin\Item::class) {
+            echo "Resolving item from request or route...\n";
+            $itemId = $this->extractItemId();
+            if (!$itemId) {
+                return null;
+            }
+            return $this->fetchItem($itemId);
+        }
+
+        return null;
+    }
+
+    private function extractItemId(): ?int
+    {
+        $id = $this->extractItemIdFromRequest();
+        if ($id) {
+            return $id;
+        }
+
+        return $this->extractItemIdFromRoute();
+    }
+
+    private function extractItemIdFromRequest(): ?int
+    {
+        if (!$this->services || !$this->services->has('Request')) {
+            return null;
+        }
+
+        $request = $this->services->get('Request');
+        if (!$request) {
+            return null;
+        }
+
+        $id = null;
+        if (method_exists($request, 'getPost')) {
+            $id = $request->getPost('id', null);
+        }
+        if ((null === $id || '' === $id) && method_exists($request, 'getQuery')) {
+            $id = $request->getQuery('id', null);
+        }
+
+        return $this->normalizeId($id);
+    }
+
+    private function extractItemIdFromRoute(): ?int
+    {
+        $routeMatch = $this->getRouteMatch();
+        if (!$routeMatch) {
+            return null;
+        }
+
+        foreach (['item-id', 'item_id', 'id'] as $param) {
+            $value = $routeMatch->getParam($param, null);
+            $id = $this->normalizeId($value);
+            if ($id) {
+                return $id;
+            }
+        }
+
+        return null;
+    }
+
+    private function normalizeId($id): ?int
+    {
+        if ($id === null || $id === '') {
+            return null;
+        }
+        if (is_array($id)) {
+            return null;
+        }
+        if (!is_scalar($id)) {
+            return null;
+        }
+
+        $intId = (int) $id;
+        return $intId > 0 ? $intId : null;
+    }
+
+    private function fetchItem(int $itemId)
+    {
+        if (!$this->services || !$this->services->has('Omeka\ApiManager')) {
+            return null;
+        }
+
+        $api = $this->services->get('Omeka\ApiManager');
+        if (!$api) {
+            return null;
+        }
+
+        try {
+            return $api->read('items', $itemId)->getContent();
+        } catch (NotFoundException | ApiExceptionInterface $e) {
+            return null;
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    private function shouldLimitToGrantedSites(int $userId): bool
+    {
         if (!isset($this->userSettingsCache[$userId])) {
-            $this->userSettings->setTargetId($userId);
-            $this->userSettingsCache[$userId] = $this->userSettings->get('limit_to_granted_sites', false);
-        }
-        $limitToGrantedSites = $this->userSettingsCache[$userId];
-        
-        // If setting is not enabled, allow access
-        if (!$limitToGrantedSites) {
-            return true;
-        }
-
-        // Get the item from the resource
-        $item = null;
-        if ($resource instanceof Item) {
-            $item = $resource;
-        } elseif (method_exists($resource, 'getEntity')) {
-            $entity = $resource->getEntity();
-            if ($entity instanceof Item) {
-                $item = $entity;
-            }
-        } elseif (method_exists($resource, 'resource')) {
-            $entity = $resource->resource();
-            if ($entity instanceof Item) {
-                $item = $entity;
+            try {
+                $this->userSettings->setTargetId($userId);
+                $this->userSettingsCache[$userId] = (bool) $this->userSettings->get('limit_to_granted_sites', false);
+            } catch (\Throwable $e) {
+                $this->userSettingsCache[$userId] = true;
             }
         }
 
-        // If we can't get the item, deny access for safety
-        if (!$item) {
+        return $this->userSettingsCache[$userId];
+    }
+
+    private function userHasAccessToAnyItemSite(int $userId, $item): bool
+    {
+        $itemId = null;
+        if ($item instanceof Item) {
+            $itemId = (int) $item->getId();
+        } elseif ($item instanceof ItemRepresentation) {
+            $itemId = (int) $item->id();
+        }
+
+        if (!$itemId) {
             return false;
         }
 
-        $itemId = $item->getId();
-        
-        // Get user's granted sites (with caching)
         if (!isset($this->grantedSitesCache[$userId])) {
             $sql = 'SELECT site_id FROM site_permission WHERE user_id = :user_id';
             $stmt = $this->connection->executeQuery($sql, ['user_id' => $userId]);
-            $this->grantedSitesCache[$userId] = $stmt->fetchFirstColumn();
+            $siteIds = array_map('intval', $stmt->fetchFirstColumn());
+            $this->grantedSitesCache[$userId] = $siteIds;
         }
         $grantedSiteIds = $this->grantedSitesCache[$userId];
-        
-        // If user has no granted sites, deny access
         if (empty($grantedSiteIds)) {
             return false;
         }
 
-        // Get item's site assignments (with caching)
         if (!isset($this->itemSitesCache[$itemId])) {
             $sql = 'SELECT site_id FROM item_site WHERE item_id = :item_id';
             $stmt = $this->connection->executeQuery($sql, ['item_id' => $itemId]);
-            $this->itemSitesCache[$itemId] = $stmt->fetchFirstColumn();
+            $siteIds = array_map('intval', $stmt->fetchFirstColumn());
+            $this->itemSitesCache[$itemId] = $siteIds;
         }
         $itemSiteIds = $this->itemSitesCache[$itemId];
-        
-        // Check if there's any intersection between user's granted sites and item's sites
-        $hasAccess = !empty(array_intersect($grantedSiteIds, $itemSiteIds));
-        
-        return $hasAccess;
+        if (empty($itemSiteIds)) {
+            return false;
+        }
+
+        return !empty(array_intersect($grantedSiteIds, $itemSiteIds));
+    }
+
+    private function getRouteMatch(): ?RouteMatch
+    {
+        if (!$this->services || !$this->services->has('Application')) {
+            return null;
+        }
+
+        $application = $this->services->get('Application');
+        if (!$application || !method_exists($application, 'getMvcEvent')) {
+            return null;
+        }
+
+        $event = $application->getMvcEvent();
+        if (!$event || !method_exists($event, 'getRouteMatch')) {
+            return null;
+        }
+
+        $routeMatch = $event->getRouteMatch();
+        return $routeMatch instanceof RouteMatch ? $routeMatch : null;
     }
 }

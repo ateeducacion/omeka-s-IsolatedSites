@@ -23,6 +23,10 @@ use IsolatedSites\Listener\UserApiListener;
 use Omeka\Permissions\Acl;
 use Omeka\Permissions\Assertion\IsSelfAssertion;
 use IsolatedSites\Assertion\HasAccessToItemSiteAssertion;
+use Laminas\Permissions\Acl\Assertion\AssertionInterface as AInterface;
+use Laminas\Permissions\Acl\Acl as LAcl;
+use Laminas\Permissions\Acl\Role\RoleInterface as RInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface as ResInterface;
 
 /**
  * Main class for the IsoltatedSites module.
@@ -214,28 +218,58 @@ class Module extends AbstractModule
         $services = $this->getServiceLocator();
         $acl = $services->get('Omeka\Acl');
 
-        // Add SITE_EDITOR role that inherits from EDITOR
-        $acl->addRole(self::ROLE_SITE_EDITOR, Acl::ROLE_EDITOR);
-         $acl->addRoleLabel(self::ROLE_SITE_EDITOR, 'Site Editor'); // @translate
-        // Get the site access assertion for item restrictions
-        $siteAccessAssertion = $services->get(HasAccessToItemSiteAssertion::class);
+        $acl->addRole(self::ROLE_SITE_EDITOR, Acl::ROLE_REVIEWER);
+        $acl->addRoleLabel(self::ROLE_SITE_EDITOR, 'Site Editor'); // @translate
 
-        // Site editors have same permissions as editors, but limited to items in their granted sites
-        // We use allow with assertion to restrict access to items in granted sites only
-        $acl->allow(
+        $itemResources = [
+            \Omeka\Entity\Item::class,
+            \Omeka\Api\Adapter\ItemAdapter::class,
+            \Omeka\Controller\Admin\Item::class,
+        ];
+
+        $siteAccessAssertion = $services->get(HasAccessToItemSiteAssertion::class);
+        if (method_exists($siteAccessAssertion, 'setServiceLocator')) {
+            $siteAccessAssertion->setServiceLocator($services);
+        }
+
+        $denyIfNoAccess = new class($siteAccessAssertion) implements AInterface {
+            private $inner;
+
+            public function __construct(AInterface $inner)
+            {
+                $this->inner = $inner;
+            }
+
+            public function assert(LAcl $acl, RInterface $role = null, ResInterface $resource = null, $privilege = null)
+            {
+                try {
+                    return !$this->inner->assert($acl, $role, $resource, $privilege);
+                } catch (\Throwable $e) {
+                    return true;
+                }
+            }
+        };
+
+        $acl->deny(
             self::ROLE_SITE_EDITOR,
-            [\Omeka\Entity\Item::class],
-            ['read', 'create', 'update', 'delete', 'browse'],
-            $siteAccessAssertion
+            $itemResources,
+            ['update', 'delete', 'edit'],
+            $denyIfNoAccess
         );
 
-        // Allow site editors to manage themselves
+        $acl->allow(
+            self::ROLE_SITE_EDITOR,
+            $itemResources,
+            ['read', 'browse', 'show', 'index']
+        );
+
         $acl->allow(
             self::ROLE_SITE_EDITOR,
             [\Omeka\Entity\User::class],
             ['read', 'update', 'change-password'],
             new IsSelfAssertion
         );
+        $acl->deny(self::ROLE_SITE_EDITOR, ['Omeka\Controller\Admin\User']);
     }
     
     /**
