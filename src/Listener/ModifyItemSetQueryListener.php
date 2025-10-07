@@ -54,25 +54,28 @@ class ModifyItemSetQueryListener
             $stmt = $this->connection->executeQuery($sql, ['user_id' => $user->getId()]);
             $siteIds = $stmt->fetchFirstColumn();
 
-            // If user has no site permissions, ensure they see no itemsets
-            if (empty($siteIds)) {
-                $siteIds = [-1]; // Use an impossible ID to return no results
-            }
-
             $queryBuilder = $event->getParam('queryBuilder');
             $alias = $queryBuilder->getRootAliases()[0];
 
-            // Join with site_item_set table and filter by site IDs
-            $queryBuilder->innerJoin(
-                "$alias.siteItemSets",
-                'sis'
-            )
-                ->innerJoin(
-                    'sis.site',
-                    'site'
+            // Create OR condition: itemsets from granted sites OR itemsets owned by user
+            if (empty($siteIds)) {
+                // User has no site permissions, only show itemsets they own
+                $queryBuilder->andWhere("$alias.owner = :userId")
+                    ->setParameter('userId', $user->getId());
+            } else {
+                // User has site permissions, show itemsets from granted sites OR owned by user
+                $queryBuilder->leftJoin(
+                    "$alias.siteItemSets",
+                    'sis'
                 )
-                ->andWhere('site.id IN (:siteIds)')
-                ->setParameter('siteIds', $siteIds);
+                    ->leftJoin(
+                        'sis.site',
+                        'site'
+                    )
+                    ->andWhere('site.id IN (:siteIds) OR ' . $alias . '.owner = :userId')
+                    ->setParameter('siteIds', $siteIds)
+                    ->setParameter('userId', $user->getId());
+            }
         }
     }
 }

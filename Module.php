@@ -20,12 +20,23 @@ use IsolatedSites\Listener\ModifyAssetQueryListener;
 use IsolatedSites\Listener\ModifySiteQueryListener;
 use IsolatedSites\Listener\ModifyMediaQueryListener;
 use IsolatedSites\Listener\UserApiListener;
+use Omeka\Permissions\Acl;
+use Omeka\Permissions\Assertion\IsSelfAssertion;
+use Omeka\Permissions\Assertion\OwnsEntityAssertion;
+use IsolatedSites\Assertion\HasAccessToItemSiteAssertion;
+use Laminas\Permissions\Acl\Assertion\AssertionInterface as AInterface;
+use Laminas\Permissions\Acl\Acl as LAcl;
+use Laminas\Permissions\Acl\Role\RoleInterface as RInterface;
+use Laminas\Permissions\Acl\Resource\ResourceInterface as ResInterface;
 
 /**
  * Main class for the IsoltatedSites module.
  */
 class Module extends AbstractModule
 {
+    /** Custom role for site editors with limited access to their granted sites */
+    const ROLE_SITE_EDITOR = 'site_editor';
+    
     /**
      * Retrieve the configuration array.
      *
@@ -69,7 +80,9 @@ class Module extends AbstractModule
         $this->serviceLocator = $event->getApplication()->getServiceManager();
         $sharedEventManager = $this->serviceLocator->get('SharedEventManager');
 
+        $this->addAclRoleAndRules();
         $this->attachListeners($sharedEventManager);
+        $this->filterAdminNavigationOnBootstrap($event);
     }
     /**
      * Register the file validator service and renderers.
@@ -89,6 +102,12 @@ class Module extends AbstractModule
             \Omeka\Form\UserForm::class,
             'form.add_input_filters',
             [$this->serviceLocator->get(ModifyUserSettingsFormListener::class), 'addInputFilters']
+        );
+
+        $sharedEventManager->attach(
+            \Omeka\Form\UserForm::class,
+            'form.validate',
+            [$this->serviceLocator->get(ModifyUserSettingsFormListener::class), 'handleFormValidation']
         );
 
         $sharedEventManager->attach(
@@ -149,12 +168,6 @@ class Module extends AbstractModule
             'api.create.post',
             [$this->serviceLocator->get(UserApiListener::class), 'handleApiCreate']
         );
-
-        $sharedEventManager->attach(
-            'Omeka\Api\Adapter\UserAdapter',
-            'api.batch_update.pre',
-            [$this->serviceLocator->get(UserApiListener::class), 'handleBatchUpdate']
-        );
     }
     /**
      * Get the configuration form for this module.
@@ -195,6 +208,241 @@ class Module extends AbstractModule
         // Save configuration settings in omeka settings database
         $settings->set('activate_IsolatedSites', $value);
     }
+     /**
+     * Add ACL role and rules for this module.
+     */
+    protected function addAclRoleAndRules(): void
+    {
+        /** @var \Omeka\Permissions\Acl $acl */
+        $services = $this->getServiceLocator();
+        $acl = $services->get('Omeka\Acl');
+
+        $acl->addRole(self::ROLE_SITE_EDITOR, Acl::ROLE_EDITOR);
+        $acl->addRoleLabel(self::ROLE_SITE_EDITOR, 'Site Editor'); // @translate
+
+
+
+        $siteAccessAssertion = $services->get(HasAccessToItemSiteAssertion::class);
+        if (method_exists($siteAccessAssertion, 'setServiceLocator')) {
+            $siteAccessAssertion->setServiceLocator($services);
+        }
+
+        $denyIfNoAccess = new class($siteAccessAssertion) implements AInterface {
+            private $inner;
+
+            public function __construct(AInterface $inner)
+            {
+                $this->inner = $inner;
+            }
+
+            public function assert(LAcl $acl, RInterface $role = null, ResInterface $resource = null, $privilege = null)
+            {
+                try {
+                    return !$this->inner->assert($acl, $role, $resource, $privilege);
+                } catch (\Throwable $e) {
+                    return true;
+                }
+            }
+        };
+
+        //Items/Media permissions
+        // Deny update if no access to any site of the item
+        $itemResources = [
+            \Omeka\Entity\Item::class,
+            \Omeka\Entity\Media::class,
+        ];
+        $acl->deny(
+            self::ROLE_SITE_EDITOR,
+            $itemResources,
+            ['update', 'delete', 'edit'],
+            $denyIfNoAccess
+        );
+
+        $acl->allow(
+            self::ROLE_SITE_EDITOR,
+            $itemResources,
+            ['read', 'browse', 'show', 'index']
+        );
+
+        $acl->deny(
+            'editor',
+            [
+                'Omeka\Api\Adapter\ItemAdapter',
+                'Omeka\Api\Adapter\MediaAdapter',
+            ],
+            [
+                'batch_delete_all',
+            ]
+        );
+
+        // ItemSets/Asset permissions
+        $ownsAssertion = new OwnsEntityAssertion();
+        $denyIfNotOwned = new class($ownsAssertion) implements AInterface {
+            private $owns;
+
+            public function __construct(OwnsEntityAssertion $owns)
+            {
+                $this->owns = $owns;
+            }
+
+            public function assert(LAcl $acl, RInterface $role = null, ResInterface $resource = null, $privilege = null)
+            {
+                try {
+                    return !$this->owns->assert($acl, $role, $resource, $privilege);
+                } catch (\Throwable $e) {
+                    return true;
+                }
+            }
+        };
+
+        $acl->deny(
+            'site_editor',
+            [
+                \Omeka\Entity\ItemSet::class,
+                \Omeka\Entity\Asset::class,
+            ],
+            ['update', 'delete'],
+            $denyIfNotOwned
+        );
+
+        $acl->allow(
+            'site_editor',
+            [
+                \Omeka\Entity\ItemSet::class,
+                \Omeka\Entity\Asset::class,
+            ],
+            ['create']
+        );
+
+        //Resource template permissions
+        // Deny all resource template actions inherited from editor role
+
+        $acl->deny(
+            self::ROLE_SITE_EDITOR,
+            [\Omeka\Entity\ResourceTemplate::class,
+            \Omeka\Controller\Admin\ResourceTemplate::class,
+            \Omeka\Api\Adapter\ResourceTemplateAdapter::class],
+        );
+
+        // Allow only specific read actions
+        $acl->allow(
+            self::ROLE_SITE_EDITOR,
+            [\Omeka\Controller\Admin\ResourceTemplate::class],
+            ['index', 'browse', 'show', 'show-details','table-templates']
+        );
+        // Allow only specific read actions
+        $acl->allow(
+            self::ROLE_SITE_EDITOR,
+            [\Omeka\Entity\ResourceTemplate::class,
+            \Omeka\Api\Adapter\ResourceTemplateAdapter::class],
+            ['read']
+        );
+
+        // User admin permissions
+        $isSelfAssertion = new IsSelfAssertion();
+
+        $acl->deny(
+            self::ROLE_SITE_EDITOR,
+            [
+                \Omeka\Entity\User::class,
+            ]
+        );
+
+        $acl->deny(
+            self::ROLE_SITE_EDITOR,
+            [\Omeka\Controller\Admin\User::class],
+            ['browse']
+        );
+        
+        $acl->allow(
+            self::ROLE_SITE_EDITOR,
+            [\Omeka\Entity\User::class],
+            ['read', 'update', 'change-password'],
+            $isSelfAssertion
+        );
+
+        $acl->allow(
+            self::ROLE_SITE_EDITOR,
+            [\Omeka\Controller\Admin\User::class],
+            ['show', 'edit'],
+            $isSelfAssertion
+        );
+
+        //Other entities permissions
+        $acl->deny(
+            'site_editor',
+            'Omeka\Entity\Site',
+            'create'
+        );
+        
+        $acl->allow(
+            null,
+            'Omeka\Entity\Site',
+            'update'
+        );
+        $acl->deny(
+            'site_editor',
+            [\Omeka\Controller\SiteAdmin\Index::class],
+            ['index', 'edit','navigation','users','theme']
+        );
+
+        $acl->deny(
+            self::ROLE_SITE_EDITOR,
+            [\Omeka\Controller\Admin\SystemInfo::class],
+        );
+    }
     
-    // /**
+    /**
+     * Filter admin navigation during bootstrap for specific roles.
+     *
+     * @param \Laminas\Mvc\MvcEvent $event
+     */
+    protected function filterAdminNavigationOnBootstrap($event)
+    {
+        $auth = $this->serviceLocator->get('Omeka\AuthenticationService');
+        $identity = $auth->getIdentity();
+   
+        if (!$identity) {
+            return;
+        }
+
+        $role = $identity->getRole();
+        // Only filter navigation for site editor role
+        if ($role !== self::ROLE_SITE_EDITOR) {
+            return;
+        }
+
+        // Site editors inherit editor permissions, so navigation is already appropriate
+        // No additional filtering needed
+    }
+    
+    /**
+     * Filter the admin navigation menu for specific roles.
+     *
+     * @param Event $event
+     */
+    public function filterAdminNavigation(Event $event)
+    {
+        // We only want this logic to run for the main admin layout
+        if ('layout/layout' !== $event->getTarget()->resolver()->getTemplate()) {
+            return;
+        }
+
+        $auth = $this->serviceLocator->get('Omeka\AuthenticationService');
+        $identity = $auth->getIdentity();
+        
+        if (!$identity) {
+            return;
+        }
+
+        $role = $identity->getRole();
+        
+        // Only filter navigation for site editor role
+        if ($role !== self::ROLE_SITE_EDITOR) {
+            return;
+        }
+        
+        // Site editors inherit editor permissions, so navigation is already appropriate
+        // No additional filtering needed
+    }
 }

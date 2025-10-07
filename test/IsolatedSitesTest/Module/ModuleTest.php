@@ -140,6 +140,11 @@ class ModuleTest extends TestCase
                     $this->identicalTo([$mockUserSettingsListener, 'addInputFilters'])
                 ],
                 [
+                    $this->equalTo(\Omeka\Form\UserForm::class),
+                    $this->equalTo('form.validate'),
+                    $this->identicalTo([$mockUserSettingsListener, 'handleFormValidation'])
+                ],
+                [
                     $this->equalTo('CAS\Controller\LoginController'),
                     $this->equalTo('cas.user.create.post'),
                     $this->identicalTo([$mockUserSettingsListener, 'handleUserSettings'])

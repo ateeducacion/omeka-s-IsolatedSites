@@ -82,17 +82,15 @@ class ModifyItemSetQueryListenerTest extends TestCase
         $this->queryBuilder->method('getRootAliases')
             ->willReturn(['root']);
 
-        $this->queryBuilder->expects($this->exactly(2))
-            ->method('innerJoin')
-            ->withConsecutive(
-                ['root.siteItemSets', 'sis'],
-                ['sis.site', 'site']
-            )
+        // With no site permissions, user should only see itemsets they own
+        $this->queryBuilder->expects($this->once())
+            ->method('andWhere')
+            ->with('root.owner = :userId')
             ->willReturn($this->queryBuilder);
 
         $this->queryBuilder->expects($this->once())
-            ->method('andWhere')
-            ->with('site.id IN (:siteIds)')
+            ->method('setParameter')
+            ->with('userId', $userId)
             ->willReturn($this->queryBuilder);
 
         $this->event->method('getParam')
@@ -132,8 +130,9 @@ class ModifyItemSetQueryListenerTest extends TestCase
         $this->queryBuilder->method('getRootAliases')
             ->willReturn(['root']);
 
+        // With site permissions, user should see itemsets from granted sites OR itemsets they own
         $this->queryBuilder->expects($this->exactly(2))
-            ->method('innerJoin')
+            ->method('leftJoin')
             ->withConsecutive(
                 ['root.siteItemSets', 'sis'],
                 ['sis.site', 'site']
@@ -142,7 +141,15 @@ class ModifyItemSetQueryListenerTest extends TestCase
 
         $this->queryBuilder->expects($this->once())
             ->method('andWhere')
-            ->with('site.id IN (:siteIds)')
+            ->with('site.id IN (:siteIds) OR root.owner = :userId')
+            ->willReturn($this->queryBuilder);
+
+        $this->queryBuilder->expects($this->exactly(2))
+            ->method('setParameter')
+            ->withConsecutive(
+                ['siteIds', $siteIds],
+                ['userId', $userId]
+            )
             ->willReturn($this->queryBuilder);
 
         $this->event->method('getParam')
