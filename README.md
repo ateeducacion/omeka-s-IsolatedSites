@@ -79,7 +79,7 @@ Depending on the settings enabled, the admin interface will be dynamically filte
   - API event listeners handle custom settings in user API operations.
 - **Resource Filters**:
   - Items: Filtered based on granted sites.
-  - Item Sets: Filtered based on granted sites.
+  - Item Sets: Filtered based on granted sites and ownership. 
   - Assets: Filtered based on ownership.
   - Sites: Filtered based on granted site permissions.
 - **Admin Users**: Administrators are exempt from restrictions.
@@ -149,3 +149,29 @@ This module is released under the [GNU General Public License v3.0 (GPL-3.0)](ht
 ## 📬 Support
 
 For questions, suggestions, or contributions, please open an [Issue](https://github.com/ateeducacion/omeka-s-IsolatedSites/issues) or submit a Pull Request.
+
+## Site Editor Role
+
+The module adds a `site_editor` role for site-scoped content editors. It inherits from the core `editor` role but applies the IsolatedSites filtering so users only interact with items and media that belong to sites they are permitted to manage. The role keeps the minimum set of editor capabilities required for day-to-day content work while removing global administration features.
+
+- Inherits every capability of `editor`, then relies on the site access assertion to scope actions to the user's granted sites.
+- Only items and media attached to at least one permitted site stay editable; everything else is hidden or read-only by design.
+- Resource-template, site creation, and user-administration privileges are trimmed to keep the role focused on content work.
+- Permissions limited in SiteAdmin index controller so that the user can access the Resources tab to add ItemSets to sites. 
+
+### Permission Comparison
+
+| Capability | editor | site_editor | Notes |
+| --- | --- | --- | --- |
+| Items and media | Create, read, update, delete across all sites | Same actions, but only for items and media attached to the user's granted sites | Restrictions enforced by the site access assertion and the `limit_to_granted_sites` setting |
+| Resource templates | Create, edit, delete templates | Read-only access to template listings and details | Prevents accidental global changes while still allowing reference |
+| User management | Browse and edit any user (core behaviour) | Limited to viewing and updating their own profile | Inherits `editor` abilities only when self-targeted |
+| Site management | Create and manage any site | Cannot create new sites and can only work in sites where they are an `Author` | Site-level `Author` permission controls page editing within a site |
+
+### Configuration Checklist
+
+- Assign the `site_editor` role in Admin > Users, then grant the user `Author` permission for each site they should manage (Sites > Permissions).
+- Set a Default site for the user in Admin > Users > User settings so new items they create automatically belong to that site.
+- Enable `limit_to_granted_sites` in the same settings panel to activate the site-based filtering.
+- Remind site editors that they will only see and manage content linked to their permitted sites; content elsewhere remains hidden.
+

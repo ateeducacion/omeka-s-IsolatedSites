@@ -22,6 +22,7 @@ use IsolatedSites\Listener\ModifyMediaQueryListener;
 use IsolatedSites\Listener\UserApiListener;
 use Omeka\Permissions\Acl;
 use Omeka\Permissions\Assertion\IsSelfAssertion;
+use Omeka\Permissions\Assertion\OwnsEntityAssertion;
 use IsolatedSites\Assertion\HasAccessToItemSiteAssertion;
 use Laminas\Permissions\Acl\Assertion\AssertionInterface as AInterface;
 use Laminas\Permissions\Acl\Acl as LAcl;
@@ -244,7 +245,7 @@ class Module extends AbstractModule
             }
         };
 
-        //Items permissions
+        //Items/Media permissions
         // Deny update if no access to any site of the item
         $itemResources = [
             \Omeka\Entity\Item::class,
@@ -263,8 +264,55 @@ class Module extends AbstractModule
             ['read', 'browse', 'show', 'index']
         );
 
-        // ItemSets permissions
+        $acl->deny(
+            'editor',
+            [
+                'Omeka\Api\Adapter\ItemAdapter',
+                'Omeka\Api\Adapter\MediaAdapter',
+            ],
+            [
+                'batch_delete_all',
+            ]
+        );
 
+        // ItemSets/Asset permissions
+        $ownsAssertion = new OwnsEntityAssertion();
+        $denyIfNotOwned = new class($ownsAssertion) implements AInterface {
+            private $owns;
+
+            public function __construct(OwnsEntityAssertion $owns)
+            {
+                $this->owns = $owns;
+            }
+
+            public function assert(LAcl $acl, RInterface $role = null, ResInterface $resource = null, $privilege = null)
+            {
+                try {
+                    return !$this->owns->assert($acl, $role, $resource, $privilege);
+                } catch (\Throwable $e) {
+                    return true;
+                }
+            }
+        };
+
+        $acl->deny(
+            'site_editor',
+            [
+                \Omeka\Entity\ItemSet::class,
+                \Omeka\Entity\Asset::class,
+            ],
+            ['update', 'delete'],
+            $denyIfNotOwned
+        );
+
+        $acl->allow(
+            'site_editor',
+            [
+                \Omeka\Entity\ItemSet::class,
+                \Omeka\Entity\Asset::class,
+            ],
+            ['create']
+        );
 
         //Resource template permissions
         // Deny all resource template actions inherited from editor role
@@ -281,6 +329,13 @@ class Module extends AbstractModule
             self::ROLE_SITE_EDITOR,
             [\Omeka\Controller\Admin\ResourceTemplate::class],
             ['index', 'browse', 'show', 'show-details','table-templates']
+        );
+        // Allow only specific read actions
+        $acl->allow(
+            self::ROLE_SITE_EDITOR,
+            [\Omeka\Entity\ResourceTemplate::class,
+            \Omeka\Api\Adapter\ResourceTemplateAdapter::class],
+            ['read']
         );
 
         // User admin permissions
@@ -318,6 +373,17 @@ class Module extends AbstractModule
             'site_editor',
             'Omeka\Entity\Site',
             'create'
+        );
+        
+        $acl->allow(
+            null,
+            'Omeka\Entity\Site',
+            'update'
+        );
+        $acl->deny(
+            'site_editor',
+            [\Omeka\Controller\SiteAdmin\Index::class],
+            ['index', 'edit','navigation','users','theme']
         );
 
         $acl->deny(
