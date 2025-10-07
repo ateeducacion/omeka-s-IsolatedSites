@@ -1,24 +1,46 @@
 # IsolatedSites Module for Omeka S
 
-The **IsolatedSites** module enhances the Omeka S admin experience by allowing users to **only view content (items, item sets, assets, and sites) they are explicitly permitted to access**.  
-This improves clarity, security, and usability in multi-site, multi-user environments.
+The **IsolatedSites** module is a comprehensive security and access control solution for Omeka S that enforces **content isolation based on site permissions**. It ensures users can only view and interact with resources (items, item sets, media, assets, and sites) belonging to sites they are explicitly granted access to, significantly enhancing security and usability in multi-site, multi-user environments.
+
+The module achieves this through **role-based access control** with a specialized `site_editor` role, **user-configurable scope limitation settings**, and **full API integration** for programmatic access management. This allows organizations to maintain strict data boundaries between different sites and users while preserving a streamlined administrative experience for site editors and content managers.
 
 ---
 
 ## ✨ Features
 
-- **User Settings Extension**:
-  - Two new options are added in each user's settings (`Profiles → User Settings`):
+- **New User Settings** ⚙️:
+  - Two flags are added per user:
+    - `limit_to_granted_sites`
+    - `limit_to_own_assets`
+  - These options are available in each user's settings (`Profiles → User Settings`):
     - 🔒 **Limit to granted sites**:
       - Items and Item Sets assigned to sites where the logged-in user has no role are **filtered out** from the admin browse pages.
       - In the Admin Dashboard and under the "Sites" navigation menu, only the sites where the user has assigned roles are shown.
     - 📄 **Limit assets list to my own assets**:
       - Assets not owned by the logged-in user are hidden from the admin browse page.
+
+- **Site Editor Role** 🎭:
+  - A specialized `site_editor` role for site-scoped content management.
+  - Inherits core `editor` capabilities but restricts access to only assigned sites.
+  - Users can view and edit Item Sets they own and those included in sites with granted access.
+  - SiteAdmin permissions configured to allow access to the Resources tab for adding Item Sets while restricting other administrative actions.
+  - Ideal for organizations with multiple sites requiring strict content isolation between teams.
+
+- **Full API Integration** 🔌:
+  - Custom user settings (`limit_to_granted_sites`, `limit_to_own_assets`) are fully accessible via REST and PHP APIs.
+  - Programmatic management of user permissions and scope settings.
+  - Seamless integration with existing Omeka S API workflows.
+  - See the API Integration section below for detailed usage examples.
+
 - **Automatic Filtering**:
   - When enabled, content filtering is automatic without requiring any manual user action.
+  - Resource queries are filtered at the API level for consistent behavior.
+
 - **Admin Exemption**:
   - Global administrators retain **unrestricted access** to all content, regardless of the settings.
-- **Docker Compose for Easy Testing**:
+  - Ensures system administrators can always perform maintenance and troubleshooting.
+
+- **Docker Compose for Easy Testing** 🐳:
   - A simple Docker environment is included for fast testing and development.
 
 ---
@@ -174,4 +196,3 @@ The module adds a `site_editor` role for site-scoped content editors. It inherit
 - Set a Default site for the user in Admin > Users > User settings so new items they create automatically belong to that site.
 - Enable `limit_to_granted_sites` in the same settings panel to activate the site-based filtering.
 - Remind site editors that they will only see and manage content linked to their permitted sites; content elsewhere remains hidden.
-
