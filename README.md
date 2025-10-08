@@ -8,7 +8,7 @@ The module achieves this through **role-based access control** with a specialize
 
 ## ✨ Features
 
-- **New User Settings** ⚙️:
+- **User Setting Options** ⚙️:
   - Two flags are added per user:
     - `limit_to_granted_sites`
     - `limit_to_own_assets`
