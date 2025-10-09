@@ -191,6 +191,7 @@ The module adds a `site_editor` role for site-scoped content editors. It inherit
 | Site management | Create and manage any site | Cannot create new sites and can only work in sites where they are an `Author` | Site-level `Author` permission controls page editing within a site |
 
 ### Configuration Checklist
+> Keep the `site_editor` role aligned with user isolation settings; the admin UI now surfaces a warning whenever the required options drift out of sync.
 
 - Assign the `site_editor` role in Admin > Users, then grant the user `Author` permission for each site they should manage (Sites > Permissions).
 - Set a Default site for the user in Admin > Users > User settings so new items they create automatically belong to that site.
