@@ -11,6 +11,7 @@ use Laminas\Mvc\Controller\PluginManager as ControllerPluginManager;
 use Laminas\Mvc\MvcEvent;
 use Laminas\View\Renderer\PhpRenderer;
 use Omeka\Api\Adapter\UserAdapter;
+use Omeka\Api\Representation\UserRepresentation;
 use Omeka\Entity\User;
 use Omeka\Mvc\Controller\Plugin\Messenger;
 use Omeka\Settings\UserSettings as UserSettingsService;
@@ -19,7 +20,8 @@ class UserSettingsValidationListener implements ListenerAggregateInterface
 {
     use ListenerAggregateTrait;
 
-    private const WARNING_MESSAGE = "\u{26A0}\u{FE0F} Configuration warning: 'Site Editor' requires 'limit_to_granted_sites' enabled and at least one default site for items.";
+    private const WARNING_MESSAGE = "\u{26A0}\u{FE0F} Configuration warning: 'Site Editor' requires 'limit_to_granted_sites' enabled and at least one default site.";
+    private const BROWSE_WARNING_TEXT = 'Site editor isolation settings are incomplete.';
 
     /**
      * @var UserSettingsService
@@ -78,6 +80,13 @@ class UserSettingsValidationListener implements ListenerAggregateInterface
                 'view.edit.after',
                 [$this, 'registerUserFormAssets'],
                 $priority
+            );
+
+            $this->listeners[] = $sharedEvents->attach(
+                '*',
+                'view.browse.actions',
+                [$this, 'appendUserBrowseWarning'],
+                0
             );
         }
 
@@ -162,6 +171,39 @@ class UserSettingsValidationListener implements ListenerAggregateInterface
             'text/javascript',
             ['defer' => 'defer']
         );
+    }
+
+    /**
+     * Append a warning icon for site editors with incomplete isolation settings.
+     *
+     * @param EventInterface $event
+     * @return string|null
+     */
+    public function appendUserBrowseWarning(EventInterface $event): ?string
+    {
+        $resource = $event->getParam('resource');
+        if (!$resource instanceof UserRepresentation) {
+            return null;
+        }
+        if ($resource->role() !== 'site_editor') {
+            return null;
+        }
+
+        $userId = (int) $resource->id();
+        if (!$userId || $this->configurationIsValid($userId)) {
+            return null;
+        }
+
+        $message = self::BROWSE_WARNING_TEXT;
+        $view = $event->getTarget();
+
+        if ($view instanceof PhpRenderer) {
+            echo '<li class="site-editor-warning" title="'.$view->escapeHtmlAttr($message).'">⚠️</span><span class="screen-reader-text">'.$view->escapeHtml($message).'</span></li>';
+            return null;
+        }
+
+        echo '<li class="site-editor-warning" title="'.$view->escapeHtmlAttr($message).'">⚠️</span><span class="screen-reader-text">'.$view->escapeHtml($message).'</span></li>';
+        return null;
     }
 
     /**

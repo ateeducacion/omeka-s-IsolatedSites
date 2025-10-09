@@ -20,6 +20,7 @@ use IsolatedSites\Listener\UserApiListener;
 use IsolatedSites\Listener\FilterAdminNavigationListener;
 use IsolatedSites\Assertion\HasAccessToItemSiteAssertion;
 use Laminas\Mvc\Application;
+use IsolatedSites\Listener\UserSettingsValidationListener;
 
 return [
     'view_manager' => [
@@ -109,7 +110,16 @@ return [
                     $services->get('Omeka\Connection')
                 );
             },
+            UserSettingsValidationListener::class => function ($services) {
+                return new UserSettingsValidationListener(
+                    $services->get('Omeka\Settings\User'),
+                    $services->get('ControllerPluginManager')
+                );
+            },
         ],
+    ],
+    'listeners' => [
+        UserSettingsValidationListener::class,
     ],
     'IsolatedSites' => [
         'settings' => [
