@@ -125,6 +125,6 @@ return [
         'settings' => [
             'activate_IsolatedSites' => true,
         ]
-    ],
-    'environment' => 'development',
+            ],
+            'environment' => 'development',
 ];

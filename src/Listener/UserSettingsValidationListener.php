@@ -20,7 +20,8 @@ class UserSettingsValidationListener implements ListenerAggregateInterface
 {
     use ListenerAggregateTrait;
 
-    private const WARNING_MESSAGE = "\u{26A0}\u{FE0F} Configuration warning: 'Site Editor' requires 'limit_to_granted_sites' enabled and at least one default site.";
+    private const WARNING_MESSAGE = "\u{26A0}\u{FE0F} Configuration warning: 'Site Editor' requires ".
+                    "'<limit_to_granted_sites' enabled and at least one default site.";
     private const BROWSE_WARNING_TEXT = 'Site editor isolation settings are incomplete.';
 
     /**
@@ -198,11 +199,13 @@ class UserSettingsValidationListener implements ListenerAggregateInterface
         $view = $event->getTarget();
 
         if ($view instanceof PhpRenderer) {
-            echo '<li class="site-editor-warning" title="'.$view->escapeHtmlAttr($message).'">⚠️</span><span class="screen-reader-text">'.$view->escapeHtml($message).'</span></li>';
+            echo '<li class="site-editor-warning" title="'.$view->escapeHtmlAttr($message).
+                '">⚠️</span><span class="screen-reader-text">'.$view->escapeHtml($message).'</span></li>';
             return null;
         }
 
-        echo '<li class="site-editor-warning" title="'.$view->escapeHtmlAttr($message).'">⚠️</span><span class="screen-reader-text">'.$view->escapeHtml($message).'</span></li>';
+        echo '<li class="site-editor-warning" title="'.$view->escapeHtmlAttr($message).
+            '">⚠️</span><span class="screen-reader-text">'.$view->escapeHtml($message).'</span></li>';
         return null;
     }
 
@@ -327,8 +330,7 @@ class UserSettingsValidationListener implements ListenerAggregateInterface
         if (!$user) {
             $target = $event->getTarget();
             $user = $this->extractUserEntity($target);
-            if (
-                !$user
+            if (!$user
                 && is_object($target)
                 && method_exists($target, 'getContent')
             ) {
@@ -361,4 +363,3 @@ class UserSettingsValidationListener implements ListenerAggregateInterface
         return null;
     }
 }
-
