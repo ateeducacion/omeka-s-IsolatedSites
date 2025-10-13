@@ -199,13 +199,15 @@ class UserSettingsValidationListener implements ListenerAggregateInterface
         $view = $event->getTarget();
 
         if ($view instanceof PhpRenderer) {
-            echo '<li><span class="fas fa-exclamation-triangle" style="color:#a91919;opacity:0.5" title="'.$view->escapeHtmlAttr($message).
-                '"></span><span class="screen-reader-text">'.$view->escapeHtml($message).'</span></li>';
+            echo '<li><span class="fas fa-exclamation-triangle" style="color:#a91919;opacity:0.5" title="'
+                .$view->escapeHtmlAttr($message).'"></span><span class="screen-reader-text">'.
+                $view->escapeHtml($message).'</span></li>';
             return null;
         }
 
-        echo '<li><span class="fas fa-exclamation-triangle" style="color:#a91919;opacity:0.5" title="'.$view->escapeHtmlAttr($message).
-                '"></span><span class="screen-reader-text">'.$view->escapeHtml($message).'</span></li>';
+        echo '<li><span class="fas fa-exclamation-triangle" style="color:#a91919;opacity:0.5" title="'
+            .$view->escapeHtmlAttr($message).'"></span><span class="screen-reader-text">'.
+            $view->escapeHtml($message).'</span></li>';
         return null;
     }
 
