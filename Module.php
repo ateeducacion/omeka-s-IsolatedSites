@@ -229,8 +229,12 @@ class Module extends AbstractModule
                 $this->inner = $inner;
             }
 
-            public function assert(LAcl $acl, ?RInterface $role = null, ?ResInterface $resource = null, $privilege = null)
-            {
+            public function assert(
+                LAcl $acl,
+                ?RInterface $role = null,
+                ?ResInterface $resource = null,
+                $privilege = null
+            ) {
                 try {
                     return !$this->inner->assert($acl, $role, $resource, $privilege);
                 } catch (\Throwable $e) {
@@ -280,8 +284,12 @@ class Module extends AbstractModule
                 $this->owns = $owns;
             }
 
-            public function assert(LAcl $acl, ?RInterface $role = null, ?ResInterface $resource = null, $privilege = null)
-            {
+            public function assert(
+                LAcl $acl,
+                ?RInterface $role = null,
+                ?ResInterface $resource = null,
+                $privilege = null
+            ) {
                 try {
                     return !$this->owns->assert($acl, $role, $resource, $privilege);
                 } catch (\Throwable $e) {
