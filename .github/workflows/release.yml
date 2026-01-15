@@ -2,27 +2,53 @@
 name: Release
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - 'v*.*.*'
 
 jobs:
   build_and_upload:
     runs-on: ubuntu-latest
     steps:
-      # Checkout the code
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required to get full history for release notes
 
       - name: Set environment variables
         run: |
           echo "RELEASE_TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
+      - name: Generate Release Notes
+        id: notes
+        run: |
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          if [ -z "$PREVIOUS_TAG" ]; then
+            NOTES=$(git log --pretty=format:"- %s (%h)" HEAD | head -20)
+          else
+            NOTES=$(git log --pretty=format:"- %s (%h)" ${PREVIOUS_TAG}..HEAD)
+          fi
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
       - name: Create package using the Makefile
         run: make package VERSION=${RELEASE_TAG}
 
-      - name: Upload ZIP to the release
+      - name: Create Release and Upload ZIP
         uses: softprops/action-gh-release@v2
         with:
           files: IsolatedSites-${{ env.RELEASE_TAG }}.zip
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: Release ${{ env.RELEASE_TAG }}
+          body: |
+            ## 📦 Changes in ${{ env.RELEASE_TAG }}
+
+            ${{ steps.notes.outputs.notes }}
+
+            ## 📥 Installation
+            Download the ZIP file and extract it to your Omeka S modules directory.
+          draft: false
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
