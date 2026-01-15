@@ -52,7 +52,7 @@ class Module extends AbstractModule
      *
      * @param ServiceLocatorInterface $serviceLocator
      */
-    public function install(ServiceLocatorInterface $serviceLocator, Messenger $messenger = null)
+    public function install(ServiceLocatorInterface $serviceLocator, ?Messenger $messenger = null)
     {
         if (!$messenger) {
             $messenger = new Messenger();
@@ -65,7 +65,7 @@ class Module extends AbstractModule
      *
      * @param ServiceLocatorInterface $serviceLocator
      */
-    public function uninstall(ServiceLocatorInterface $serviceLocator, Messenger $messenger = null)
+    public function uninstall(ServiceLocatorInterface $serviceLocator, ?Messenger $messenger = null)
     {
         if (!$messenger) {
             $messenger = new Messenger();
@@ -102,12 +102,6 @@ class Module extends AbstractModule
             \Omeka\Form\UserForm::class,
             'form.add_input_filters',
             [$this->serviceLocator->get(ModifyUserSettingsFormListener::class), 'addInputFilters']
-        );
-
-        $sharedEventManager->attach(
-            \Omeka\Form\UserForm::class,
-            'form.validate',
-            [$this->serviceLocator->get(ModifyUserSettingsFormListener::class), 'handleFormValidation']
         );
 
         $sharedEventManager->attach(
@@ -235,8 +229,12 @@ class Module extends AbstractModule
                 $this->inner = $inner;
             }
 
-            public function assert(LAcl $acl, RInterface $role = null, ResInterface $resource = null, $privilege = null)
-            {
+            public function assert(
+                LAcl $acl,
+                ?RInterface $role = null,
+                ?ResInterface $resource = null,
+                $privilege = null
+            ) {
                 try {
                     return !$this->inner->assert($acl, $role, $resource, $privilege);
                 } catch (\Throwable $e) {
@@ -275,6 +273,7 @@ class Module extends AbstractModule
             ]
         );
 
+
         // ItemSets/Asset permissions
         $ownsAssertion = new OwnsEntityAssertion();
         $denyIfNotOwned = new class($ownsAssertion) implements AInterface {
@@ -285,8 +284,12 @@ class Module extends AbstractModule
                 $this->owns = $owns;
             }
 
-            public function assert(LAcl $acl, RInterface $role = null, ResInterface $resource = null, $privilege = null)
-            {
+            public function assert(
+                LAcl $acl,
+                ?RInterface $role = null,
+                ?ResInterface $resource = null,
+                $privilege = null
+            ) {
                 try {
                     return !$this->owns->assert($acl, $role, $resource, $privilege);
                 } catch (\Throwable $e) {
@@ -314,6 +317,12 @@ class Module extends AbstractModule
             ['create']
         );
 
+        // Deny access to logs
+        $acl->deny(
+            'site_editor',
+            [\Log\Controller\Admin\LogController::class],
+            ['browse']
+        );
         //Resource template permissions
         // Deny all resource template actions inherited from editor role
 
@@ -335,7 +344,7 @@ class Module extends AbstractModule
             self::ROLE_SITE_EDITOR,
             [\Omeka\Entity\ResourceTemplate::class,
             \Omeka\Api\Adapter\ResourceTemplateAdapter::class],
-            ['read']
+            ['read','search']
         );
 
         // User admin permissions

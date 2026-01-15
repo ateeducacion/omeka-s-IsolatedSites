@@ -20,6 +20,9 @@ class ModifyQueryListenerTest extends TestCase
     private $event;
     private $queryBuilder;
     private $user;
+    private $application;
+    private $mvcEvent;
+    private $routeMatch;
 
     protected function setUp(): void
     {
