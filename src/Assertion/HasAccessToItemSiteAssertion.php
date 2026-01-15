@@ -60,7 +60,7 @@ class HasAccessToItemSiteAssertion implements AssertionInterface
         $this->services = $services;
     }
 
-    public function assert(Acl $acl, RoleInterface $role = null, ResourceInterface $resource = null, $privilege = null)
+    public function assert(Acl $acl, ?RoleInterface $role = null, ?ResourceInterface $resource = null, $privilege = null)
     {
         try {
             if (!$resource || !$role || !method_exists($role, 'getId')) {

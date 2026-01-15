@@ -83,7 +83,7 @@ class ModifyUserSettingsFormListener
 
             // If user cannot modify settings, make fields disabled
             if (!$canModifySettings) {
-                $limitToGrantedSitesAttributes['disabled'] = 'disabled';
+                $limitToGrantedSitesAttributes['disabled'] = 'true';
                 $limitToOwnAssetsAttributes['disabled'] = 'disabled';
             }
 
@@ -129,64 +129,95 @@ class ModifyUserSettingsFormListener
     {
         $form = $event->getTarget();
         $inputFilter = $form->getInputFilter();
-        
-        $inputFilter->add([
-            'name' => 'limit_to_granted_sites',
-            'required' => false,
-            'filters' => [
-                ['name' => 'Boolean'],
-            ],
-        ]);
-
-        $inputFilter->add([
-            'name' => 'limit_to_own_assets',
-            'required' => false,
-            'filters' => [
-                ['name' => 'Boolean'],
-            ],
-        ]);
-    }
-    
-    /**
-     * Handle form validation and prevent unauthorized changes
-     * This should be called after form validation but before saving
-     */
-    public function handleFormValidation(Event $event)
-    {
-        $form = $event->getTarget();
-        
-        // Get the current logged-in user
-        $currentUser = $this->getCurrentUser();
-        if ($currentUser == null) {
+        // Get the user-settings fieldset's input filter
+        if (!$inputFilter->has('user-settings')) {
             return;
         }
 
-        // Check if current user is allowed to modify these settings
-        $currentUserRole = $currentUser->getRole();
-        $canModifySettings = $this->acl->isAdminRole($currentUserRole) ||
-                             $currentUserRole === 'supervisor';
+        $fieldsetInputFilter = $inputFilter->get('user-settings');
 
-        // If the user cannot modify settings, restore the original values
-        if (!$canModifySettings) {
+        // Only add input filters if the fields were actually added to the form
+        try {
+            $fieldset = $form->get('user-settings');
+
+            // Check if current user can modify these settings
+            $currentUser = $this->getCurrentUser();
+            $canModifySettings = false;
+            if ($currentUser !== null) {
+                $currentUserRole = $currentUser->getRole();
+                $canModifySettings = $this->acl->isAdminRole($currentUserRole) ||
+                                     $currentUserRole === 'supervisor';
+            }
+
+            // Get existing values from the database
             $userId = $form->getOption('user_id');
+            $existingLimitToGrantedSites = false;
+            $existingLimitToOwnAssets = false;
             if ($userId) {
                 $this->userSettingsService->setTargetId($userId);
                 $existingLimitToGrantedSites = $this->userSettingsService->get('limit_to_granted_sites', false);
                 $existingLimitToOwnAssets = $this->userSettingsService->get('limit_to_own_assets', false);
-
-                // Get the fieldset and override the values
-                try {
-                    $fieldset = $form->get('user-settings');
-                    if ($fieldset->has('limit_to_granted_sites')) {
-                        $fieldset->get('limit_to_granted_sites')->setValue($existingLimitToGrantedSites ? '1' : '0');
-                    }
-                    if ($fieldset->has('limit_to_own_assets')) {
-                        $fieldset->get('limit_to_own_assets')->setValue($existingLimitToOwnAssets ? '1' : '0');
-                    }
-                } catch (\Exception $e) {
-                    // Fieldset not found, skip
-                }
             }
+
+            if ($fieldset->has('limit_to_granted_sites')) {
+                // Remove existing input filter if present, then add our own
+                if ($fieldsetInputFilter->has('limit_to_granted_sites')) {
+                    $fieldsetInputFilter->remove('limit_to_granted_sites');
+                }
+
+                $filters = [['name' => 'Boolean']];
+
+                // For non-privileged users, add a callback filter that forces the existing value
+                if (!$canModifySettings) {
+                    $forcedValue = $existingLimitToGrantedSites;
+                    $filters[] = [
+                        'name' => 'Callback',
+                        'options' => [
+                            'callback' => function ($value) use ($forcedValue) {
+                                return $forcedValue;
+                            },
+                        ],
+                    ];
+                }
+
+                $fieldsetInputFilter->add([
+                    'name' => 'limit_to_granted_sites',
+                    'required' => false,
+                    'allow_empty' => true,
+                    'filters' => $filters,
+                ]);
+            }
+
+            if ($fieldset->has('limit_to_own_assets')) {
+                // Remove existing input filter if present, then add our own
+                if ($fieldsetInputFilter->has('limit_to_own_assets')) {
+                    $fieldsetInputFilter->remove('limit_to_own_assets');
+                }
+
+                $filters = [['name' => 'Boolean']];
+
+                // For non-privileged users, add a callback filter that forces the existing value
+                if (!$canModifySettings) {
+                    $forcedValue = $existingLimitToOwnAssets;
+                    $filters[] = [
+                        'name' => 'Callback',
+                        'options' => [
+                            'callback' => function ($value) use ($forcedValue) {
+                                return $forcedValue;
+                            },
+                        ],
+                    ];
+                }
+
+                $fieldsetInputFilter->add([
+                    'name' => 'limit_to_own_assets',
+                    'required' => false,
+                    'allow_empty' => true,
+                    'filters' => $filters,
+                ]);
+            }
+        } catch (\Exception $e) {
+            // Fieldset not found, skip
         }
     }
 

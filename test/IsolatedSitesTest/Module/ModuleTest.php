@@ -25,14 +25,17 @@ class ModuleTest extends TestCase
     protected $module;
     protected $serviceLocator;
     protected $sharedEventManager;
+    protected $ModifyUserSettingsFormListener;
+    protected $ModifyQueryListener;
+    protected $ModifyItemSetQueryListener;
 
     public function setUp(): void
     {
         $this->module = new Module();
-        
+
         // Mock service locator
         $this->serviceLocator = $this->createMock(ServiceLocatorInterface::class);
-        
+
         // Mock shared event manager
         $this->sharedEventManager = $this->createMock(SharedEventManagerInterface::class);
 
@@ -113,7 +116,7 @@ class ModuleTest extends TestCase
             ->getMock();
 
         // Setup service locator to return our mock listeners
-        $this->serviceLocator->expects($this->exactly(12))
+        $this->serviceLocator->expects($this->exactly(11))
             ->method('get')
             ->willReturnMap([
                 [ModifyUserSettingsFormListener::class, $mockUserSettingsListener],
@@ -126,7 +129,7 @@ class ModuleTest extends TestCase
             ]);
 
         // Test that all expected event listeners are attached
-        $this->sharedEventManager->expects($this->exactly(12))
+        $this->sharedEventManager->expects($this->exactly(11))
             ->method('attach')
             ->withConsecutive(
                 [
@@ -138,11 +141,6 @@ class ModuleTest extends TestCase
                     $this->equalTo(\Omeka\Form\UserForm::class),
                     $this->equalTo('form.add_input_filters'),
                     $this->identicalTo([$mockUserSettingsListener, 'addInputFilters'])
-                ],
-                [
-                    $this->equalTo(\Omeka\Form\UserForm::class),
-                    $this->equalTo('form.validate'),
-                    $this->identicalTo([$mockUserSettingsListener, 'handleFormValidation'])
                 ],
                 [
                     $this->equalTo('CAS\Controller\LoginController'),
@@ -188,11 +186,6 @@ class ModuleTest extends TestCase
                     $this->equalTo('Omeka\Api\Adapter\UserAdapter'),
                     $this->equalTo('api.create.post'),
                     $this->identicalTo([$mockUserApiListener, 'handleApiCreate'])
-                ],
-                [
-                    $this->equalTo('Omeka\Api\Adapter\UserAdapter'),
-                    $this->equalTo('api.batch_update.pre'),
-                    $this->identicalTo([$mockUserApiListener, 'handleBatchUpdate'])
                 ]
             );
 

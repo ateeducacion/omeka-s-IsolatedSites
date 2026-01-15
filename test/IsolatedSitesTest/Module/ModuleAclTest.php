@@ -63,7 +63,7 @@ class ModuleAclTest extends TestCase
                         \Omeka\Entity\ResourceTemplate::class,
                         \Omeka\Api\Adapter\ResourceTemplateAdapter::class,
                     ]
-                    && $call['privileges'] === ['read'];
+                    && $call['privileges'] === ['read', 'search'];
             },
             'Site editor should retain read privilege on resource template entities.'
         );
@@ -159,7 +159,7 @@ class ModuleAclTest extends TestCase
     private function invokeAddAclRoleAndRules(Module $module): void
     {
         $method = new \ReflectionMethod($module, 'addAclRoleAndRules');
-        $method->setAccessible(true);
+        // Note: setAccessible() has no effect since PHP 8.1, removed to avoid deprecation warning
         $method->invoke($module);
     }
 

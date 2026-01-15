@@ -309,6 +309,7 @@ public function testHandleCasUserCreatePreEvent()
     public function testAddInputFilters()
     {
         $inputFilter = $this->createMock(InputFilter::class);
+        $fieldsetInputFilter = $this->createMock(InputFilter::class);
 
         $this->event->expects($this->once())
             ->method('getTarget')
@@ -318,7 +319,44 @@ public function testHandleCasUserCreatePreEvent()
             ->method('getInputFilter')
             ->willReturn($inputFilter);
 
-        $inputFilter->expects($this->exactly(2))
+        // The code checks if 'user-settings' exists in the input filter
+        $inputFilter->expects($this->once())
+            ->method('has')
+            ->with('user-settings')
+            ->willReturn(true);
+
+        $inputFilter->expects($this->once())
+            ->method('get')
+            ->with('user-settings')
+            ->willReturn($fieldsetInputFilter);
+
+        // Mock the form to return the fieldset with our fields
+        $this->form->expects($this->once())
+            ->method('get')
+            ->with('user-settings')
+            ->willReturn($this->fieldset);
+
+        $this->form->expects($this->once())
+            ->method('getOption')
+            ->with('user_id')
+            ->willReturn(null);
+
+        $this->fieldset->expects($this->exactly(2))
+            ->method('has')
+            ->willReturnMap([
+                ['limit_to_granted_sites', true],
+                ['limit_to_own_assets', true]
+            ]);
+
+        // Check if fieldset input filter has the fields (for removal)
+        $fieldsetInputFilter->expects($this->exactly(2))
+            ->method('has')
+            ->willReturnMap([
+                ['limit_to_granted_sites', false],
+                ['limit_to_own_assets', false]
+            ]);
+
+        $fieldsetInputFilter->expects($this->exactly(2))
             ->method('add')
             ->withConsecutive(
                 [$this->callback(function($params) {
