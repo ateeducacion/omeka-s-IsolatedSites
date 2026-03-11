@@ -1,5 +1,10 @@
 # IsolatedSites Module for Omeka S
 
+<a href="https://ateeducacion.github.io/omeka-s-playground/?blueprint=https%3A%2F%2Fraw.githubusercontent.com%2Fateeducacion%2Fomeka-s-IsolatedSites%2Frefs%2Fheads%2Fmain%2Fblueprint.json">
+  <img src="https://raw.githubusercontent.com/ateeducacion/omeka-s-playground/main/ogimage.png" alt="Try IsolatedSites in your browser" width="220">
+</a><br>
+<small><a href="https://ateeducacion.github.io/omeka-s-playground/?blueprint=https%3A%2F%2Fraw.githubusercontent.com%2Fateeducacion%2Fomeka-s-IsolatedSites%2Frefs%2Fheads%2Fmain%2Fblueprint.json">Try in your browser</a></small>
+
 The **IsolatedSites** module is a comprehensive security and access control solution for Omeka S that enforces **content isolation based on site permissions**. It ensures users can only view and interact with resources (items, item sets, media, assets, and sites) belonging to sites they are explicitly granted access to, significantly enhancing security and usability in multi-site, multi-user environments.
 
 The module achieves this through **role-based access control** with a specialized `site_editor` role, **user-configurable scope limitation settings**, and **full API integration** for programmatic access management. This allows organizations to maintain strict data boundaries between different sites and users while preserving a streamlined administrative experience for site editors and content managers.
