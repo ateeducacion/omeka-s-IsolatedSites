@@ -111,7 +111,7 @@ class UserSettingsValidationListener implements ListenerAggregateInterface
         }
 
         $this->pendingUsers[$user->getId()] = [
-            'is_site_editor' => $user->getRole() === 'site_editor',
+            'is_site_editor' => $this->isManagedSiteRole((string) $user->getRole()),
         ];
     }
 
@@ -186,7 +186,7 @@ class UserSettingsValidationListener implements ListenerAggregateInterface
         if (!$resource instanceof UserRepresentation) {
             return null;
         }
-        if ($resource->role() !== 'site_editor') {
+        if (!$this->isManagedSiteRole((string) $resource->role())) {
             return null;
         }
 
@@ -209,6 +209,19 @@ class UserSettingsValidationListener implements ListenerAggregateInterface
             .$view->escapeHtmlAttr($message).'"></span><span class="screen-reader-text">'.
             $view->escapeHtml($message).'</span></li>';
         return null;
+    }
+
+    /**
+     * Whether the role is a content-managing, site-scoped role that needs the
+     * isolation settings (limit_to_granted_sites + a default site) to behave
+     * correctly. Read-only site_researcher is excluded — it creates no content.
+     *
+     * @param string $role
+     * @return bool
+     */
+    private function isManagedSiteRole(string $role): bool
+    {
+        return in_array($role, ['site_editor', 'site_manager'], true);
     }
 
     /**

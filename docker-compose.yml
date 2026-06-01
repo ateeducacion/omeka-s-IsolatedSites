@@ -44,11 +44,15 @@ services:
         omeka-s-cli module:install IsolatedSites || true
 
         # Demo users for verifying isolation (password "1234" for all):
-        #   - editor          : plain editor, no isolation (control, sees everything)
-        #   - siteeditor.a / b : site_editor role, each isolated to their own site
-        omeka-s-cli user:add "editor@example.com"       "Editor"         editor      "1234" || true
-        omeka-s-cli user:add "siteeditor.a@example.com" "Site Editor A"  site_editor "1234" || true
-        omeka-s-cli user:add "siteeditor.b@example.com" "Site Editor B"  site_editor "1234" || true
+        #   - editor             : plain editor, no isolation (control, sees everything)
+        #   - siteresearcher.a   : site_researcher (read-only) on site-a
+        #   - siteeditor.a / b   : site_editor (content) on site-a / site-b
+        #   - sitemanager.a      : site_manager (content + edit the site) on site-a
+        omeka-s-cli user:add "editor@example.com"          "Editor"            editor          "1234" || true
+        omeka-s-cli user:add "siteresearcher.a@example.com" "Site Researcher A" site_researcher "1234" || true
+        omeka-s-cli user:add "siteeditor.a@example.com"    "Site Editor A"     site_editor     "1234" || true
+        omeka-s-cli user:add "sitemanager.a@example.com"   "Site Manager A"    site_manager    "1234" || true
+        omeka-s-cli user:add "siteeditor.b@example.com"    "Site Editor B"     site_editor     "1234" || true
 
         # Provision the multi-site demo (sites, per-site permissions, isolation
         # settings and sample content) through the Omeka API. The bundled

@@ -27,10 +27,30 @@
       }
     },
     {
+      "username": "Site Researcher A",
+      "email": "siteresearcher.a@example.com",
+      "password": "password",
+      "role": "site_researcher",
+      "settings": {
+        "limit_to_granted_sites": true,
+        "limit_to_own_assets": true
+      }
+    },
+    {
       "username": "Site Editor A",
       "email": "siteeditor.a@example.com",
       "password": "password",
       "role": "site_editor",
+      "settings": {
+        "limit_to_granted_sites": true,
+        "limit_to_own_assets": true
+      }
+    },
+    {
+      "username": "Site Manager A",
+      "email": "sitemanager.a@example.com",
+      "password": "password",
+      "role": "site_manager",
       "settings": {
         "limit_to_granted_sites": true,
         "limit_to_own_assets": true
@@ -126,21 +146,23 @@
       "title": "Site A (Team A)",
       "slug": "site-a",
       "theme": "default",
-      "summary": "Site managed by Editor A. With isolation on, only Editor A and admins see it.",
+      "summary": "Team A site. With isolation on, only its granted users and admins see it.",
       "isPublic": true,
       "setAsDefault": true,
       "permissions": [
-        { "user": "siteeditor.a@example.com", "role": "admin" }
+        { "user": "siteresearcher.a@example.com", "role": "viewer" },
+        { "user": "siteeditor.a@example.com", "role": "editor" },
+        { "user": "sitemanager.a@example.com", "role": "admin" }
       ]
     },
     {
       "title": "Site B (Team B)",
       "slug": "site-b",
       "theme": "default",
-      "summary": "Site managed by Editor B. With isolation on, only Editor B and admins see it.",
+      "summary": "Team B site, managed by Site Editor B.",
       "isPublic": true,
       "permissions": [
-        { "user": "siteeditor.b@example.com", "role": "admin" }
+        { "user": "siteeditor.b@example.com", "role": "editor" }
       ]
     }
   ],

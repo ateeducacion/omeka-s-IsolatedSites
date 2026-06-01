@@ -78,42 +78,65 @@ $titleValue = static function (string $text) use ($titlePropId): array {
 };
 
 // --- Demo definition --------------------------------------------------------
-$demo = [
-    ['slug' => 'site-a', 'title' => 'Site A (Team A)', 'editor' => 'siteeditor.a@example.com'],
-    ['slug' => 'site-b', 'title' => 'Site B (Team B)', 'editor' => 'siteeditor.b@example.com'],
+// site-a showcases the three site-scoped roles; site-b shows cross-site isolation.
+// 'role' is the per-site permission (viewer/editor/admin); the global role is set
+// by docker-compose's omeka-s-cli user:add calls. 'collectionOwner' owns the
+// item set, to also exercise ownership-based filtering.
+$sites = [
+    [
+        'slug' => 'site-a',
+        'title' => 'Site A (Team A)',
+        'grants' => [
+            ['email' => 'siteresearcher.a@example.com', 'role' => 'viewer'],
+            ['email' => 'siteeditor.a@example.com',     'role' => 'editor'],
+            ['email' => 'sitemanager.a@example.com',    'role' => 'admin'],
+        ],
+        'collectionOwner' => 'siteeditor.a@example.com',
+    ],
+    [
+        'slug' => 'site-b',
+        'title' => 'Site B (Team B)',
+        'grants' => [
+            ['email' => 'siteeditor.b@example.com', 'role' => 'editor'],
+        ],
+        'collectionOwner' => 'siteeditor.b@example.com',
+    ],
 ];
 
-foreach ($demo as $d) {
-    $editor = $findUser($d['editor']);
-    if (!$editor) {
-        fwrite(STDERR, "[provision] User {$d['editor']} not found; skipping {$d['slug']}.\n");
-        continue;
-    }
-    $editorId = $editor->getId();
+$userSettings = $services->get('Omeka\Settings\User');
 
-    // Enable the isolation settings for this site editor (idempotent).
-    $userSettings = $services->get('Omeka\Settings\User');
-    $userSettings->setTargetId($editorId);
-    $userSettings->set('limit_to_granted_sites', true);
-    $userSettings->set('limit_to_own_assets', true);
+foreach ($sites as $d) {
+    // Enable isolation settings for every granted user and build the site's
+    // permission payload (idempotent).
+    $sitePermissions = [];
+    foreach ($d['grants'] as $grant) {
+        $user = $findUser($grant['email']);
+        if (!$user) {
+            fwrite(STDERR, "[provision] User {$grant['email']} not found; skipping grant.\n");
+            continue;
+        }
+        $userSettings->setTargetId($user->getId());
+        $userSettings->set('limit_to_granted_sites', true);
+        $userSettings->set('limit_to_own_assets', true);
+
+        $sitePermissions[] = ['o:user' => ['o:id' => $user->getId()], 'o:role' => $grant['role']];
+    }
 
     if ($siteExists($d['slug'])) {
         echo "[provision] Site {$d['slug']} already exists; skipping creation.\n";
         continue;
     }
 
-    // Create the site and grant the editor admin permission on it only.
+    // Create the site with its per-user permissions.
     $site = $api->create('sites', [
         'o:title' => $d['title'],
         'o:slug' => $d['slug'],
         'o:theme' => 'default',
         'o:is_public' => true,
-        'o:site_permission' => [
-            ['o:user' => ['o:id' => $editorId], 'o:role' => 'admin'],
-        ],
+        'o:site_permission' => $sitePermissions,
     ])->getContent();
     $siteId = $site->id();
-    echo "[provision] Created site {$d['slug']} (#{$siteId}); granted {$d['editor']} admin.\n";
+    echo "[provision] Created site {$d['slug']} (#{$siteId}) with " . count($sitePermissions) . " permission(s).\n";
 
     // Create two items assigned to this site.
     for ($i = 1; $i <= 2; $i++) {
@@ -125,14 +148,17 @@ foreach ($demo as $d) {
     }
     echo "[provision] Created 2 items in {$d['slug']}.\n";
 
-    // Create one item set owned by the site editor (to exercise ownership-based
-    // filtering, which is independent of site membership).
-    $api->create('item_sets', [
-        'dcterms:title' => $titleValue("{$d['title']} - Collection"),
-        'o:is_public' => true,
-        'o:owner' => ['o:id' => $editorId],
-    ]);
-    echo "[provision] Created 1 item set owned by {$d['editor']}.\n";
+    // Create one item set owned by the site's content editor (ownership-based
+    // filtering is independent of site membership).
+    $owner = $findUser($d['collectionOwner']);
+    if ($owner) {
+        $api->create('item_sets', [
+            'dcterms:title' => $titleValue("{$d['title']} - Collection"),
+            'o:is_public' => true,
+            'o:owner' => ['o:id' => $owner->getId()],
+        ]);
+        echo "[provision] Created 1 item set owned by {$d['collectionOwner']}.\n";
+    }
 }
 
 echo "[provision] Done.\n";

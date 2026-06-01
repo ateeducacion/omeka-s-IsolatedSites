@@ -33,8 +33,16 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface as ResInterface;
  */
 class Module extends AbstractModule
 {
-    /** Custom role for site editors with limited access to their granted sites */
+    /** Site-scoped roles, all isolated to their granted sites. They differ only
+     * in write capability (read isolation is driven by the limit_to_granted_sites
+     * user setting, not the role):
+     *   - site_researcher: read-only within granted sites.
+     *   - site_editor: manage content (items, item sets, media), but NOT the site.
+     *   - site_manager: content + edit the site (pages, title, navigation, theme).
+     */
     const ROLE_SITE_EDITOR = 'site_editor';
+    const ROLE_SITE_MANAGER = 'site_manager';
+    const ROLE_SITE_RESEARCHER = 'site_researcher';
     
     /**
      * Retrieve the configuration array.
@@ -224,11 +232,29 @@ class Module extends AbstractModule
         $services = $this->getServiceLocator();
         $acl = $services->get('Omeka\Acl');
 
+        // ─── Roles ────────────────────────────────────────────────────────────────
+        // site_researcher inherits the read-only "researcher"; site_editor and
+        // site_manager inherit "editor". All three are isolated to their granted
+        // sites via the limit_to_granted_sites user setting.
+        $acl->addRole(self::ROLE_SITE_RESEARCHER, Acl::ROLE_RESEARCHER);
+        $acl->addRoleLabel(self::ROLE_SITE_RESEARCHER, 'Site Researcher'); // @translate
         $acl->addRole(self::ROLE_SITE_EDITOR, Acl::ROLE_EDITOR);
         $acl->addRoleLabel(self::ROLE_SITE_EDITOR, 'Site Editor'); // @translate
+        $acl->addRole(self::ROLE_SITE_MANAGER, Acl::ROLE_EDITOR);
+        $acl->addRoleLabel(self::ROLE_SITE_MANAGER, 'Site Manager'); // @translate
 
+        // Roles allowed to manage content (create/edit items, item sets, media).
+        $contentRoles = [self::ROLE_SITE_EDITOR, self::ROLE_SITE_MANAGER];
+        // Roles that may NOT edit the site itself (pages, title, navigation, theme).
+        $noSiteEditRoles = [self::ROLE_SITE_EDITOR, self::ROLE_SITE_RESEARCHER];
+        // Every site-scoped role (shared restrictions apply to all of them).
+        $siteRoles = [
+            self::ROLE_SITE_RESEARCHER,
+            self::ROLE_SITE_EDITOR,
+            self::ROLE_SITE_MANAGER,
+        ];
 
-
+        // ─── Assertions ─────────────────────────────────────────────────────────────
         $siteAccessAssertion = $services->get(HasAccessToItemSiteAssertion::class);
         if (method_exists($siteAccessAssertion, 'setServiceLocator')) {
             $siteAccessAssertion->setServiceLocator($services);
@@ -256,38 +282,6 @@ class Module extends AbstractModule
             }
         };
 
-        //Items/Media permissions
-        // Deny update if no access to any site of the item
-        $itemResources = [
-            \Omeka\Entity\Item::class,
-            \Omeka\Entity\Media::class,
-        ];
-        $acl->deny(
-            self::ROLE_SITE_EDITOR,
-            $itemResources,
-            ['update', 'delete', 'edit'],
-            $denyIfNoAccess
-        );
-
-        $acl->allow(
-            self::ROLE_SITE_EDITOR,
-            $itemResources,
-            ['read', 'browse', 'show', 'index']
-        );
-
-        $acl->deny(
-            'editor',
-            [
-                'Omeka\Api\Adapter\ItemAdapter',
-                'Omeka\Api\Adapter\MediaAdapter',
-            ],
-            [
-                'batch_delete_all',
-            ]
-        );
-
-
-        // ItemSets/Asset permissions
         $ownsAssertion = new OwnsEntityAssertion();
         $denyIfNotOwned = new class($ownsAssertion) implements AInterface {
             private $owns;
@@ -311,123 +305,113 @@ class Module extends AbstractModule
             }
         };
 
+        // ─── Items / Media ──────────────────────────────────────────────────────────
+        $itemResources = [
+            \Omeka\Entity\Item::class,
+            \Omeka\Entity\Media::class,
+        ];
+
+        // Everyone may read (the query listeners scope WHAT is read); content roles
+        // may edit only items/media reachable through a granted site (or owned);
+        // researchers are strictly read-only.
+        $acl->allow($siteRoles, $itemResources, ['read', 'browse', 'show', 'index']);
+        $acl->deny($contentRoles, $itemResources, ['update', 'delete', 'edit'], $denyIfNoAccess);
         $acl->deny(
-            'site_editor',
-            [
-                \Omeka\Entity\ItemSet::class,
-                \Omeka\Entity\Asset::class,
-            ],
-            ['update', 'delete'],
-            $denyIfNotOwned
+            self::ROLE_SITE_RESEARCHER,
+            $itemResources,
+            ['create', 'update', 'delete', 'edit']
         );
 
-        $acl->allow(
-            'site_editor',
+        $acl->deny(
+            Acl::ROLE_EDITOR,
             [
-                \Omeka\Entity\ItemSet::class,
-                \Omeka\Entity\Asset::class,
+                'Omeka\Api\Adapter\ItemAdapter',
+                'Omeka\Api\Adapter\MediaAdapter',
             ],
-            ['create']
+            [
+                'batch_delete_all',
+            ]
         );
 
-        // Deny access to logs
+        // ─── Item sets / Assets ───────────────────────────────────────────────────────
+        $ownedResources = [
+            \Omeka\Entity\ItemSet::class,
+            \Omeka\Entity\Asset::class,
+        ];
+        $acl->allow($contentRoles, $ownedResources, ['create']);
+        $acl->deny($contentRoles, $ownedResources, ['update', 'delete'], $denyIfNotOwned);
+        $acl->deny(self::ROLE_SITE_RESEARCHER, $ownedResources, ['create', 'update', 'delete']);
+
+        // ─── Logs ───────────────────────────────────────────────────────────────────
         if ($this->hasAclResource($acl, \Log\Controller\Admin\LogController::class)) {
-            $acl->deny(
-                'site_editor',
-                [\Log\Controller\Admin\LogController::class],
-                ['browse']
-            );
+            $acl->deny($siteRoles, [\Log\Controller\Admin\LogController::class], ['browse']);
         }
-        //Resource template permissions
-        // Deny all resource template actions inherited from editor role
 
+        // ─── Resource templates: read-only for every site role ──────────────────────
         $acl->deny(
-            self::ROLE_SITE_EDITOR,
+            $siteRoles,
             [\Omeka\Entity\ResourceTemplate::class,
             \Omeka\Controller\Admin\ResourceTemplate::class,
             \Omeka\Api\Adapter\ResourceTemplateAdapter::class],
         );
-
-        // Allow only specific read actions
         $acl->allow(
-            self::ROLE_SITE_EDITOR,
+            $siteRoles,
             [\Omeka\Controller\Admin\ResourceTemplate::class],
             ['index', 'browse', 'show', 'show-details','table-templates']
         );
-        // Allow only specific read actions
         $acl->allow(
-            self::ROLE_SITE_EDITOR,
+            $siteRoles,
             [\Omeka\Entity\ResourceTemplate::class,
             \Omeka\Api\Adapter\ResourceTemplateAdapter::class],
             ['read','search']
         );
 
-        // User admin permissions
+        // ─── Users: self-management only for every site role ─────────────────────────
         $isSelfAssertion = new IsSelfAssertion();
-
-        $acl->deny(
-            self::ROLE_SITE_EDITOR,
-            [
-                \Omeka\Entity\User::class,
-            ]
-        );
-
-        $acl->deny(
-            self::ROLE_SITE_EDITOR,
-            [\Omeka\Controller\Admin\User::class],
-            ['browse']
-        );
-        
+        $acl->deny($siteRoles, [\Omeka\Entity\User::class]);
+        $acl->deny($siteRoles, [\Omeka\Controller\Admin\User::class], ['browse']);
         $acl->allow(
-            self::ROLE_SITE_EDITOR,
+            $siteRoles,
             [\Omeka\Entity\User::class],
             ['read', 'update', 'change-password'],
             $isSelfAssertion
         );
-
         $acl->allow(
-            self::ROLE_SITE_EDITOR,
+            $siteRoles,
             [\Omeka\Controller\Admin\User::class],
             ['show', 'edit'],
             $isSelfAssertion
         );
 
-        // ─── SITE: denegar creación y administración general del sitio ───────────────
+        // ─── Sites: no site-scoped role may create or delete sites ───────────────────
+        $acl->deny($siteRoles, \Omeka\Entity\Site::class, ['create', 'delete']);
+
+        // ─── System info: off-limits ─────────────────────────────────────────────────
+        $acl->deny($siteRoles, [\Omeka\Controller\Admin\SystemInfo::class]);
+
+        // ─── Site administration (SiteAdmin\Index + SitePage) ────────────────────────
+        // site_manager MAY edit the site (title, navigation, theme) and its pages, but
+        // cannot create/delete sites nor manage site user permissions.
         $acl->deny(
-            Module::ROLE_SITE_EDITOR,
-            \Omeka\Entity\Site::class,
-            ['create', 'delete']
+            self::ROLE_SITE_MANAGER,
+            \Omeka\Controller\SiteAdmin\Index::class,
+            ['add', 'delete', 'users']
         );
 
+        // site_editor and site_researcher cannot edit the site at all.
         $acl->deny(
-            'site_editor',
+            $noSiteEditRoles,
             \Omeka\Controller\SiteAdmin\Index::class,
             ['index', 'edit', 'navigation', 'users', 'theme', 'add', 'delete']
         );
 
-        // ─── PÁGINAS: permitir solo listar y editar páginas ──────────────────────────
-        $acl->allow(
-            'site_editor',
-            \Omeka\Entity\SitePage::class,
-            ['read', 'index']        // sin 'create' ni 'delete'
-        );
-
-
-        // Site editors may edit existing pages of sites where they have the
-        // required per-site permission (core gates SitePage 'update' behind a
-        // per-site assertion); they cannot create or delete pages. 'edit' must NOT
-        // be denied here, otherwise the controller-level deny 403s the page editor.
+        // Pages: everyone may view; only site_manager may add/edit/delete (core still
+        // gates SitePage writes behind a per-site permission assertion).
+        $acl->allow($siteRoles, \Omeka\Entity\SitePage::class, ['read', 'index']);
         $acl->deny(
-            'site_editor',
+            $noSiteEditRoles,
             \Omeka\Controller\SiteAdmin\Page::class,
-            ['add', 'delete']         // no puede crear ni eliminar páginas
-        );
-
-        // ─── SYSTEM INFO: denegar acceso a información del sistema ───────────────────
-
-        $acl->deny(
-            self::ROLE_SITE_EDITOR,
-            [\Omeka\Controller\Admin\SystemInfo::class],
+            ['add', 'edit', 'delete']
         );
     }
 
