@@ -20,25 +20,31 @@
       "username": "editor",
       "email": "editor@example.com",
       "password": "password",
-      "role": "editor"
+      "role": "editor",
+      "settings": {
+        "limit_to_granted_sites": false,
+        "limit_to_own_assets": false
+      }
     },
     {
-      "username": "editor_a",
+      "username": "site_editor_a",
       "email": "editor.a@example.com",
       "password": "password",
-      "role": "editor"
+      "role": "site_editor",
+      "settings": {
+        "limit_to_granted_sites": true,
+        "limit_to_own_assets": true
+      }
     },
     {
-      "username": "editor_b",
+      "username": "site_editor_b",
       "email": "editor.b@example.com",
       "password": "password",
-      "role": "editor"
-    },
-    {
-      "username": "author",
-      "email": "author@example.com",
-      "password": "password",
-      "role": "author"
+      "role": "site_editor",
+      "settings": {
+        "limit_to_granted_sites": true,
+        "limit_to_own_assets": true
+      }
     }
   ],
   "modules": [
@@ -49,7 +55,7 @@
         "type": "url",
         "url": "https://github.com/Daniel-KM/Omeka-S-module-Common/archive/refs/heads/master.zip"
       }
-    },    
+    },
     {
       "name": "Log",
       "state": "activate",
@@ -90,32 +96,59 @@
       "title": "Team A - Document 1",
       "description": "Sample item belonging to the Team A collection.",
       "creator": "Editor A",
-      "itemSets": ["Team A Collection"]
+      "itemSets": ["Team A Collection"],
+      "sites": ["site-a"]
     },
     {
       "title": "Team A - Document 2",
       "description": "Another sample item in the Team A collection.",
       "creator": "Editor A",
-      "itemSets": ["Team A Collection"]
+      "itemSets": ["Team A Collection"],
+      "sites": ["site-a"]
     },
     {
       "title": "Team B - Document 1",
       "description": "Sample item belonging to the Team B collection.",
       "creator": "Editor B",
-      "itemSets": ["Team B Collection"]
+      "itemSets": ["Team B Collection"],
+      "sites": ["site-b"]
     },
     {
       "title": "Team B - Document 2",
       "description": "Another sample item in the Team B collection.",
       "creator": "Editor B",
-      "itemSets": ["Team B Collection"]
+      "itemSets": ["Team B Collection"],
+      "sites": ["site-b"]
+    }
+  ],
+  "sites": [
+    {
+      "title": "Site A (Team A)",
+      "slug": "site-a",
+      "theme": "default",
+      "summary": "Site managed by Editor A. With isolation on, only Editor A and admins see it.",
+      "isPublic": true,
+      "setAsDefault": true,
+      "permissions": [
+        { "user": "editor.a@example.com", "role": "admin" }
+      ]
+    },
+    {
+      "title": "Site B (Team B)",
+      "slug": "site-b",
+      "theme": "default",
+      "summary": "Site managed by Editor B. With isolation on, only Editor B and admins see it.",
+      "isPublic": true,
+      "permissions": [
+        { "user": "editor.b@example.com", "role": "admin" }
+      ]
     }
   ],
   "site": {
-    "title": "IsolatedSites Demo",
-    "slug": "demo",
+    "title": "Site A (Team A)",
+    "slug": "site-a",
     "theme": "default",
-    "summary": "Instalacion minima para probar el modulo IsolatedSites en Omeka S Playground.",
+    "summary": "Instalacion para probar el modulo IsolatedSites en Omeka S Playground.",
     "isPublic": true,
     "setAsDefault": true
   }

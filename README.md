@@ -98,12 +98,14 @@ installed so you can switch into any of these users from the admin user list
 4. Confirm the same filtering applies over the REST API, e.g.
    `GET /api/items` authenticated as Site Editor A returns only their items.
 
-> **Playground note:** the hosted [Omeka S Playground](https://ateeducacion.github.io/omeka-s-playground/)
-> blueprint only supports a **single** site (it cannot create site permissions or
-> per-user settings), so the full multi-site scenario above is only auto-built by
-> the Docker environment. In the playground the blueprint still seeds several
-> users, sample item sets/items and the Impersonate module — create extra sites
-> and grant permissions from the admin UI to try the isolation there.
+> **Playground:** the [browser playground](https://ateeducacion.github.io/omeka-s-playground/)
+> provisions the same two-site scenario from `blueprint.json` (sites *site-a* /
+> *site-b* with `site_editor` users, per-site permissions, the
+> `limit_to_granted_sites` user setting, and the Impersonate module). Open the
+> **Try in your browser** link, then impersonate `editor.a@example.com` or
+> `editor.b@example.com` (password `password`) to see each scoped to their own
+> site, or `editor@example.com` for the unrestricted control. Multi-site
+> blueprints require an up-to-date playground build.
 
 ## 🛠️ Usage
 
