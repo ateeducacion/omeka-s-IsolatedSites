@@ -6,7 +6,6 @@ namespace IsolatedSites;
 use Omeka\Acl\Acl;
 use Omeka\Api\Adapter\ItemAdapter;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use IsolatedSites\Form\UserSettingsFieldset;
 use Omeka\Settings\User as UserSettingsService;
 use Laminas\Authentication\AuthenticationService;
 use Doctrine\DBAL\Connection;
@@ -17,7 +16,6 @@ use IsolatedSites\Listener\ModifyAssetQueryListener;
 use IsolatedSites\Listener\ModifySiteQueryListener;
 use IsolatedSites\Listener\ModifyMediaQueryListener;
 use IsolatedSites\Listener\UserApiListener;
-use IsolatedSites\Listener\FilterAdminNavigationListener;
 use IsolatedSites\Assertion\HasAccessToItemSiteAssertion;
 use Laminas\Mvc\Application;
 use IsolatedSites\Listener\UserSettingsValidationListener;
@@ -30,8 +28,6 @@ return [
     ],
     'form_elements' => [
         'invokables' => [
-            Form\SettingsFieldset::class => Form\SettingsFieldset::class,
-            Form\SiteSettingsFieldset::class => Form\SiteSettingsFieldset::class,
         ],
     ],
     'translator' => [
@@ -96,12 +92,9 @@ return [
             },
             UserApiListener::class => function ($services) {
                 return new UserApiListener(
-                    $services->get('Omeka\Settings\User')
-                );
-            },
-            FilterAdminNavigationListener::class => function ($services) {
-                return new FilterAdminNavigationListener(
-                    $services->get('Omeka\AuthenticationService')
+                    $services->get('Omeka\Settings\User'),
+                    $services->get('Omeka\AuthenticationService'),
+                    $services->get('Omeka\Acl')
                 );
             },
             HasAccessToItemSiteAssertion::class => function ($services) {

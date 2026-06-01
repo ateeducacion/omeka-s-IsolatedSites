@@ -45,20 +45,28 @@ class ModifySiteQueryListener
     {
         $user = $this->auth->getIdentity();
 
-        // Check if we're in the admin interface
+        // api.search.query fires for the admin UI AND the REST API (route names
+        // 'api' / 'api-local'). Filtering must cover both contexts; gating on the
+        // admin route alone left the authenticated REST API completely unfiltered.
         $routeMatch = $this->application->getMvcEvent()->getRouteMatch();
         $routeName = $routeMatch ? $routeMatch->getMatchedRouteName() : '';
         $isAdmin = strpos($routeName, 'admin') === 0;
+        $isApi = strpos($routeName, 'api') === 0;
 
-        // Only apply filtering in admin interface for non-global-admin users
-        if (!$isAdmin || !$user || $user->getRole() === 'global_admin') {
+        // Skip anonymous requests and both administrator roles (global_admin and
+        // site_admin, per Acl::isAdminRole), as well as any non-admin/non-API
+        // context (e.g. public site, CLI).
+        if ((!$isAdmin && !$isApi)
+            || !$user
+            || in_array($user->getRole(), ['global_admin', 'site_admin'], true)
+        ) {
             return;
         }
 
         $this->userSettings->setTargetId($user->getId());
         $limitToGrantedSites = $this->userSettings->get('limit_to_granted_sites', 1);
 
-        if ($limitToGrantedSites!=null && $limitToGrantedSites) {
+        if ($limitToGrantedSites) {
             $qb = $event->getParam('queryBuilder');
             
             // Get the sites where the user has permissions
@@ -87,6 +95,8 @@ class ModifySiteQueryListener
            ->where('sp.user_id = :userId')
            ->setParameter('userId', $userId);
 
-        return $qb->execute()->fetchFirstColumn();
+        // executeQuery() supersedes the deprecated execute() (removed in DBAL 4)
+        // and is available since DBAL 2.13, so this is behaviour-preserving.
+        return $qb->executeQuery()->fetchFirstColumn();
     }
 }

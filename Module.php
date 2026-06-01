@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace IsolatedSites;
 
-use Laminas\EventManager\Event;
-use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\SharedEventManagerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Mvc\Controller\AbstractController;
@@ -89,7 +87,6 @@ class Module extends AbstractModule
 
         $this->addAclRoleAndRules();
         $this->attachListeners($sharedEventManager);
-        $this->filterAdminNavigationOnBootstrap($event);
     }
     /**
      * Register the file validator service and renderers.
@@ -117,39 +114,48 @@ class Module extends AbstractModule
             [$this->serviceLocator->get(ModifyUserSettingsFormListener::class), 'handleUserSettings']
         );
 
-        //Listener to limit item view
-        $sharedEventManager->attach(
-            'Omeka\Api\Adapter\ItemAdapter',
-            'api.search.query',
-            [$this->serviceLocator->get(ModifyQueryListener::class), '__invoke']
-        );
+        // The "Enable this option to hide unallowed sites" module setting acts as a
+        // global kill switch for the read-side site filtering. When disabled, the
+        // api.search.query listeners are not attached (the per-user
+        // limit_to_granted_sites/limit_to_own_assets flags still gate behaviour
+        // when enabled). Defaults to on so isolation stays active unless an admin
+        // explicitly turns it off.
+        $settings = $this->serviceLocator->get('Omeka\Settings');
+        if ($settings->get('activate_IsolatedSites', true)) {
+            //Listener to limit item view
+            $sharedEventManager->attach(
+                'Omeka\Api\Adapter\ItemAdapter',
+                'api.search.query',
+                [$this->serviceLocator->get(ModifyQueryListener::class), '__invoke']
+            );
 
-        // For limit the view of ItemSets
-        $sharedEventManager->attach(
-            'Omeka\Api\Adapter\ItemSetAdapter',
-            'api.search.query',
-            [$this->serviceLocator->get(ModifyItemSetQueryListener::class), '__invoke']
-        );
+            // For limit the view of ItemSets
+            $sharedEventManager->attach(
+                'Omeka\Api\Adapter\ItemSetAdapter',
+                'api.search.query',
+                [$this->serviceLocator->get(ModifyItemSetQueryListener::class), '__invoke']
+            );
 
-        // For limit the view of Assets
-        $sharedEventManager->attach(
-            'Omeka\Api\Adapter\AssetAdapter',
-            'api.search.query',
-            [$this->serviceLocator->get(ModifyAssetQueryListener::class), '__invoke']
-        );
+            // For limit the view of Assets
+            $sharedEventManager->attach(
+                'Omeka\Api\Adapter\AssetAdapter',
+                'api.search.query',
+                [$this->serviceLocator->get(ModifyAssetQueryListener::class), '__invoke']
+            );
 
-        $sharedEventManager->attach(
-            'Omeka\Api\Adapter\SiteAdapter',
-            'api.search.query',
-            [$this->serviceLocator->get(ModifySiteQueryListener::class), '__invoke']
-        );
+            $sharedEventManager->attach(
+                'Omeka\Api\Adapter\SiteAdapter',
+                'api.search.query',
+                [$this->serviceLocator->get(ModifySiteQueryListener::class), '__invoke']
+            );
 
-        // For limit the view of Media
-        $sharedEventManager->attach(
-            'Omeka\Api\Adapter\MediaAdapter',
-            'api.search.query',
-            [$this->serviceLocator->get(ModifyMediaQueryListener::class), '__invoke']
-        );
+            // For limit the view of Media
+            $sharedEventManager->attach(
+                'Omeka\Api\Adapter\MediaAdapter',
+                'api.search.query',
+                [$this->serviceLocator->get(ModifyMediaQueryListener::class), '__invoke']
+            );
+        }
 
         // API listeners for custom user settings
         $sharedEventManager->attach(
@@ -407,10 +413,14 @@ class Module extends AbstractModule
         );
 
 
+        // Site editors may edit existing pages of sites where they have the
+        // required per-site permission (core gates SitePage 'update' behind a
+        // per-site assertion); they cannot create or delete pages. 'edit' must NOT
+        // be denied here, otherwise the controller-level deny 403s the page editor.
         $acl->deny(
             'site_editor',
             \Omeka\Controller\SiteAdmin\Page::class,
-            ['add', 'delete','edit']         // no puede crear ni eliminar páginas
+            ['add', 'delete']         // no puede crear ni eliminar páginas
         );
 
         // ─── SYSTEM INFO: denegar acceso a información del sistema ───────────────────
@@ -444,59 +454,5 @@ class Module extends AbstractModule
     protected function hasAclResource($acl, string $resource): bool
     {
         return is_object($acl) && method_exists($acl, 'hasResource') && $acl->hasResource($resource);
-    }
-    
-    /**
-     * Filter admin navigation during bootstrap for specific roles.
-     *
-     * @param \Laminas\Mvc\MvcEvent $event
-     */
-    protected function filterAdminNavigationOnBootstrap($event)
-    {
-        $auth = $this->serviceLocator->get('Omeka\AuthenticationService');
-        $identity = $auth->getIdentity();
-   
-        if (!$identity) {
-            return;
-        }
-
-        $role = $identity->getRole();
-        // Only filter navigation for site editor role
-        if ($role !== self::ROLE_SITE_EDITOR) {
-            return;
-        }
-
-        // Site editors inherit editor permissions, so navigation is already appropriate
-        // No additional filtering needed
-    }
-    
-    /**
-     * Filter the admin navigation menu for specific roles.
-     *
-     * @param Event $event
-     */
-    public function filterAdminNavigation(Event $event)
-    {
-        // We only want this logic to run for the main admin layout
-        if ('layout/layout' !== $event->getTarget()->resolver()->getTemplate()) {
-            return;
-        }
-
-        $auth = $this->serviceLocator->get('Omeka\AuthenticationService');
-        $identity = $auth->getIdentity();
-        
-        if (!$identity) {
-            return;
-        }
-
-        $role = $identity->getRole();
-        
-        // Only filter navigation for site editor role
-        if ($role !== self::ROLE_SITE_EDITOR) {
-            return;
-        }
-        
-        // Site editors inherit editor permissions, so navigation is already appropriate
-        // No additional filtering needed
     }
 }

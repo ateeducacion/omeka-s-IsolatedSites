@@ -357,7 +357,11 @@ class HasAccessToItemSiteAssertion implements AssertionInterface
         if (!isset($this->userSettingsCache[$userId])) {
             try {
                 $this->userSettings->setTargetId($userId);
-                $this->userSettingsCache[$userId] = (bool) $this->userSettings->get('limit_to_granted_sites', false);
+                // Default ON (true) to match the read-side query listeners. When the
+                // setting was never persisted, the write gate must fail closed exactly
+                // like the read filter, otherwise a user with no stored value would be
+                // read-filtered yet allowed to update/delete any resource.
+                $this->userSettingsCache[$userId] = (bool) $this->userSettings->get('limit_to_granted_sites', true);
             } catch (\Throwable $e) {
                 $this->userSettingsCache[$userId] = true;
             }
@@ -377,6 +381,15 @@ class HasAccessToItemSiteAssertion implements AssertionInterface
 
         if (!$itemId) {
             return false;
+        }
+
+        // The owner of a resource always has access to it, even when it is not yet
+        // attached to any site. This mirrors the read listeners' "OR owner" clause
+        // (and OwnsEntityAssertion used for item sets/assets), so a site editor can
+        // edit their own freshly created, not-yet-sited content.
+        $ownerId = $this->resolveItemOwnerId($item);
+        if ($ownerId !== null && $ownerId === $userId) {
+            return true;
         }
 
         if (!isset($this->grantedSitesCache[$userId])) {
@@ -413,6 +426,28 @@ class HasAccessToItemSiteAssertion implements AssertionInterface
         }
 
         return !empty(array_intersect($grantedSiteIds, $resourceSiteIds));
+    }
+
+    /**
+     * Resolve the owner id of the resolved item, supporting both the entity and
+     * the representation. Returns null when the owner cannot be determined.
+     */
+    private function resolveItemOwnerId($item): ?int
+    {
+        try {
+            if ($item instanceof Item) {
+                $owner = $item->getOwner();
+                return $owner ? $this->normalizeId($owner->getId()) : null;
+            }
+            if ($item instanceof ItemRepresentation) {
+                $owner = $item->owner();
+                return $owner ? $this->normalizeId($owner->id()) : null;
+            }
+        } catch (\Throwable $e) {
+            return null;
+        }
+
+        return null;
     }
 
     private function resolveMediaId($resource): ?int
