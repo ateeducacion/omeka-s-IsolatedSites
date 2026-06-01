@@ -15,6 +15,30 @@
       "email": "admin@example.com",
       "password": "password",
       "role": "global_admin"
+    },
+    {
+      "username": "editor",
+      "email": "editor@example.com",
+      "password": "password",
+      "role": "editor"
+    },
+    {
+      "username": "editor_a",
+      "email": "editor.a@example.com",
+      "password": "password",
+      "role": "editor"
+    },
+    {
+      "username": "editor_b",
+      "email": "editor.b@example.com",
+      "password": "password",
+      "role": "editor"
+    },
+    {
+      "username": "author",
+      "email": "author@example.com",
+      "password": "password",
+      "role": "author"
     }
   ],
   "modules": [
@@ -41,6 +65,42 @@
         "type": "url",
         "url": "https://github.com/ateeducacion/omeka-s-IsolatedSites/archive/refs/heads/main.zip"
       }
+    }
+  ],
+  "itemSets": [
+    {
+      "title": "Team A Collection",
+      "description": "Sample item set used to try out IsolatedSites filtering."
+    },
+    {
+      "title": "Team B Collection",
+      "description": "Second sample item set for isolation testing."
+    }
+  ],
+  "items": [
+    {
+      "title": "Team A - Document 1",
+      "description": "Sample item belonging to the Team A collection.",
+      "creator": "Editor A",
+      "itemSets": ["Team A Collection"]
+    },
+    {
+      "title": "Team A - Document 2",
+      "description": "Another sample item in the Team A collection.",
+      "creator": "Editor A",
+      "itemSets": ["Team A Collection"]
+    },
+    {
+      "title": "Team B - Document 1",
+      "description": "Sample item belonging to the Team B collection.",
+      "creator": "Editor B",
+      "itemSets": ["Team B Collection"]
+    },
+    {
+      "title": "Team B - Document 2",
+      "description": "Another sample item in the Team B collection.",
+      "creator": "Editor B",
+      "itemSets": ["Team B Collection"]
     }
   ],
   "site": {

@@ -72,7 +72,27 @@ make up
 
 - Access Omeka S at http://localhost:8080.
 
-- Finish installation via the web installer and log in as admin.
+- Log in as admin (`admin@example.com` / `PLEASE_CHANGEME`).
+
+### 🧪 Verifying site isolation (local Docker)
+
+On first boot the Docker environment provisions a ready-made multi-site scenario
+(see `data/provision-demo.php`) so the isolation can be checked end to end:
+
+| User | Email | Password | Role | Scope |
+| --- | --- | --- | --- | --- |
+| Site Editor A | `siteeditor.a@example.com` | `1234` | `site_editor` | Granted on **site-a** only, `limit_to_granted_sites` on |
+| Site Editor B | `siteeditor.b@example.com` | `1234` | `site_editor` | Granted on **site-b** only, `limit_to_granted_sites` on |
+| Editor | `editor@example.com` | `1234` | `editor` | No isolation (control — sees everything) |
+
+Each site has two items and an item set owned by its editor. To verify:
+
+1. Log in as **Site Editor A** → the admin **Items**, **Item sets** and **Sites**
+   listings show only *site-a* content (plus their own item set); *site-b* is hidden.
+2. Log in as **Site Editor B** → the mirror image (only *site-b*).
+3. Log in as **Editor** or **admin** → everything is visible.
+4. Confirm the same filtering applies over the REST API, e.g.
+   `GET /api/items` authenticated as Site Editor A returns only their items.
 
 ## 🛠️ Usage
 
