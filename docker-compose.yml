@@ -33,6 +33,7 @@ services:
         EasyAdmin
         Adminer
         Log
+        https://github.com/ateeducacion/omeka-s-Impersonate/archive/refs/heads/main.zip
 
       # Hooks to finish configuration on first boot
       PRE_CONFIGURE_COMMANDS: |

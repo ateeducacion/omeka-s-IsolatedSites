@@ -65,6 +65,14 @@
         "type": "url",
         "url": "https://github.com/ateeducacion/omeka-s-IsolatedSites/archive/refs/heads/main.zip"
       }
+    },
+    {
+      "name": "Impersonate",
+      "state": "activate",
+      "source": {
+        "type": "url",
+        "url": "https://github.com/ateeducacion/omeka-s-Impersonate/archive/refs/heads/main.zip"
+      }
     }
   ],
   "itemSets": [

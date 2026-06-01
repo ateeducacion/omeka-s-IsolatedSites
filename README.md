@@ -85,14 +85,25 @@ On first boot the Docker environment provisions a ready-made multi-site scenario
 | Site Editor B | `siteeditor.b@example.com` | `1234` | `site_editor` | Granted on **site-b** only, `limit_to_granted_sites` on |
 | Editor | `editor@example.com` | `1234` | `editor` | No isolation (control — sees everything) |
 
-Each site has two items and an item set owned by its editor. To verify:
+Each site has two items and an item set owned by its editor. The
+[Impersonate](https://github.com/ateeducacion/omeka-s-Impersonate) module is also
+installed so you can switch into any of these users from the admin user list
+(or with `?login_as=<userId>`) without juggling passwords. To verify:
 
-1. Log in as **Site Editor A** → the admin **Items**, **Item sets** and **Sites**
-   listings show only *site-a* content (plus their own item set); *site-b* is hidden.
-2. Log in as **Site Editor B** → the mirror image (only *site-b*).
-3. Log in as **Editor** or **admin** → everything is visible.
+1. As admin, **impersonate** (or log in as) **Site Editor A** → the admin
+   **Items**, **Item sets** and **Sites** listings show only *site-a* content
+   (plus their own item set); *site-b* is hidden.
+2. Impersonate **Site Editor B** → the mirror image (only *site-b*).
+3. As **Editor** or **admin** → everything is visible.
 4. Confirm the same filtering applies over the REST API, e.g.
    `GET /api/items` authenticated as Site Editor A returns only their items.
+
+> **Playground note:** the hosted [Omeka S Playground](https://ateeducacion.github.io/omeka-s-playground/)
+> blueprint only supports a **single** site (it cannot create site permissions or
+> per-user settings), so the full multi-site scenario above is only auto-built by
+> the Docker environment. In the playground the blueprint still seeds several
+> users, sample item sets/items and the Impersonate module — create extra sites
+> and grant permissions from the admin UI to try the isolation there.
 
 ## 🛠️ Usage
 
