@@ -87,16 +87,17 @@ class ModifySiteQueryListener
 
     protected function getGrantedSites($userId)
     {
-        $qb = $this->connection->createQueryBuilder();
-        
-        $qb->select('DISTINCT s.id')
-           ->from('site', 's')
-           ->leftJoin('s', 'site_permission', 'sp', 's.id = sp.site_id')
-           ->where('sp.user_id = :userId')
-           ->setParameter('userId', $userId);
+        // Use the DBAL Connection directly (like the sibling listeners) rather
+        // than the DBAL query builder. Connection::executeQuery() exists across
+        // DBAL 2.x/3.x/4.x, whereas Query\QueryBuilder::executeQuery() only exists
+        // from DBAL 3.1 (Omeka S 4.x ships DBAL 2.x) and execute() is removed in
+        // DBAL 4 — so going through the connection keeps this version-safe.
+        $sql = 'SELECT DISTINCT s.id FROM site s'
+            . ' LEFT JOIN site_permission sp ON s.id = sp.site_id'
+            . ' WHERE sp.user_id = :userId';
 
-        // executeQuery() supersedes the deprecated execute() (removed in DBAL 4)
-        // and is available since DBAL 2.13, so this is behaviour-preserving.
-        return $qb->executeQuery()->fetchFirstColumn();
+        return $this->connection
+            ->executeQuery($sql, ['userId' => $userId])
+            ->fetchFirstColumn();
     }
 }

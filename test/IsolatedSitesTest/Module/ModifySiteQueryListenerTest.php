@@ -118,33 +118,10 @@ class ModifySiteQueryListenerTest extends TestCase
             ->with('limit_to_granted_sites', 1)
             ->willReturn(true);
 
-        // Setup granted sites query
-        $grantedSitesQb = $this->createMock(\Doctrine\DBAL\Query\QueryBuilder::class);
+        // Granted sites are fetched via the DBAL connection directly.
         $statement = $this->createMock(Result::class);
-        
+
         $this->connection->expects($this->once())
-            ->method('createQueryBuilder')
-            ->willReturn($grantedSitesQb);
-
-        $grantedSitesQb->expects($this->once())
-            ->method('select')
-            ->with('DISTINCT s.id')
-            ->willReturnSelf();
-        
-        $grantedSitesQb->expects($this->once())
-            ->method('from')
-            ->with('site', 's')
-            ->willReturnSelf();
-
-        $grantedSitesQb->expects($this->once())
-            ->method('leftJoin')
-            ->willReturnSelf();
-
-        $grantedSitesQb->expects($this->once())
-            ->method('Where')
-            ->willReturnSelf();
-
-        $grantedSitesQb->expects($this->once())
             ->method('executeQuery')
             ->willReturn($statement);
 
@@ -197,31 +174,10 @@ class ModifySiteQueryListenerTest extends TestCase
             ->with('limit_to_granted_sites', 1)
             ->willReturn(true);
 
-        // Setup granted sites query
-        $grantedSitesQb = $this->createMock(\Doctrine\DBAL\Query\QueryBuilder::class);
+        // Granted sites are fetched via the DBAL connection directly.
         $statement = $this->createMock(Result::class);
-        
+
         $this->connection->expects($this->once())
-            ->method('createQueryBuilder')
-            ->willReturn($grantedSitesQb);
-
-        $grantedSitesQb->expects($this->once())
-            ->method('select')
-            ->willReturnSelf();
-
-        $grantedSitesQb->expects($this->once())
-            ->method('from')
-            ->willReturnSelf();
-
-        $grantedSitesQb->expects($this->once())
-            ->method('leftJoin')
-            ->willReturnSelf();
-
-        $grantedSitesQb->expects($this->once())
-            ->method('Where')
-            ->willReturnSelf();
-        
-        $grantedSitesQb->expects($this->once())
             ->method('executeQuery')
             ->willReturn($statement);
 
