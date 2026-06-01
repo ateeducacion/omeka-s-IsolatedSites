@@ -27,8 +27,8 @@
       }
     },
     {
-      "username": "site_editor_a",
-      "email": "editor.a@example.com",
+      "username": "Site Editor A",
+      "email": "siteeditor.a@example.com",
       "password": "password",
       "role": "site_editor",
       "settings": {
@@ -37,8 +37,8 @@
       }
     },
     {
-      "username": "site_editor_b",
-      "email": "editor.b@example.com",
+      "username": "Site Editor B",
+      "email": "siteeditor.b@example.com",
       "password": "password",
       "role": "site_editor",
       "settings": {
@@ -130,7 +130,7 @@
       "isPublic": true,
       "setAsDefault": true,
       "permissions": [
-        { "user": "editor.a@example.com", "role": "admin" }
+        { "user": "siteeditor.a@example.com", "role": "admin" }
       ]
     },
     {
@@ -140,7 +140,7 @@
       "summary": "Site managed by Editor B. With isolation on, only Editor B and admins see it.",
       "isPublic": true,
       "permissions": [
-        { "user": "editor.b@example.com", "role": "admin" }
+        { "user": "siteeditor.b@example.com", "role": "admin" }
       ]
     }
   ],

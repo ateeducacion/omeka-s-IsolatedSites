@@ -102,9 +102,9 @@ installed so you can switch into any of these users from the admin user list
 > provisions the same two-site scenario from `blueprint.json` (sites *site-a* /
 > *site-b* with `site_editor` users, per-site permissions, the
 > `limit_to_granted_sites` user setting, and the Impersonate module). Open the
-> **Try in your browser** link, then impersonate `editor.a@example.com` or
-> `editor.b@example.com` (password `password`) to see each scoped to their own
-> site, or `editor@example.com` for the unrestricted control. Multi-site
+> **Try in your browser** link, then impersonate `siteeditor.a@example.com` or
+> `siteeditor.b@example.com` (password `password`) to see each scoped to their
+> own site, or `editor@example.com` for the unrestricted control. Multi-site
 > blueprints require an up-to-date playground build.
 
 ## 🛠️ Usage
