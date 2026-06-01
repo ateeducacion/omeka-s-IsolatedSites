@@ -61,7 +61,7 @@ class HasAccessToItemSiteAssertionTest extends TestCase
 
         $this->userSettings->expects($this->once())
             ->method('get')
-            ->with('limit_to_granted_sites', false)
+            ->with('limit_to_granted_sites', true)
             ->willReturn(false);
 
         $result = $this->assertion->assert($this->acl, $role, $item, 'read');
@@ -81,7 +81,7 @@ class HasAccessToItemSiteAssertionTest extends TestCase
 
         $this->userSettings->expects($this->once())
             ->method('get')
-            ->with('limit_to_granted_sites', false)
+            ->with('limit_to_granted_sites', true)
             ->willReturn(true);
 
         $this->connection->expects($this->once())
@@ -113,7 +113,7 @@ class HasAccessToItemSiteAssertionTest extends TestCase
 
         $this->userSettings->expects($this->once())
             ->method('get')
-            ->with('limit_to_granted_sites', false)
+            ->with('limit_to_granted_sites', true)
             ->willReturn(true);
 
         $this->connection->expects($this->exactly(2))
@@ -150,7 +150,7 @@ class HasAccessToItemSiteAssertionTest extends TestCase
 
         $this->userSettings->expects($this->once())
             ->method('get')
-            ->with('limit_to_granted_sites', false)
+            ->with('limit_to_granted_sites', true)
             ->willReturn(true);
 
         $this->connection->expects($this->exactly(2))
@@ -169,6 +169,31 @@ class HasAccessToItemSiteAssertionTest extends TestCase
         $result = $this->assertion->assert($this->acl, $role, $item, 'read');
 
         $this->assertFalse($result);
+    }
+
+    public function testAllowsOwnerOfItemThatHasNoSites(): void
+    {
+        $userId = 5;
+        $role = $this->createMockRole($userId);
+        $item = $this->createMockItemWithOwner(10, $userId);
+
+        $this->userSettings->expects($this->once())
+            ->method('setTargetId')
+            ->with($userId);
+
+        $this->userSettings->expects($this->once())
+            ->method('get')
+            ->with('limit_to_granted_sites', true)
+            ->willReturn(true);
+
+        // The owner short-circuit must grant access before any site query runs,
+        // so a user can edit their own not-yet-sited content.
+        $this->connection->expects($this->never())
+            ->method('executeQuery');
+
+        $result = $this->assertion->assert($this->acl, $role, $item, 'update');
+
+        $this->assertTrue($result);
     }
 
     public function testAllowsAccessWhenMediaItemAndSitesOverlap(): void
@@ -190,7 +215,7 @@ class HasAccessToItemSiteAssertionTest extends TestCase
 
         $this->userSettings->expects($this->once())
             ->method('get')
-            ->with('limit_to_granted_sites', false)
+            ->with('limit_to_granted_sites', true)
             ->willReturn(true);
 
         $this->connection->expects($this->exactly(3))
@@ -233,7 +258,7 @@ class HasAccessToItemSiteAssertionTest extends TestCase
 
         $this->userSettings->expects($this->once())
             ->method('get')
-            ->with('limit_to_granted_sites', false)
+            ->with('limit_to_granted_sites', true)
             ->willReturn(true);
 
         $this->connection->expects($this->exactly(3))
@@ -276,7 +301,7 @@ class HasAccessToItemSiteAssertionTest extends TestCase
 
         $this->userSettings->expects($this->once())
             ->method('get')
-            ->with('limit_to_granted_sites', false)
+            ->with('limit_to_granted_sites', true)
             ->willReturn(true);
 
         $this->connection->expects($this->exactly(3))
@@ -325,6 +350,22 @@ class HasAccessToItemSiteAssertionTest extends TestCase
             ->getMock();
 
         $item->method('getId')->willReturn($itemId);
+
+        return $item;
+    }
+
+    private function createMockItemWithOwner(int $itemId, int $ownerId)
+    {
+        $owner = $this->getMockBuilder(\Omeka\Entity\User::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $owner->method('getId')->willReturn($ownerId);
+
+        $item = $this->getMockBuilder(Item::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $item->method('getId')->willReturn($itemId);
+        $item->method('getOwner')->willReturn($owner);
 
         return $item;
     }

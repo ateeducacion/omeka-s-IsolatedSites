@@ -146,10 +146,17 @@ class ModuleTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        // Isolation enabled (default): all query listeners are attached.
+        $settings = $this->createMock(\Omeka\Settings\Settings::class);
+        $settings->method('get')
+            ->with('activate_IsolatedSites', true)
+            ->willReturn(true);
+
         // Setup service locator to return our mock listeners
-        $this->serviceLocator->expects($this->exactly(11))
+        $this->serviceLocator->expects($this->exactly(12))
             ->method('get')
             ->willReturnMap([
+                ['Omeka\Settings', $settings],
                 [ModifyUserSettingsFormListener::class, $mockUserSettingsListener],
                 [ModifyQueryListener::class, $mockQueryListener],
                 [ModifyItemSetQueryListener::class, $mockItemSetQueryListener],
@@ -202,6 +209,70 @@ class ModuleTest extends TestCase
                     $this->equalTo('Omeka\Api\Adapter\MediaAdapter'),
                     $this->equalTo('api.search.query'),
                     $this->identicalTo([$mockMediaQueryListener, '__invoke'])
+                ],
+                [
+                    $this->equalTo('Omeka\Api\Adapter\UserAdapter'),
+                    $this->equalTo('api.hydrate.post'),
+                    $this->identicalTo([$mockUserApiListener, 'handleApiHydrate'])
+                ],
+                [
+                    $this->equalTo('Omeka\Api\Representation\UserRepresentation'),
+                    $this->equalTo('rep.resource.json'),
+                    $this->identicalTo([$mockUserApiListener, 'handleRepresentationJson'])
+                ],
+                [
+                    $this->equalTo('Omeka\Api\Adapter\UserAdapter'),
+                    $this->equalTo('api.create.post'),
+                    $this->identicalTo([$mockUserApiListener, 'handleApiCreate'])
+                ]
+            );
+
+        $this->module->setServiceLocator($this->serviceLocator);
+
+        $this->module->attachListeners($this->sharedEventManager);
+    }
+
+    public function testAttachListenersSkipsQueryListenersWhenDisabled()
+    {
+        $mockUserSettingsListener = $this->getMockBuilder(ModifyUserSettingsFormListener::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mockUserApiListener = $this->getMockBuilder(UserApiListener::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // Isolation disabled: the five api.search.query listeners must NOT be
+        // attached, but the form, CAS and user-API listeners still are.
+        $settings = $this->createMock(\Omeka\Settings\Settings::class);
+        $settings->method('get')
+            ->with('activate_IsolatedSites', true)
+            ->willReturn(false);
+
+        $this->serviceLocator->expects($this->exactly(7))
+            ->method('get')
+            ->willReturnMap([
+                ['Omeka\Settings', $settings],
+                [ModifyUserSettingsFormListener::class, $mockUserSettingsListener],
+                [UserApiListener::class, $mockUserApiListener],
+            ]);
+
+        $this->sharedEventManager->expects($this->exactly(6))
+            ->method('attach')
+            ->withConsecutive(
+                [
+                    $this->equalTo(\Omeka\Form\UserForm::class),
+                    $this->equalTo('form.add_elements'),
+                    $this->identicalTo([$mockUserSettingsListener, '__invoke'])
+                ],
+                [
+                    $this->equalTo(\Omeka\Form\UserForm::class),
+                    $this->equalTo('form.add_input_filters'),
+                    $this->identicalTo([$mockUserSettingsListener, 'addInputFilters'])
+                ],
+                [
+                    $this->equalTo('CAS\Controller\LoginController'),
+                    $this->equalTo('cas.user.create.post'),
+                    $this->identicalTo([$mockUserSettingsListener, 'handleUserSettings'])
                 ],
                 [
                     $this->equalTo('Omeka\Api\Adapter\UserAdapter'),

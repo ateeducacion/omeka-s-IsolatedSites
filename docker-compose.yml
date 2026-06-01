@@ -33,16 +33,32 @@ services:
         EasyAdmin
         Adminer
         Log
+        https://github.com/ateeducacion/omeka-s-Impersonate/archive/refs/heads/main.zip
 
       # Hooks to finish configuration on first boot
       PRE_CONFIGURE_COMMANDS: |
         echo 'Pre-configure hook'
       POST_CONFIGURE_COMMANDS: |
-        # Create an Editor user if missing
-        omeka-s-cli user:add "editor@example.com" "Editor" editor "1234" || true
-
-        # Enable the IsolatedSites module from local source
+        # Enable the IsolatedSites module from local source first, so the
+        # 'site_editor' role it registers is available for the users below.
         omeka-s-cli module:install IsolatedSites || true
+
+        # Demo users for verifying isolation (password "1234" for all):
+        #   - editor             : plain editor, no isolation (control, sees everything)
+        #   - siteresearcher.a   : site_researcher (read-only) on site-a
+        #   - siteeditor.a / b   : site_editor (content) on site-a / site-b
+        #   - sitemanager.a      : site_manager (content + edit the site) on site-a
+        omeka-s-cli user:add "editor@example.com"          "Editor"            editor          "1234" || true
+        omeka-s-cli user:add "siteresearcher.a@example.com" "Site Researcher A" site_researcher "1234" || true
+        omeka-s-cli user:add "siteeditor.a@example.com"    "Site Editor A"     site_editor     "1234" || true
+        omeka-s-cli user:add "sitemanager.a@example.com"   "Site Manager A"    site_manager    "1234" || true
+        omeka-s-cli user:add "siteeditor.b@example.com"    "Site Editor B"     site_editor     "1234" || true
+
+        # Provision the multi-site demo (sites, per-site permissions, isolation
+        # settings and sample content) through the Omeka API. The bundled
+        # omeka-s-cli cannot create sites/permissions/user-settings yet, so this
+        # runs a small script shipped with the module. See data/provision-demo.php.
+        php /var/www/html/volume/modules/IsolatedSites/data/provision-demo.php || true
 
     volumes:
       - omekas_data:/var/www/html/volume:Z

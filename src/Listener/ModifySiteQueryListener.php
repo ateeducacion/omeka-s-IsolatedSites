@@ -45,20 +45,28 @@ class ModifySiteQueryListener
     {
         $user = $this->auth->getIdentity();
 
-        // Check if we're in the admin interface
+        // api.search.query fires for the admin UI AND the REST API (route names
+        // 'api' / 'api-local'). Filtering must cover both contexts; gating on the
+        // admin route alone left the authenticated REST API completely unfiltered.
         $routeMatch = $this->application->getMvcEvent()->getRouteMatch();
         $routeName = $routeMatch ? $routeMatch->getMatchedRouteName() : '';
         $isAdmin = strpos($routeName, 'admin') === 0;
+        $isApi = strpos($routeName, 'api') === 0;
 
-        // Only apply filtering in admin interface for non-global-admin users
-        if (!$isAdmin || !$user || $user->getRole() === 'global_admin') {
+        // Skip anonymous requests and both administrator roles (global_admin and
+        // site_admin, per Acl::isAdminRole), as well as any non-admin/non-API
+        // context (e.g. public site, CLI).
+        if ((!$isAdmin && !$isApi)
+            || !$user
+            || in_array($user->getRole(), ['global_admin', 'site_admin'], true)
+        ) {
             return;
         }
 
         $this->userSettings->setTargetId($user->getId());
         $limitToGrantedSites = $this->userSettings->get('limit_to_granted_sites', 1);
 
-        if ($limitToGrantedSites!=null && $limitToGrantedSites) {
+        if ($limitToGrantedSites) {
             $qb = $event->getParam('queryBuilder');
             
             // Get the sites where the user has permissions
@@ -79,14 +87,17 @@ class ModifySiteQueryListener
 
     protected function getGrantedSites($userId)
     {
-        $qb = $this->connection->createQueryBuilder();
-        
-        $qb->select('DISTINCT s.id')
-           ->from('site', 's')
-           ->leftJoin('s', 'site_permission', 'sp', 's.id = sp.site_id')
-           ->where('sp.user_id = :userId')
-           ->setParameter('userId', $userId);
+        // Use the DBAL Connection directly (like the sibling listeners) rather
+        // than the DBAL query builder. Connection::executeQuery() exists across
+        // DBAL 2.x/3.x/4.x, whereas Query\QueryBuilder::executeQuery() only exists
+        // from DBAL 3.1 (Omeka S 4.x ships DBAL 2.x) and execute() is removed in
+        // DBAL 4 — so going through the connection keeps this version-safe.
+        $sql = 'SELECT DISTINCT s.id FROM site s'
+            . ' LEFT JOIN site_permission sp ON s.id = sp.site_id'
+            . ' WHERE sp.user_id = :userId';
 
-        return $qb->execute()->fetchFirstColumn();
+        return $this->connection
+            ->executeQuery($sql, ['userId' => $userId])
+            ->fetchFirstColumn();
     }
 }

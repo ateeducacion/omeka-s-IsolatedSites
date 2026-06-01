@@ -104,9 +104,10 @@ class ModifyMediaQueryListenerTest extends TestCase
         $this->queryBuilder->method('getRootAliases')
             ->willReturn(['root']);
 
-        // Join with item and sites
+        // LEFT JOIN item and its sites; show media of granted-site items OR media
+        // whose parent item the user owns.
         $this->queryBuilder->expects($this->exactly(2))
-            ->method('innerJoin')
+            ->method('leftJoin')
             ->withConsecutive(
                 ['root.item', 'i'],
                 ['i.sites', 'site']
@@ -115,12 +116,15 @@ class ModifyMediaQueryListenerTest extends TestCase
 
         $this->queryBuilder->expects($this->once())
             ->method('andWhere')
-            ->with('site.id IN (:siteIds)')
+            ->with('site.id IN (:siteIds) OR i.owner = :userId')
             ->willReturn($this->queryBuilder);
 
-        $this->queryBuilder->expects($this->once())
+        $this->queryBuilder->expects($this->exactly(2))
             ->method('setParameter')
-            ->with('siteIds', $siteIds)
+            ->withConsecutive(
+                ['siteIds', $siteIds],
+                ['userId', $userId]
+            )
             ->willReturn($this->queryBuilder);
 
         $this->event->method('getParam')
@@ -182,9 +186,10 @@ class ModifyMediaQueryListenerTest extends TestCase
         $this->queryBuilder->method('getRootAliases')
             ->willReturn(['root']);
 
-        // Join with item and sites
+        // With no granted sites, the empty siteIds renders as IN (NULL) (matches
+        // nothing); the user still sees media of items they own via the owner clause.
         $this->queryBuilder->expects($this->exactly(2))
-            ->method('innerJoin')
+            ->method('leftJoin')
             ->withConsecutive(
                 ['root.item', 'i'],
                 ['i.sites', 'site']
@@ -193,13 +198,15 @@ class ModifyMediaQueryListenerTest extends TestCase
 
         $this->queryBuilder->expects($this->once())
             ->method('andWhere')
-            ->with('site.id IN (:siteIds)')
+            ->with('site.id IN (:siteIds) OR i.owner = :userId')
             ->willReturn($this->queryBuilder);
 
-        // Should use impossible ID to ensure no results
-        $this->queryBuilder->expects($this->once())
+        $this->queryBuilder->expects($this->exactly(2))
             ->method('setParameter')
-            ->with('siteIds', [-1])
+            ->withConsecutive(
+                ['siteIds', []],
+                ['userId', $userId]
+            )
             ->willReturn($this->queryBuilder);
 
         $this->event->method('getParam')

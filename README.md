@@ -72,7 +72,45 @@ make up
 
 - Access Omeka S at http://localhost:8080.
 
-- Finish installation via the web installer and log in as admin.
+- Log in as admin (`admin@example.com` / `PLEASE_CHANGEME`).
+
+### 🧪 Verifying site isolation (local Docker)
+
+On first boot the Docker environment provisions a ready-made multi-site scenario
+(see `data/provision-demo.php`) so the isolation can be checked end to end:
+
+| User | Email | Password | Role | Scope |
+| --- | --- | --- | --- | --- |
+| Editor (control) | `editor@example.com` | `1234` | `editor` | No isolation — sees everything |
+| Site Researcher A | `siteresearcher.a@example.com` | `1234` | `site_researcher` | **site-a**, read-only |
+| Site Editor A | `siteeditor.a@example.com` | `1234` | `site_editor` | **site-a**, manages content (not the site) |
+| Site Manager A | `sitemanager.a@example.com` | `1234` | `site_manager` | **site-a**, content **and** site/pages |
+| Site Editor B | `siteeditor.b@example.com` | `1234` | `site_editor` | **site-b**, manages content |
+
+Each site has two items and an item set. The
+[Impersonate](https://github.com/ateeducacion/omeka-s-Impersonate) module is also
+installed so you can switch into any of these users from the admin user list
+(or with `?login_as=<userId>`) without juggling passwords. To verify:
+
+1. Impersonate **Site Editor A** → admin **Items / Item sets / Sites** show only
+   *site-a*; *site-b* is hidden. They can add/edit items but the page editor is
+   blocked.
+2. Impersonate **Site Manager A** → same isolation, but they *can* edit *site-a*'s
+   pages, title and navigation.
+3. Impersonate **Site Researcher A** → sees *site-a* content read-only (no
+   add/edit buttons).
+4. Impersonate **Site Editor B** → the mirror image (only *site-b*).
+5. **Editor** / **admin** → everything is visible.
+6. Confirm the same filtering applies over the REST API, e.g.
+   `GET /api/items` authenticated as Site Editor A returns only their items.
+
+> **Playground:** the [browser playground](https://ateeducacion.github.io/omeka-s-playground/)
+> provisions the same scenario from `blueprint.json` (sites *site-a* / *site-b*
+> with `site_researcher` / `site_editor` / `site_manager` users, per-site
+> permissions, the `limit_to_granted_sites` user setting, and the Impersonate
+> module). Open the **Try in your browser** link and impersonate the demo users
+> above (password `password` in the playground) to compare the three roles.
+> Multi-site blueprints require an up-to-date playground build.
 
 ## 🛠️ Usage
 
@@ -177,28 +215,45 @@ This module is released under the [GNU General Public License v3.0 (GPL-3.0)](ht
 
 For questions, suggestions, or contributions, please open an [Issue](https://github.com/ateeducacion/omeka-s-IsolatedSites/issues) or submit a Pull Request.
 
-## Site Editor Role
+## Site-scoped Roles
 
-The module adds a `site_editor` role for site-scoped content editors. It inherits from the core `editor` role but applies the IsolatedSites filtering so users only interact with items and media that belong to sites they are permitted to manage. The role keeps the minimum set of editor capabilities required for day-to-day content work while removing global administration features.
+The module adds **three site-scoped roles**. All three are isolated to the sites a
+user is granted on (via the `limit_to_granted_sites` setting); they differ only in
+**what they can write**:
 
-- Inherits every capability of `editor`, then relies on the site access assertion to scope actions to the user's granted sites.
-- Only items and media attached to at least one permitted site stay editable; everything else is hidden or read-only by design.
-- Resource-template, site creation, and user-administration privileges are trimmed to keep the role focused on content work.
-- Permissions limited in SiteAdmin index controller so that the user can access the Resources tab to add ItemSets to sites. 
+| Role | Inherits | Can do | Cannot do |
+| --- | --- | --- | --- |
+| `site_researcher` | `researcher` | **Read** items, item sets, media and pages of their granted sites | Create or edit any content; edit the site |
+| `site_editor` | `editor` | Everything `site_researcher` can **plus** create/edit/delete **content** (items, item sets, media) reachable through a granted site (or owned) | Edit the site itself — pages, title, navigation, theme |
+| `site_manager` | `editor` | Everything `site_editor` can **plus** edit the **site** — pages, title, navigation and theme — of their granted sites | Create or delete sites; manage a site's user permissions |
+
+In short: **`site_editor` manages content, `site_manager` also manages the site**, and
+**`site_researcher` is read-only**. None of them can create/delete sites, manage other
+users, change resource templates, or see system information — those stay with global
+administrators.
 
 ### Permission Comparison
 
-| Capability | editor | site_editor | Notes |
-| --- | --- | --- | --- |
-| Items and media | Create, read, update, delete across all sites | Same actions, but only for items and media attached to the user's granted sites | Restrictions enforced by the site access assertion and the `limit_to_granted_sites` setting |
-| Resource templates | Create, edit, delete templates | Read-only access to template listings and details | Prevents accidental global changes while still allowing reference |
-| User management | Browse and edit any user (core behaviour) | Limited to viewing and updating their own profile | Inherits `editor` abilities only when self-targeted |
-| Site management | Create and manage any site | Cannot create new sites and can only work in sites where they are an `Author` | Site-level `Author` permission controls page editing within a site |
+| Capability | editor (core) | site_researcher | site_editor | site_manager |
+| --- | --- | --- | --- | --- |
+| Read items / item sets / media | All sites | Granted sites only | Granted sites only | Granted sites only |
+| Create / edit content | All sites | ❌ | ✅ (granted sites / owned) | ✅ (granted sites / owned) |
+| Edit pages, title, navigation, theme | All sites | ❌ | ❌ | ✅ (granted sites) |
+| Create / delete sites | ✅ | ❌ | ❌ | ❌ |
+| Manage site user permissions | ✅ | ❌ | ❌ | ❌ |
+| Resource templates | Full | Read-only | Read-only | Read-only |
+| User management | Any user | Own profile only | Own profile only | Own profile only |
+
+> Read isolation is enforced by the `api.search.query` listeners + the
+> `limit_to_granted_sites` user setting (role-independent); write isolation is
+> enforced by the ACL rules above + the per-site access assertion. Page editing for
+> `site_manager` is additionally gated by Omeka core's per-site permission.
 
 ### Configuration Checklist
-> Keep the `site_editor` role aligned with user isolation settings; the admin UI now surfaces a warning whenever the required options drift out of sync.
+> The admin UI surfaces a warning whenever a content-managing site role
+> (`site_editor` / `site_manager`) is missing the required isolation settings.
 
-- Assign the `site_editor` role in Admin > Users, then grant the user `Author` permission for each site they should manage (Sites > Permissions).
-- Set a Default site for the user in Admin > Users > User settings so new items they create automatically belong to that site.
-- Enable `limit_to_granted_sites` in the same settings panel to activate the site-based filtering.
-- Remind site editors that they will only see and manage content linked to their permitted sites; content elsewhere remains hidden.
+- Assign the role in **Admin > Users**, then grant the user a permission for each site they should access (**Sites > Permissions**): `viewer` is enough for `site_researcher`, `editor`/`admin` for `site_editor` / `site_manager`.
+- Set a **Default site** in **Admin > Users > User settings** so new items a content role creates belong to that site.
+- Enable **`limit_to_granted_sites`** in the same panel to activate the site-based filtering.
+- Remind users they will only see and manage content linked to their permitted sites; content elsewhere remains hidden.

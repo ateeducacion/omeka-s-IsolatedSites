@@ -15,6 +15,56 @@
       "email": "admin@example.com",
       "password": "password",
       "role": "global_admin"
+    },
+    {
+      "username": "editor",
+      "email": "editor@example.com",
+      "password": "password",
+      "role": "editor",
+      "settings": {
+        "limit_to_granted_sites": false,
+        "limit_to_own_assets": false
+      }
+    },
+    {
+      "username": "Site Researcher A",
+      "email": "siteresearcher.a@example.com",
+      "password": "password",
+      "role": "site_researcher",
+      "settings": {
+        "limit_to_granted_sites": true,
+        "limit_to_own_assets": true
+      }
+    },
+    {
+      "username": "Site Editor A",
+      "email": "siteeditor.a@example.com",
+      "password": "password",
+      "role": "site_editor",
+      "settings": {
+        "limit_to_granted_sites": true,
+        "limit_to_own_assets": true
+      }
+    },
+    {
+      "username": "Site Manager A",
+      "email": "sitemanager.a@example.com",
+      "password": "password",
+      "role": "site_manager",
+      "settings": {
+        "limit_to_granted_sites": true,
+        "limit_to_own_assets": true
+      }
+    },
+    {
+      "username": "Site Editor B",
+      "email": "siteeditor.b@example.com",
+      "password": "password",
+      "role": "site_editor",
+      "settings": {
+        "limit_to_granted_sites": true,
+        "limit_to_own_assets": true
+      }
     }
   ],
   "modules": [
@@ -25,7 +75,7 @@
         "type": "url",
         "url": "https://github.com/Daniel-KM/Omeka-S-module-Common/archive/refs/heads/master.zip"
       }
-    },    
+    },
     {
       "name": "Log",
       "state": "activate",
@@ -41,13 +91,86 @@
         "type": "url",
         "url": "https://github.com/ateeducacion/omeka-s-IsolatedSites/archive/refs/heads/main.zip"
       }
+    },
+    {
+      "name": "Impersonate",
+      "state": "activate",
+      "source": {
+        "type": "url",
+        "url": "https://github.com/ateeducacion/omeka-s-Impersonate/archive/refs/heads/main.zip"
+      }
+    }
+  ],
+  "itemSets": [
+    {
+      "title": "Team A Collection",
+      "description": "Sample item set used to try out IsolatedSites filtering."
+    },
+    {
+      "title": "Team B Collection",
+      "description": "Second sample item set for isolation testing."
+    }
+  ],
+  "items": [
+    {
+      "title": "Team A - Document 1",
+      "description": "Sample item belonging to the Team A collection.",
+      "creator": "Editor A",
+      "itemSets": ["Team A Collection"],
+      "sites": ["site-a"]
+    },
+    {
+      "title": "Team A - Document 2",
+      "description": "Another sample item in the Team A collection.",
+      "creator": "Editor A",
+      "itemSets": ["Team A Collection"],
+      "sites": ["site-a"]
+    },
+    {
+      "title": "Team B - Document 1",
+      "description": "Sample item belonging to the Team B collection.",
+      "creator": "Editor B",
+      "itemSets": ["Team B Collection"],
+      "sites": ["site-b"]
+    },
+    {
+      "title": "Team B - Document 2",
+      "description": "Another sample item in the Team B collection.",
+      "creator": "Editor B",
+      "itemSets": ["Team B Collection"],
+      "sites": ["site-b"]
+    }
+  ],
+  "sites": [
+    {
+      "title": "Site A (Team A)",
+      "slug": "site-a",
+      "theme": "default",
+      "summary": "Team A site. With isolation on, only its granted users and admins see it.",
+      "isPublic": true,
+      "setAsDefault": true,
+      "permissions": [
+        { "user": "siteresearcher.a@example.com", "role": "viewer" },
+        { "user": "siteeditor.a@example.com", "role": "editor" },
+        { "user": "sitemanager.a@example.com", "role": "admin" }
+      ]
+    },
+    {
+      "title": "Site B (Team B)",
+      "slug": "site-b",
+      "theme": "default",
+      "summary": "Team B site, managed by Site Editor B.",
+      "isPublic": true,
+      "permissions": [
+        { "user": "siteeditor.b@example.com", "role": "editor" }
+      ]
     }
   ],
   "site": {
-    "title": "IsolatedSites Demo",
-    "slug": "demo",
+    "title": "Site A (Team A)",
+    "slug": "site-a",
     "theme": "default",
-    "summary": "Instalacion minima para probar el modulo IsolatedSites en Omeka S Playground.",
+    "summary": "Instalacion para probar el modulo IsolatedSites en Omeka S Playground.",
     "isPublic": true,
     "setAsDefault": true
   }

@@ -35,13 +35,21 @@ class ModifyItemSetQueryListener
     {
         $user = $this->authService->getIdentity();
 
-        // Check if we're in the admin interface
+        // api.search.query fires for the admin UI AND the REST API (route names
+        // 'api' / 'api-local'). Filtering must cover both contexts; gating on the
+        // admin route alone left the authenticated REST API completely unfiltered.
         $routeMatch = $this->application->getMvcEvent()->getRouteMatch();
         $routeName = $routeMatch ? $routeMatch->getMatchedRouteName() : '';
         $isAdmin = strpos($routeName, 'admin') === 0;
+        $isApi = strpos($routeName, 'api') === 0;
 
-        // Only apply filtering in admin interface for non-global-admin users
-        if (!$isAdmin || !$user || $user->getRole() === 'global_admin') {
+        // Skip anonymous requests (core's is_public filter applies) and both
+        // administrator roles (global_admin and site_admin, per Acl::isAdminRole),
+        // as well as any non-admin/non-API context (e.g. public site, CLI).
+        if ((!$isAdmin && !$isApi)
+            || !$user
+            || in_array($user->getRole(), ['global_admin', 'site_admin'], true)
+        ) {
             return;
         }
 

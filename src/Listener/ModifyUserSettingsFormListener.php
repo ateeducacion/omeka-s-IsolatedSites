@@ -2,7 +2,6 @@
 namespace IsolatedSites\Listener;
 
 use Laminas\EventManager\EventInterface;
-use IsolatedSites\Form\UserSettingsFieldset;
 use Omeka\Entity\User;
 use Omeka\Permissions\Acl;
 use Laminas\EventManager\Event;

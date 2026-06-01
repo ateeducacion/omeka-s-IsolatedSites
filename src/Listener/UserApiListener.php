@@ -2,17 +2,46 @@
 namespace IsolatedSites\Listener;
 
 use Laminas\EventManager\Event;
+use Laminas\Authentication\AuthenticationService;
+use Omeka\Permissions\Acl;
 use Omeka\Settings\UserSettings;
 use Omeka\Entity\User;
 
 class UserApiListener
 {
     protected $userSettings;
+    protected $authService;
+    protected $acl;
     protected $pendingUserSettings = [];
 
-    public function __construct(UserSettings $userSettings)
-    {
+    public function __construct(
+        UserSettings $userSettings,
+        AuthenticationService $authService,
+        Acl $acl
+    ) {
         $this->userSettings = $userSettings;
+        $this->authService = $authService;
+        $this->acl = $acl;
+    }
+
+    /**
+     * Whether the acting (logged-in) user may change the isolation settings.
+     *
+     * Only administrators may, since these flags control the user's own access
+     * scope. Trusted internal/system calls that run without an authenticated
+     * identity (CLI jobs, provisioning) are also allowed. This prevents a
+     * restricted user from lifting their own restrictions via the API.
+     *
+     * @return bool
+     */
+    protected function actingUserMayModifySettings(): bool
+    {
+        $identity = $this->authService->getIdentity();
+        if (!$identity) {
+            return true;
+        }
+
+        return $this->acl->isAdminRole($identity->getRole());
     }
 
     /**
@@ -20,51 +49,51 @@ class UserApiListener
      */
     public function handleApiHydrate(Event $event)
     {
-        $adapter = $event->getTarget();
         $request = $event->getParam('request');
         $entity = $event->getParam('entity');
-        
+
         // Only handle User entities
         if (!$entity instanceof User) {
             return;
         }
 
-        
-        // For create operations, entity doesn't have ID yet, so we store the settings temporarily
-        $userId = $entity->getId();
-        
-        if ($userId) {
-            // Update operation - entity has ID
-            $this->userSettings->setTargetId($userId);
-            
-            // Handle limit_to_granted_sites setting
-            if ($request->getValue('o-module-isolatedsites:limit_to_granted_sites') !== null) {
-                $rawValue = $request->getValue('o-module-isolatedsites:limit_to_granted_sites');
-                $value = $this->validateBooleanValue($rawValue, 'limit_to_granted_sites');
-                $this->userSettings->set('limit_to_granted_sites', $value);
+        // Collect any isolation settings present in the request.
+        $incoming = [];
+        foreach (['limit_to_granted_sites', 'limit_to_own_assets'] as $key) {
+            $rawValue = $request->getValue('o-module-isolatedsites:' . $key);
+            if ($rawValue !== null) {
+                $incoming[$key] = $rawValue;
             }
+        }
 
-            // Handle limit_to_own_assets setting
-            if ($request->getValue('o-module-isolatedsites:limit_to_own_assets') !== null) {
-                $rawValue = $request->getValue('o-module-isolatedsites:limit_to_own_assets');
-                $value = $this->validateBooleanValue($rawValue, 'limit_to_own_assets');
-                $this->userSettings->set('limit_to_own_assets', $value);
+        if (empty($incoming)) {
+            return;
+        }
+
+        // Only administrators (or trusted internal/system calls) may change these
+        // settings; otherwise silently ignore the keys so a restricted user cannot
+        // lift their own isolation via the API.
+        if (!$this->actingUserMayModifySettings()) {
+            return;
+        }
+
+        // Validate ALL values before persisting any, so a malformed second value
+        // cannot leave the first one half-written (settings auto-commit on set()).
+        $validated = [];
+        foreach ($incoming as $key => $rawValue) {
+            $validated[$key] = $this->validateBooleanValue($rawValue, $key);
+        }
+
+        $userId = $entity->getId();
+        if ($userId) {
+            // Update operation - entity already has an ID.
+            $this->userSettings->setTargetId($userId);
+            foreach ($validated as $key => $value) {
+                $this->userSettings->set($key, $value);
             }
         } else {
-            // Create operation - store settings temporarily for later processing
-            $this->pendingUserSettings = [];
-            
-            if ($request->getValue('o-module-isolatedsites:limit_to_granted_sites') !== null) {
-                $rawValue = $request->getValue('o-module-isolatedsites:limit_to_granted_sites');
-                $value = $this->validateBooleanValue($rawValue, 'limit_to_granted_sites');
-                $this->pendingUserSettings['limit_to_granted_sites'] = $value;
-            }
-            
-            if ($request->getValue('o-module-isolatedsites:limit_to_own_assets') !== null) {
-                $rawValue = $request->getValue('o-module-isolatedsites:limit_to_own_assets');
-                $value = $this->validateBooleanValue($rawValue, 'limit_to_own_assets');
-                $this->pendingUserSettings['limit_to_own_assets'] = $value;
-            }
+            // Create operation - entity has no ID yet; defer until api.create.post.
+            $this->pendingUserSettings = $validated;
         }
     }
 
@@ -132,40 +161,6 @@ class UserApiListener
 
         // Set the modified JSON-LD back to the event
         $event->setParam('jsonLd', $jsonLd);
-    }
-    /**
-     * Handle batch update preprocessing to include custom settings
-     */
-    public function handleBatchUpdate(Event $event)
-    {
-        $adapter = $event->getTarget();
-        $data = $event->getParam('data');
-        $request = $event->getParam('request');
-
-        // Only handle UserAdapter
-        if (!$adapter instanceof \Omeka\Api\Adapter\UserAdapter) {
-            return;
-        }
-
-        $rawData = $request->getContent();
-
-        // Add custom settings to batch data if present with validation
-        if (isset($rawData['o-module-isolatedsites:limit_to_granted_sites'])) {
-            $value = $this->validateBooleanValue(
-                $rawData['o-module-isolatedsites:limit_to_granted_sites'],
-                'limit_to_granted_sites'
-            );
-            $data['o-module-isolatedsites:limit_to_granted_sites'] = $value;
-        }
-        if (isset($rawData['o-module-isolatedsites:limit_to_own_assets'])) {
-            $value = $this->validateBooleanValue(
-                $rawData['o-module-isolatedsites:limit_to_own_assets'],
-                'limit_to_own_assets'
-            );
-            $data['o-module-isolatedsites:limit_to_own_assets'] = $value;
-        }
-
-        $event->setParam('data', $data);
     }
 
     /**
