@@ -19,6 +19,7 @@ use IsolatedSites\Listener\UserApiListener;
 use IsolatedSites\Assertion\HasAccessToItemSiteAssertion;
 use Laminas\Mvc\Application;
 use IsolatedSites\Listener\UserSettingsValidationListener;
+use IsolatedSites\Service\GrantedSites;
 
 return [
     'view_manager' => [
@@ -107,6 +108,11 @@ return [
                 return new UserSettingsValidationListener(
                     $services->get('Omeka\Settings\User'),
                     $services->get('ControllerPluginManager')
+                );
+            },
+            GrantedSites::class => function ($services) {
+                return new GrantedSites(
+                    $services->get('Omeka\Connection')
                 );
             },
         ],
