@@ -30,6 +30,8 @@ Per `src/Listener/ModifyItemSetQueryListener.php:83`, an item set matching no `s
 | Sites outside the user's permissions | Preserve, invisible | A Site Editor must never be able to detach an item set from a site they cannot see. Showing a count would leak the existence of hidden sites. |
 | Create-time default | Prefill `default_item_sites ∩ granted`; empty allowed | Reuses the core user setting that already drives new items — one setting, one mental model, no new config. Empty stays legal so admins and scripts are unaffected. |
 | Approach | Module-side form injection + adapter reconciliation | No ACL loosening; covers create and edit in one place; keeps the module's isolation invariant intact. |
+| `activate_IsolatedSites` gates the feature | No | The switch is not a true kill switch today — `addAclRoleAndRules()` runs unconditionally (`Module.php:96`), so with it off the roles still exist and `site_editor` still cannot reach Site → Resources. Gating the tab would silently reintroduce this bug whenever an admin flips it. |
+| `limit_to_granted_sites` widens the selector | No | It controls what a user may *see*, not what they may *manage*. Listing all sites when it is off would let a `site_editor` assign an item set to a site they hold no permission on — a privilege escalation nothing else in this module allows. |
 
 ### Rejected alternatives
 
