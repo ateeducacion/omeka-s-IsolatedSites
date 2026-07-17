@@ -21,6 +21,7 @@ use IsolatedSites\Listener\ModifySiteQueryListener;
 use IsolatedSites\Listener\ModifyMediaQueryListener;
 use IsolatedSites\Listener\UserApiListener;
 use IsolatedSites\Listener\ItemSetSitesHydrationListener;
+use IsolatedSites\Listener\ItemSetSitesFormListener;
 
 class ModuleTest extends TestCase
 {
@@ -151,6 +152,10 @@ class ModuleTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $mockItemSetSitesFormListener = $this->getMockBuilder(ItemSetSitesFormListener::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         // Isolation enabled (default): all query listeners are attached.
         $settings = $this->createMock(\Omeka\Settings\Settings::class);
         $settings->method('get')
@@ -158,7 +163,7 @@ class ModuleTest extends TestCase
             ->willReturn(true);
 
         // Setup service locator to return our mock listeners
-        $this->serviceLocator->expects($this->exactly(13))
+        $this->serviceLocator->expects($this->exactly(14))
             ->method('get')
             ->willReturnMap([
                 ['Omeka\Settings', $settings],
@@ -170,10 +175,11 @@ class ModuleTest extends TestCase
                 [ModifyMediaQueryListener::class, $mockMediaQueryListener],
                 [UserApiListener::class, $mockUserApiListener],
                 [ItemSetSitesHydrationListener::class, $mockItemSetSitesHydrationListener],
+                [ItemSetSitesFormListener::class, $mockItemSetSitesFormListener],
             ]);
 
         // Test that all expected event listeners are attached
-        $this->sharedEventManager->expects($this->exactly(12))
+        $this->sharedEventManager->expects($this->exactly(16))
             ->method('attach')
             ->withConsecutive(
                 [
@@ -222,6 +228,26 @@ class ModuleTest extends TestCase
                     $this->identicalTo([$mockItemSetSitesHydrationListener, '__invoke'])
                 ],
                 [
+                    $this->equalTo('Omeka\Controller\Admin\ItemSet'),
+                    $this->equalTo('view.add.section_nav'),
+                    $this->identicalTo([$mockItemSetSitesFormListener, 'addSectionNav'])
+                ],
+                [
+                    $this->equalTo('Omeka\Controller\Admin\ItemSet'),
+                    $this->equalTo('view.add.form.after'),
+                    $this->identicalTo([$mockItemSetSitesFormListener, 'renderFieldset'])
+                ],
+                [
+                    $this->equalTo('Omeka\Controller\Admin\ItemSet'),
+                    $this->equalTo('view.edit.section_nav'),
+                    $this->identicalTo([$mockItemSetSitesFormListener, 'addSectionNav'])
+                ],
+                [
+                    $this->equalTo('Omeka\Controller\Admin\ItemSet'),
+                    $this->equalTo('view.edit.form.after'),
+                    $this->identicalTo([$mockItemSetSitesFormListener, 'renderFieldset'])
+                ],
+                [
                     $this->equalTo('Omeka\Api\Adapter\UserAdapter'),
                     $this->equalTo('api.hydrate.post'),
                     $this->identicalTo([$mockUserApiListener, 'handleApiHydrate'])
@@ -256,6 +282,10 @@ class ModuleTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $mockItemSetSitesFormListener = $this->getMockBuilder(ItemSetSitesFormListener::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         // Isolation disabled: the five api.search.query listeners must NOT be
         // attached, but the form, CAS, item-set site assignment and user-API
         // listeners still are — the kill switch governs read-side filtering only.
@@ -264,16 +294,17 @@ class ModuleTest extends TestCase
             ->with('activate_IsolatedSites', true)
             ->willReturn(false);
 
-        $this->serviceLocator->expects($this->exactly(8))
+        $this->serviceLocator->expects($this->exactly(9))
             ->method('get')
             ->willReturnMap([
                 ['Omeka\Settings', $settings],
                 [ModifyUserSettingsFormListener::class, $mockUserSettingsListener],
                 [UserApiListener::class, $mockUserApiListener],
                 [ItemSetSitesHydrationListener::class, $mockItemSetSitesHydrationListener],
+                [ItemSetSitesFormListener::class, $mockItemSetSitesFormListener],
             ]);
 
-        $this->sharedEventManager->expects($this->exactly(7))
+        $this->sharedEventManager->expects($this->exactly(11))
             ->method('attach')
             ->withConsecutive(
                 [
@@ -295,6 +326,26 @@ class ModuleTest extends TestCase
                     $this->equalTo('Omeka\Api\Adapter\ItemSetAdapter'),
                     $this->equalTo('api.hydrate.post'),
                     $this->identicalTo([$mockItemSetSitesHydrationListener, '__invoke'])
+                ],
+                [
+                    $this->equalTo('Omeka\Controller\Admin\ItemSet'),
+                    $this->equalTo('view.add.section_nav'),
+                    $this->identicalTo([$mockItemSetSitesFormListener, 'addSectionNav'])
+                ],
+                [
+                    $this->equalTo('Omeka\Controller\Admin\ItemSet'),
+                    $this->equalTo('view.add.form.after'),
+                    $this->identicalTo([$mockItemSetSitesFormListener, 'renderFieldset'])
+                ],
+                [
+                    $this->equalTo('Omeka\Controller\Admin\ItemSet'),
+                    $this->equalTo('view.edit.section_nav'),
+                    $this->identicalTo([$mockItemSetSitesFormListener, 'addSectionNav'])
+                ],
+                [
+                    $this->equalTo('Omeka\Controller\Admin\ItemSet'),
+                    $this->equalTo('view.edit.form.after'),
+                    $this->identicalTo([$mockItemSetSitesFormListener, 'renderFieldset'])
                 ],
                 [
                     $this->equalTo('Omeka\Api\Adapter\UserAdapter'),

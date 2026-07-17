@@ -1,0 +1,31 @@
+<?php
+$translate = $this->plugin('translate');
+$escape = $this->plugin('escapeHtml');
+?>
+<fieldset id="<?php echo $escape($sectionId); ?>" class="section">
+    <?php if (!$sites): ?>
+    <p>
+        <?php echo $translate('You have no sites assigned. Ask an administrator to grant you permissions on a site before assigning this item set.'); ?>
+    </p>
+    <?php else: ?>
+    <div class="field">
+        <div class="field-meta">
+            <span class="label"><?php echo $translate('Sites'); ?></span>
+            <div class="field-description">
+                <?php echo $translate('Select the sites this item set belongs to. Only sites you have permissions on are listed.'); ?>
+            </div>
+        </div>
+        <div class="inputs">
+            <?php // Guarantees the key is present on every form POST, so clearing
+                  // every checkbox reads as "unassign" rather than "leave alone". ?>
+            <input type="hidden" name="o:site[]" value="">
+            <?php foreach ($sites as $site): ?>
+            <label>
+                <input type="checkbox" name="o:site[]" value="<?php echo (int) $site['id']; ?>"<?php echo $site['selected'] ? ' checked' : ''; ?>>
+                <?php echo $escape($site['title']); ?>
+            </label>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+</fieldset>

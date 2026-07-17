@@ -20,6 +20,7 @@ use IsolatedSites\Listener\ModifySiteQueryListener;
 use IsolatedSites\Listener\ModifyMediaQueryListener;
 use IsolatedSites\Listener\UserApiListener;
 use IsolatedSites\Listener\ItemSetSitesHydrationListener;
+use IsolatedSites\Listener\ItemSetSitesFormListener;
 use Omeka\Permissions\Acl;
 use Omeka\Permissions\Assertion\IsSelfAssertion;
 use Omeka\Permissions\Assertion\OwnsEntityAssertion;
@@ -174,6 +175,20 @@ class Module extends AbstractModule
             'api.hydrate.post',
             [$this->serviceLocator->get(ItemSetSitesHydrationListener::class), '__invoke']
         );
+
+        $formListener = $this->serviceLocator->get(ItemSetSitesFormListener::class);
+        foreach (['add', 'edit'] as $action) {
+            $sharedEventManager->attach(
+                'Omeka\Controller\Admin\ItemSet',
+                "view.$action.section_nav",
+                [$formListener, 'addSectionNav']
+            );
+            $sharedEventManager->attach(
+                'Omeka\Controller\Admin\ItemSet',
+                "view.$action.form.after",
+                [$formListener, 'renderFieldset']
+            );
+        }
 
         // API listeners for custom user settings
         $sharedEventManager->attach(
