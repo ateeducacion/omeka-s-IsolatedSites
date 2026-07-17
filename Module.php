@@ -19,6 +19,8 @@ use IsolatedSites\Listener\ModifyAssetQueryListener;
 use IsolatedSites\Listener\ModifySiteQueryListener;
 use IsolatedSites\Listener\ModifyMediaQueryListener;
 use IsolatedSites\Listener\UserApiListener;
+use IsolatedSites\Listener\ItemSetSitesHydrationListener;
+use IsolatedSites\Listener\ItemSetSitesFormListener;
 use Omeka\Permissions\Acl;
 use Omeka\Permissions\Assertion\IsSelfAssertion;
 use Omeka\Permissions\Assertion\OwnsEntityAssertion;
@@ -162,6 +164,29 @@ class Module extends AbstractModule
                 'Omeka\Api\Adapter\MediaAdapter',
                 'api.search.query',
                 [$this->serviceLocator->get(ModifyMediaQueryListener::class), '__invoke']
+            );
+        }
+
+        // Item-set site assignment for site-scoped roles. Deliberately outside
+        // the activate_IsolatedSites switch: that flag governs read-side
+        // filtering, not the ability to place an item set in your own site.
+        $sharedEventManager->attach(
+            'Omeka\Api\Adapter\ItemSetAdapter',
+            'api.hydrate.post',
+            [$this->serviceLocator->get(ItemSetSitesHydrationListener::class), '__invoke']
+        );
+
+        $formListener = $this->serviceLocator->get(ItemSetSitesFormListener::class);
+        foreach (['add', 'edit'] as $action) {
+            $sharedEventManager->attach(
+                'Omeka\Controller\Admin\ItemSet',
+                "view.$action.section_nav",
+                [$formListener, 'addSectionNav']
+            );
+            $sharedEventManager->attach(
+                'Omeka\Controller\Admin\ItemSet',
+                "view.$action.form.after",
+                [$formListener, 'renderFieldset']
             );
         }
 
