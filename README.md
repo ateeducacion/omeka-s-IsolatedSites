@@ -7,7 +7,7 @@
 
 The **IsolatedSites** module is a comprehensive security and access control solution for Omeka S that enforces **content isolation based on site permissions**. It ensures users can only view and interact with resources (items, item sets, media, assets, and sites) belonging to sites they are explicitly granted access to, significantly enhancing security and usability in multi-site, multi-user environments.
 
-The module achieves this through **role-based access control** with a specialized `site_editor` role, **user-configurable scope limitation settings**, and **full API integration** for programmatic access management. This allows organizations to maintain strict data boundaries between different sites and users while preserving a streamlined administrative experience for site editors and content managers.
+The module achieves this through **role-based access control** with specialized site-scoped roles (`site_researcher`, `site_editor`, `site_manager`), **user-configurable scope limitation settings**, and **full API integration** for programmatic access management. This allows organizations to maintain strict data boundaries between different sites and users while preserving a streamlined administrative experience for site editors and content managers.
 
 ---
 
@@ -24,12 +24,14 @@ The module achieves this through **role-based access control** with a specialize
     - 📄 **Limit assets list to my own assets**:
       - Assets not owned by the logged-in user are hidden from the admin browse page.
 
-- **Site Editor Role** 🎭:
-  - A specialized `site_editor` role for site-scoped content management.
-  - Inherits core `editor` capabilities but restricts access to only assigned sites.
-  - Users can view and edit Item Sets they own and those included in sites with granted access.
-  - SiteAdmin permissions configured to allow access to the Resources tab for adding Item Sets while restricting other administrative actions.
+- **Site-scoped Roles** 🎭:
+  - Three specialized roles for site-scoped work, all isolated to the sites a user is granted on:
+    - `site_researcher` (inherits `researcher`): read-only access within granted sites.
+    - `site_editor` (inherits `editor`): manages content (items, item sets, media) of granted sites, but not the site itself.
+    - `site_manager` (inherits `editor`): manages content **and** the site — pages, title, navigation and theme — of granted sites.
+  - Because core only exposes item-set site assignment on **Sites → Resources** (which `site_editor` cannot reach), the module adds a **Sites** tab to the item-set add/edit form so site-scoped roles can still assign their item sets.
   - Ideal for organizations with multiple sites requiring strict content isolation between teams.
+  - See the [Site-scoped Roles](#site-scoped-roles) section below for the full permission breakdown.
 
 - **Full API Integration** 🔌:
   - Custom user settings (`limit_to_granted_sites`, `limit_to_own_assets`) are fully accessible via REST and PHP APIs.
@@ -116,11 +118,12 @@ installed so you can switch into any of these users from the admin user list
 
 After installing the module:
 
-1. Go to **Profiles → User Settings**.
-2. Enable the options:
+1. (Optional) Go to **Admin → Modules → IsolatedSites → Configure**. The **Enable this option to hide unallowed sites** switch is a global kill switch for the read-side filtering. It is **on by default**; turning it off disables the per-user site/asset filtering for everyone.
+2. Go to **Profiles → User Settings**.
+3. Enable the options:
    - **Limit to granted sites**
    - **Limit assets list to my own assets**
-3. Save changes.
+4. Save changes.
 
 Depending on the settings enabled, the admin interface will be dynamically filtered to show only the permitted resources.
 
@@ -128,7 +131,7 @@ Depending on the settings enabled, the admin interface will be dynamically filte
 
 ## 📋 Requirements
 
-- Omeka S **version 4.x** or later
+- Omeka S **version 3.x or 4.x**
 - PHP **7.4** or newer
 - Composer (only for building or developing)
 
@@ -139,6 +142,7 @@ Depending on the settings enabled, the admin interface will be dynamically filte
 - **New User Settings**: Two flags are added per user:
   - `limit_to_granted_sites`
   - `limit_to_own_assets`
+- **Global Toggle**: The `activate_IsolatedSites` module setting (module Configure page) globally enables or disables the read-side `api.search.query` filtering. It is on by default; the per-user `limit_to_granted_sites` / `limit_to_own_assets` flags still gate behaviour when it is on.
 - **Event Listeners**:
   - Listeners attached to `api.search.query` events filter the resources dynamically at query time.
   - API event listeners handle custom settings in user API operations.
@@ -182,23 +186,26 @@ The custom user settings (`limit_to_granted_sites`, `limit_to_own_assets`) are f
 ```
 
 ### PHP API Usage
-Using Service Manager in $service and api in $api Omeka/ApiManager
-$response = $api->read('users', $ID);
+
+**Reading settings** (with the service manager in `$services` and `Omeka\ApiManager` in `$api`):
+```php
+$response = $api->read('users', $id);
 $user = $response->getContent();
+
 $userSettingsService = $services->get('Omeka\Settings\User');
 $userSettingsService->setTargetId($user->id());
 
-$userSettingsService->get('limit_to_granted_sites', false)
-$userSettingsService->get('limit_to_own_assets', false)
-
+$userSettingsService->get('limit_to_granted_sites', false);
+$userSettingsService->get('limit_to_own_assets', false);
+```
 
 **Updating settings**:
 ```php
 $api->update('users', 1, [
     'o:name' => 'Updated Name',
     'o-module-isolatedsites:limit_to_granted_sites' => true,
-    'o-module-isolatedsites:limit_to_own_assets' => false
-],[],'isPartial'=> true);
+    'o-module-isolatedsites:limit_to_own_assets' => false,
+], [], ['isPartial' => true]);
 ```
 
 **Note**: For PHP API calls, custom settings must be accessed via `getJsonLd()` or helper methods. See [API_INTEGRATION_README.md](API_INTEGRATION_README.md) for complete documentation.
@@ -265,6 +272,6 @@ administrators.
 > (`site_editor` / `site_manager`) is missing the required isolation settings.
 
 - Assign the role in **Admin > Users**, then grant the user a permission for each site they should access (**Sites > Permissions**): `viewer` is enough for `site_researcher`, `editor`/`admin` for `site_editor` / `site_manager`.
-- Set a **Default site** in **Admin > Users > User settings** so new items a content role creates belong to that site.
+- Set **Default sites for new items** in **Admin > Users > User settings** so new items (and item sets) a content role creates belong to those sites.
 - Enable **`limit_to_granted_sites`** in the same panel to activate the site-based filtering.
 - Remind users they will only see and manage content linked to their permitted sites; content elsewhere remains hidden.
