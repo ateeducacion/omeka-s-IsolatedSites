@@ -19,6 +19,7 @@ use IsolatedSites\Listener\UserApiListener;
 use IsolatedSites\Assertion\HasAccessToItemSiteAssertion;
 use Laminas\Mvc\Application;
 use IsolatedSites\Listener\UserSettingsValidationListener;
+use IsolatedSites\Listener\ItemSetSitesHydrationListener;
 use IsolatedSites\Service\GrantedSites;
 
 return [
@@ -113,6 +114,13 @@ return [
             GrantedSites::class => function ($services) {
                 return new GrantedSites(
                     $services->get('Omeka\Connection')
+                );
+            },
+            ItemSetSitesHydrationListener::class => function ($services) {
+                return new ItemSetSitesHydrationListener(
+                    $services->get('Omeka\AuthenticationService'),
+                    $services->get(GrantedSites::class),
+                    $services->get('Omeka\EntityManager')
                 );
             },
         ],
