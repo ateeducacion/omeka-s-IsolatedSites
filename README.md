@@ -238,6 +238,7 @@ administrators.
 | --- | --- | --- | --- | --- |
 | Read items / item sets / media | All sites | Granted sites only | Granted sites only | Granted sites only |
 | Create / edit content | All sites | ❌ | ✅ (granted sites / owned) | ✅ (granted sites / owned) |
+| Assign an item set to a site | All sites (**Sites > Resources**) | ❌ | ✅ (granted sites, item-set **Sites** tab) | ✅ (granted sites, item-set **Sites** tab or **Sites > Resources**) |
 | Edit pages, title, navigation, theme | All sites | ❌ | ❌ | ✅ (granted sites) |
 | Create / delete sites | ✅ | ❌ | ❌ | ❌ |
 | Manage site user permissions | ✅ | ❌ | ❌ | ❌ |
@@ -248,6 +249,16 @@ administrators.
 > `limit_to_granted_sites` user setting (role-independent); write isolation is
 > enforced by the ACL rules above + the per-site access assertion. Page editing for
 > `site_manager` is additionally gated by Omeka core's per-site permission.
+
+> Core exposes item-set site assignment only on **Sites > Resources**, which
+> `site_editor` cannot reach, so the module adds a **Sites** tab to the item-set
+> add/edit form. Only the sites you have permissions on are listed, and
+> assignments to any other site are preserved untouched when you save — a Site
+> Editor can never detach an item set from a site they cannot see. New item sets
+> are pre-selected from your **Default sites for new items** user setting. This
+> tab is independent of `activate_IsolatedSites` and `limit_to_granted_sites`:
+> both govern read-side visibility, while assignment follows from site
+> permissions alone.
 
 ### Configuration Checklist
 > The admin UI surfaces a warning whenever a content-managing site role
