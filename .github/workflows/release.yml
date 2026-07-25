@@ -35,7 +35,7 @@ jobs:
         run: make package VERSION=${RELEASE_TAG}
 
       - name: Create Release and Upload ZIP
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: IsolatedSites-${{ env.RELEASE_TAG }}.zip
           tag_name: ${{ env.RELEASE_TAG }}
