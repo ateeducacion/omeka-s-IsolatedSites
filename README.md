@@ -1,5 +1,8 @@
 # IsolatedSites Module for Omeka S
 
+[![codecov](https://codecov.io/gh/ateeducacion/omeka-s-IsolatedSites/branch/main/graph/badge.svg)](https://codecov.io/gh/ateeducacion/omeka-s-IsolatedSites)
+
+
 <a href="https://ateeducacion.github.io/omeka-s-playground/?blueprint=https%3A%2F%2Fraw.githubusercontent.com%2Fateeducacion%2Fomeka-s-IsolatedSites%2Frefs%2Fheads%2Fmain%2Fblueprint.json">
   <img src="https://raw.githubusercontent.com/ateeducacion/omeka-s-IsolatedSites/refs/heads/main/.github/assets/playground-preview-button.svg" alt="Try IsolatedSites in your browser" width="224">
 </a><br>
@@ -275,3 +278,10 @@ administrators.
 - Set **Default sites for new items** in **Admin > Users > User settings** so new items (and item sets) a content role creates belong to those sites.
 - Enable **`limit_to_granted_sites`** in the same panel to activate the site-based filtering.
 - Remind users they will only see and manage content linked to their permitted sites; content elsewhere remains hidden.
+
+## Code coverage
+
+Run `make test-coverage` with PCOV or Xdebug enabled. Coverage includes `Module.php`
+and every PHP class in `src/`, including untested files. The command and CI fail
+below 90% line coverage. CI uploads Clover to Codecov with GitHub OIDC; project
+and patch targets are both 90%.

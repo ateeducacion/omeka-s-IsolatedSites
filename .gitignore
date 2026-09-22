@@ -4,3 +4,6 @@ vendor/
 # PHPUnit cache files
 test/.phpunit.result.cache
 themes/
+
+/coverage.xml
+/coverage/
