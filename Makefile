@@ -187,5 +187,6 @@ help:
 # Include Module.php as well as src in PCOV collection; fail below 90% lines.
 .PHONY: test-coverage
 test-coverage:
+	rm -f coverage.xml
 	php -d pcov.directory=. -d pcov.exclude='~/(vendor|test)/~' vendor/bin/phpunit -c test/phpunit.xml --coverage-clover coverage.xml --coverage-text
 	php test/check-coverage.php coverage.xml 90
