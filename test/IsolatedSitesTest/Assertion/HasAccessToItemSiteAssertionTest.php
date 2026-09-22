@@ -325,6 +325,119 @@ class HasAccessToItemSiteAssertionTest extends TestCase
         $this->assertFalse($result);
     }
 
+    public function resourceRequests(): array
+    {
+        return [
+            ['item', 'post', 'id'], ['item', 'query', 'id'], ['item', 'route', 'item-id'],
+            ['item', 'route', 'item_id'], ['item', 'route', 'id'],
+            ['media', 'post', 'media_id'], ['media', 'post', 'id'],
+            ['media', 'query', 'media_id'], ['media', 'query', 'id'],
+            ['media', 'route', 'media-id'], ['media', 'route', 'media_id'], ['media', 'route', 'id'],
+        ];
+    }
+
+    /** @dataProvider resourceRequests */
+    public function testResolvesRequestAndRouteResources(string $kind, string $source, string $key): void
+    {
+        $isMedia = strpos($kind, 'media') === 0;
+        $item = $this->createMockItem(10);
+        $media = $this->createMockMedia(20, $item);
+        $id = $isMedia ? 20 : 10;
+        $request = new \Laminas\Http\PhpEnvironment\Request();
+        if ($source === 'post') {
+            $request->getPost()->set($key, (string) $id);
+        } elseif ($source === 'query') {
+            $request->getQuery()->set($key, (string) $id);
+        }
+        $route = new \Laminas\Router\RouteMatch($source === 'route' ? [$key => $id] : []);
+        $event = new \Laminas\Mvc\MvcEvent();
+        $event->setRouteMatch($route);
+        $application = new class ($event) {
+            private $event;
+            public function __construct($event) { $this->event = $event; }
+            public function getMvcEvent() { return $this->event; }
+        };
+        $api = $this->createMock(\Omeka\Api\Manager::class);
+        $response = $this->createMock(\Omeka\Api\Response::class);
+        $response->method('getContent')->willReturn($isMedia ? $media : $item);
+        $api->expects($this->once())->method('read')->with($isMedia ? 'media' : 'items', $id)->willReturn($response);
+        $services = new \Laminas\ServiceManager\ServiceManager(['services' => [
+            'Request' => $request, 'Application' => $application, 'Omeka\ApiManager' => $api,
+        ]]);
+        $this->assertion->setServiceLocator($services);
+        $this->userSettings->method('get')->willReturn(true);
+        $this->connection->method('executeQuery')->willReturnCallback(function () {
+            return $this->createDbalResult([7]);
+        });
+        $classes = ['item' => \Omeka\Api\Adapter\ItemAdapter::class,
+            'media' => \Omeka\Api\Adapter\MediaAdapter::class,
+            'item-controller' => \Omeka\Controller\Admin\Item::class,
+            'media-controller' => \Omeka\Controller\Admin\Media::class];
+        $resource = $this->createMock($classes[$kind]);
+        $this->assertTrue($this->assertion->assert($this->acl, $this->createMockRole(1), $resource, 'update'));
+    }
+
+    public function testMissingApiAndInvalidRequestIdsFailClosed(): void
+    {
+        $this->userSettings->method('get')->willReturn(true);
+        $role = $this->createMockRole(1);
+        $adapter = $this->createMock(\Omeka\Api\Adapter\ItemAdapter::class);
+        $this->assertFalse($this->assertion->assert($this->acl, $role, $adapter, 'update'));
+        foreach ([null, '', [], new \stdClass(), 0, -1, 10] as $id) {
+            $request = new \Laminas\Http\PhpEnvironment\Request();
+            $request->getPost()->set('id', $id);
+            $services = new \Laminas\ServiceManager\ServiceManager(['services' => ['Request' => $request]]);
+            $this->assertion->setServiceLocator($services);
+            $this->assertFalse($this->assertion->assert($this->acl, $role, $adapter, 'update'));
+        }
+    }
+
+    public function testApiFailureDoesNotGrantAccess(): void
+    {
+        $this->userSettings->method('get')->willReturn(true);
+        $request = new \Laminas\Http\PhpEnvironment\Request();
+        $request->getPost()->set('id', 10);
+        foreach ([new \Omeka\Api\Exception\NotFoundException(), new \RuntimeException()] as $error) {
+            foreach ([\Omeka\Api\Adapter\ItemAdapter::class, \Omeka\Api\Adapter\MediaAdapter::class] as $class) {
+                $api = $this->createMock(\Omeka\Api\Manager::class);
+                $api->method('read')->willThrowException($error);
+                $services = new \Laminas\ServiceManager\ServiceManager(['services' => [
+                    'Request' => $request, 'Omeka\ApiManager' => $api,
+                ]]);
+                $this->assertion->setServiceLocator($services);
+                $this->assertFalse($this->assertion->assert($this->acl, $this->createMockRole(1), $this->createMock($class)));
+            }
+        }
+    }
+
+    public function testRepresentationsAndEntityWrappersUseItemOwnership(): void
+    {
+        $this->userSettings->method('get')->willReturn(true);
+        $this->connection->expects($this->never())->method('executeQuery');
+        $owner = $this->createMock(\Omeka\Api\Representation\UserRepresentation::class);
+        $owner->method('id')->willReturn(1);
+        $item = $this->createMock(\Omeka\Api\Representation\ItemRepresentation::class);
+        $item->method('id')->willReturn(10);
+        $item->method('owner')->willReturn($owner);
+        $media = $this->createMock(\Omeka\Api\Representation\MediaRepresentation::class);
+        $media->method('item')->willReturn($item);
+        $entity = $this->createMockItemWithOwner(10, 1);
+        $mediaEntity = $this->createMockMedia(20, $entity);
+        foreach ([$item, $media, $entity, $mediaEntity] as $resource) {
+            if ($resource instanceof \Laminas\Permissions\Acl\Resource\ResourceInterface) {
+                $this->assertTrue($this->assertion->assert($this->acl, $this->createMockRole(1), $resource));
+            }
+            foreach (['getEntity', 'resource'] as $method) {
+                $wrapper = $this->getMockBuilder(\Laminas\Permissions\Acl\Resource\GenericResource::class)
+                    ->setConstructorArgs(['wrapped'])->addMethods([$method])->getMock();
+                $wrapper->method($method)->willReturn($resource);
+                // getEntity accepts entities, while resource also accepts representations.
+                $expected = $method === 'resource' || $resource instanceof Item || $resource instanceof Media;
+                $this->assertSame($expected, $this->assertion->assert($this->acl, $this->createMockRole(1), $wrapper));
+            }
+        }
+    }
+
     private function createMockRole(int $userId)
     {
         return new class($userId) extends GenericRole {

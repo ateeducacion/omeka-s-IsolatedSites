@@ -183,3 +183,9 @@ help:
 
 # Set help as the default goal if no target is specified
 .DEFAULT_GOAL := help
+
+# Include Module.php as well as src in PCOV collection; fail below 90% lines.
+.PHONY: test-coverage
+test-coverage:
+	php -d pcov.directory=. -d pcov.exclude='~/(vendor|test)/~' vendor/bin/phpunit -c test/phpunit.xml --coverage-clover coverage.xml --coverage-text
+	php test/check-coverage.php coverage.xml 90
