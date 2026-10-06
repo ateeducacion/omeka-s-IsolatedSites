@@ -1,7 +1,7 @@
 services:
 
   omekas:
-    image: erseco/alpine-omeka-s:develop
+    image: erseco/alpine-omeka-s:4.2
     restart: unless-stopped
     depends_on:
       - mariadb
@@ -15,49 +15,39 @@ services:
       DB_PASSWORD: omeka
       DB_PORT: 3306
 
-      # Admin + site
+      # Core install. The container ignores the blueprint's `install`, so keep
+      # these in line with blueprint.json (an existing admin is never changed).
       OMEKA_ADMIN_EMAIL: admin@example.com
-      OMEKA_ADMIN_NAME: "Site Administrator"
-      OMEKA_ADMIN_PASSWORD: PLEASE_CHANGEME
-      OMEKA_SITE_TITLE: "Omeka S Sample Site"
+      OMEKA_ADMIN_NAME: admin
+      OMEKA_ADMIN_PASSWORD: password
+      OMEKA_SITE_TITLE: "IsolatedSites Playground"
+      OMEKA_LOCALE: es
+      OMEKA_TIMEZONE: Atlantic/Canary
+
+      # The same blueprint.json as Omeka S Playground (modules incl. Impersonate, the demo users),
+      # re-applied on every start. Playground-only bits (x-playground) are ignored.
+      OMEKA_BLUEPRINT: /var/www/html/volume/modules/IsolatedSites/blueprint.json
+      # Keep the stack up if the blueprint fails (e.g. no network), instead of a restart loop
+      OMEKA_BLUEPRINT_ON_ERROR: warn
       # Auto-import sample data CSV on first boot (requires CSVImport module)
       OMEKA_CSV_IMPORT_FILE: /data/sample_data.csv
       # App environment and base URL
       APPLICATION_ENV: development
       SITE_URL: http://localhost:8080
 
-      # Minimal themes/modules set (names or URLs supported)
+      # Dev tools only: IsolatedSites and Impersonate come from the blueprint
       OMEKA_THEMES: "default"
       OMEKA_MODULES: |
         Common
         EasyAdmin
         Adminer
         Log
-        https://github.com/ateeducacion/omeka-s-Impersonate/archive/refs/heads/main.zip
 
-      # Hooks to finish configuration on first boot
-      PRE_CONFIGURE_COMMANDS: |
-        echo 'Pre-configure hook'
       POST_CONFIGURE_COMMANDS: |
-        # Enable the IsolatedSites module from local source first, so the
-        # 'site_editor' role it registers is available for the users below.
-        omeka-s-cli module:install IsolatedSites || true
-
-        # Demo users for verifying isolation (password "1234" for all):
-        #   - editor             : plain editor, no isolation (control, sees everything)
-        #   - siteresearcher.a   : site_researcher (read-only) on site-a
-        #   - siteeditor.a / b   : site_editor (content) on site-a / site-b
-        #   - sitemanager.a      : site_manager (content + edit the site) on site-a
-        omeka-s-cli user:add "editor@example.com"          "Editor"            editor          "1234" || true
-        omeka-s-cli user:add "siteresearcher.a@example.com" "Site Researcher A" site_researcher "1234" || true
-        omeka-s-cli user:add "siteeditor.a@example.com"    "Site Editor A"     site_editor     "1234" || true
-        omeka-s-cli user:add "sitemanager.a@example.com"   "Site Manager A"    site_manager    "1234" || true
-        omeka-s-cli user:add "siteeditor.b@example.com"    "Site Editor B"     site_editor     "1234" || true
-
-        # Provision the multi-site demo (sites, per-site permissions, isolation
-        # settings and sample content) through the Omeka API. The bundled
-        # omeka-s-cli cannot create sites/permissions/user-settings yet, so this
-        # runs a small script shipped with the module. See data/provision-demo.php.
+        # The blueprint installs the modules and the demo users. Sites, per-site
+        # permissions, user settings and sample content are not applied by
+        # omeka-s-cli yet, so a script shipped with the module provisions them;
+        # it is idempotent (sites are only created when missing). See data/provision-demo.php.
         php /var/www/html/volume/modules/IsolatedSites/data/provision-demo.php || true
 
     volumes:
