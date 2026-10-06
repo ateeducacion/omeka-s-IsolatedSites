@@ -77,7 +77,7 @@ make up
 
 - Access Omeka S at http://localhost:8080.
 
-- Log in as admin (`admin@example.com` / `PLEASE_CHANGEME`).
+- Log in as admin (`admin@example.com` / `password`).
 
 ### 🧪 Verifying site isolation (local Docker)
 
@@ -86,11 +86,11 @@ On first boot the Docker environment provisions a ready-made multi-site scenario
 
 | User | Email | Password | Role | Scope |
 | --- | --- | --- | --- | --- |
-| Editor (control) | `editor@example.com` | `1234` | `editor` | No isolation — sees everything |
-| Site Researcher A | `siteresearcher.a@example.com` | `1234` | `site_researcher` | **site-a**, read-only |
-| Site Editor A | `siteeditor.a@example.com` | `1234` | `site_editor` | **site-a**, manages content (not the site) |
-| Site Manager A | `sitemanager.a@example.com` | `1234` | `site_manager` | **site-a**, content **and** site/pages |
-| Site Editor B | `siteeditor.b@example.com` | `1234` | `site_editor` | **site-b**, manages content |
+| Editor (control) | `editor@example.com` | `password` | `editor` | No isolation — sees everything |
+| Site Researcher A | `siteresearcher.a@example.com` | `password` | `site_researcher` | **site-a**, read-only |
+| Site Editor A | `siteeditor.a@example.com` | `password` | `site_editor` | **site-a**, manages content (not the site) |
+| Site Manager A | `sitemanager.a@example.com` | `password` | `site_manager` | **site-a**, content **and** site/pages |
+| Site Editor B | `siteeditor.b@example.com` | `password` | `site_editor` | **site-b**, manages content |
 
 Each site has two items and an item set. The
 [Impersonate](https://github.com/ateeducacion/omeka-s-Impersonate) module is also
