@@ -16,6 +16,14 @@
  * Docker-only extra: each team's collection is owned by its site editor, to also
  * exercise ownership-based filtering.
  *
+ * Every reference is checked before anything is created: if a blueprint user, a
+ * site or an item set an item names is missing (e.g. the blueprint was not
+ * applied), the script stops with an error instead of creating a partial demo,
+ * where an item without its site would land in every site that takes new items.
+ *
+ * It reads blueprint.json as is and does not resolve $import entries: keep the
+ * demo users, sites, item sets and items inline in blueprint.json.
+ *
  * Idempotent; run on every start from docker-compose POST_CONFIGURE_COMMANDS:
  *   php /var/www/html/volume/modules/IsolatedSites/data/provision-demo.php
  */
@@ -86,6 +94,52 @@ $findByTitle = static function (string $resource, string $title) use ($api, $tit
     return $found ? $found[0]->id() : null;
 };
 
+// Sites, by slug and title, as created from the blueprint
+$siteIds = [];
+foreach ($api->search('sites')->getContent() as $site) {
+    $siteIds[strtolower($site->slug())] = $site->id();
+    $siteIds[strtolower($site->title())] = $site->id();
+}
+
+// Check every reference before creating anything
+$problems = [];
+foreach ($blueprint['users'] ?? [] as $spec) {
+    if (!$findUser((string) ($spec['email'] ?? ''))) {
+        $problems[] = sprintf('user %s does not exist', $spec['email'] ?? '(no email)');
+    }
+}
+foreach (COLLECTION_OWNERS as $title => $email) {
+    if (!$findUser($email)) {
+        $problems[] = sprintf('user %s, owner of "%s", does not exist', $email, $title);
+    }
+}
+foreach ($blueprint['sites'] ?? [] as $spec) {
+    $ref = strtolower((string) ($spec['slug'] ?? $spec['title'] ?? ''));
+    if (!isset($siteIds[$ref])) {
+        $problems[] = sprintf('site %s does not exist', $spec['slug'] ?? $spec['title'] ?? '?');
+    }
+}
+$itemSetTitles = array_map(static fn ($spec) => (string) $spec['title'], $blueprint['itemSets'] ?? []);
+foreach ($blueprint['items'] ?? [] as $spec) {
+    foreach ($spec['sites'] ?? [] as $site) {
+        if (!isset($siteIds[strtolower((string) $site)])) {
+            $problems[] = sprintf('item "%s" names the missing site %s', $spec['title'], $site);
+        }
+    }
+    foreach ($spec['itemSets'] ?? [] as $itemSet) {
+        if (!in_array($itemSet, $itemSetTitles, true)) {
+            $problems[] = sprintf('item "%s" names the undeclared item set "%s"', $spec['title'], $itemSet);
+        }
+    }
+}
+if ($problems) {
+    fwrite(STDERR, "[provision] Not provisioning the demo, the blueprint was not fully applied:\n");
+    foreach (array_unique($problems) as $problem) {
+        fwrite(STDERR, "[provision]   - $problem\n");
+    }
+    exit(1);
+}
+
 // Per-user settings
 $userSettings = $services->get('Omeka\Settings\User');
 foreach ($blueprint['users'] ?? [] as $spec) {
@@ -98,13 +152,6 @@ foreach ($blueprint['users'] ?? [] as $spec) {
         $userSettings->set($key, $value);
     }
     echo "[provision] Applied the settings of {$spec['email']}.\n";
-}
-
-// Sites, by slug and title, as created from the blueprint
-$siteIds = [];
-foreach ($api->search('sites')->getContent() as $site) {
-    $siteIds[strtolower($site->slug())] = $site->id();
-    $siteIds[strtolower($site->title())] = $site->id();
 }
 
 // Item sets
@@ -142,9 +189,7 @@ foreach ($blueprint['items'] ?? [] as $spec) {
     ));
     $payload['o:site'] = [];
     foreach ($spec['sites'] ?? [] as $site) {
-        if (isset($siteIds[strtolower((string) $site)])) {
-            $payload['o:site'][] = ['o:id' => $siteIds[strtolower((string) $site)]];
-        }
+        $payload['o:site'][] = ['o:id' => $siteIds[strtolower((string) $site)]];
     }
     $api->create('items', $payload);
     echo "[provision] Created item \"$title\".\n";

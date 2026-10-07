@@ -46,7 +46,10 @@ services:
         # Omeka-S-Cli applies the blueprint's modules, users, sites and permissions, but not
         # its per-user settings, item sets and items: this idempotent script applies those
         # from the same blueprint.json, so Docker gets the Playground's demo. See data/provision-demo.php.
-        php /var/www/html/volume/modules/IsolatedSites/data/provision-demo.php || true
+        # A failure keeps the stack up (as OMEKA_BLUEPRINT_ON_ERROR: warn) but is logged.
+        if ! php /var/www/html/volume/modules/IsolatedSites/data/provision-demo.php; then
+          echo "[provision] ERROR: IsolatedSites demo provisioning failed; see the messages above." >&2
+        fi
 
     volumes:
       - omekas_data:/var/www/html/volume:Z
