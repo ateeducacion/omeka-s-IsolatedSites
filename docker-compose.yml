@@ -24,13 +24,12 @@ services:
       OMEKA_LOCALE: es
       OMEKA_TIMEZONE: Atlantic/Canary
 
-      # The same blueprint.json as Omeka S Playground (modules incl. Impersonate, the demo users),
-      # re-applied on every start. Playground-only bits (x-playground) are ignored.
+      # The same blueprint.json as Omeka S Playground (modules incl. Impersonate, the demo users,
+      # the two sites and their permissions), re-applied on every start. Playground-only bits
+      # (x-playground) are ignored.
       OMEKA_BLUEPRINT: /var/www/html/volume/modules/IsolatedSites/blueprint.json
       # Keep the stack up if the blueprint fails (e.g. no network), instead of a restart loop
       OMEKA_BLUEPRINT_ON_ERROR: warn
-      # Auto-import sample data CSV on first boot (requires CSVImport module)
-      OMEKA_CSV_IMPORT_FILE: /data/sample_data.csv
       # App environment and base URL
       APPLICATION_ENV: development
       SITE_URL: http://localhost:8080
@@ -44,15 +43,13 @@ services:
         Log
 
       POST_CONFIGURE_COMMANDS: |
-        # The blueprint installs the modules and the demo users. Sites, per-site
-        # permissions, user settings and sample content are not applied by
-        # omeka-s-cli yet, so a script shipped with the module provisions them;
-        # it is idempotent (sites are only created when missing). See data/provision-demo.php.
+        # Omeka-S-Cli applies the blueprint's modules, users, sites and permissions, but not
+        # its per-user settings, item sets and items: this idempotent script applies those
+        # from the same blueprint.json, so Docker gets the Playground's demo. See data/provision-demo.php.
         php /var/www/html/volume/modules/IsolatedSites/data/provision-demo.php || true
 
     volumes:
       - omekas_data:/var/www/html/volume:Z
-      - ./data:/data:ro
       - ./:/var/www/html/volume/modules/IsolatedSites
 
   mariadb:

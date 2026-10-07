@@ -81,8 +81,10 @@ make up
 
 ### 🧪 Verifying site isolation (local Docker)
 
-On first boot the Docker environment provisions a ready-made multi-site scenario
-(see `data/provision-demo.php`) so the isolation can be checked end to end:
+The Docker environment provisions the same multi-site scenario as the Omeka S
+Playground, from `blueprint.json` (Omeka-S-Cli creates the users, sites and
+permissions; `data/provision-demo.php` adds the user settings, item sets and
+items), so the isolation can be checked end to end:
 
 | User | Email | Password | Role | Scope |
 | --- | --- | --- | --- | --- |
