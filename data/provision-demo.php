@@ -1,27 +1,30 @@
 <?php
 /**
- * Demo provisioning script for the IsolatedSites module.
+ * Demo provisioning for the IsolatedSites module's Docker stack.
  *
- * Creates a small multi-site / multi-user scenario so the per-site isolation can
- * be verified end to end:
+ * The Docker image applies blueprint.json with Omeka-S-Cli, which (as of 0.18)
+ * installs the modules and creates the users, the two sites (site-a, site-b) and
+ * their per-site permissions. It does not apply per-user settings, item sets or
+ * items, so this script applies those parts of the same blueprint.json, giving
+ * Docker the same demo as the Omeka S Playground:
  *
- *   - Two sites: "site-a" and "site-b".
- *   - Two site editors (created beforehand by docker-compose via omeka-s-cli):
- *       siteeditor.a@example.com  -> granted admin on site-a only
- *       siteeditor.b@example.com  -> granted admin on site-b only
- *     Both get limit_to_granted_sites + limit_to_own_assets enabled.
- *   - A few items assigned to each site, plus one item set owned by each editor.
+ *   - users[].settings (limit_to_granted_sites, limit_to_own_assets, ...);
+ *   - itemSets, created when no item set has that title;
+ *   - items, created when no item has that title, in their item sets and only in
+ *     the sites they list (so a site that takes new items does not get them all).
  *
- * Expected result once logged into /admin:
- *   - siteeditor.a sees only site-a (and its items) + their own item set; site-b
- *     content is hidden. siteeditor.b sees the mirror image. The plain "editor"
- *     and the global admin keep seeing everything.
+ * Docker-only extra: each team's collection is owned by its site editor, to also
+ * exercise ownership-based filtering.
  *
- * The bundled omeka-s-cli (GhentCDH) cannot create sites, site permissions or
- * per-user settings, so this is done through the Omeka S API. The script is
- * idempotent: sites are only created when their slug does not already exist.
+ * Every reference is checked before anything is created: if a blueprint user, a
+ * site or an item set an item names is missing (e.g. the blueprint was not
+ * applied), the script stops with an error instead of creating a partial demo,
+ * where an item without its site would land in every site that takes new items.
  *
- * Invoked once on first boot from docker-compose POST_CONFIGURE_COMMANDS:
+ * It reads blueprint.json as is and does not resolve $import entries: keep the
+ * demo users, sites, item sets and items inline in blueprint.json.
+ *
+ * Idempotent; run on every start from docker-compose POST_CONFIGURE_COMMANDS:
  *   php /var/www/html/volume/modules/IsolatedSites/data/provision-demo.php
  */
 
@@ -30,10 +33,21 @@ declare(strict_types=1);
 use Omeka\Entity\User;
 use Omeka\Mvc\Application;
 
+const COLLECTION_OWNERS = [
+    'Team A Collection' => 'siteeditor.a@example.com',
+    'Team B Collection' => 'siteeditor.b@example.com',
+];
+
 $omekaPath = getenv('OMEKA_PATH') ?: '/var/www/html';
 
 if (!is_file($omekaPath . '/bootstrap.php')) {
     fwrite(STDERR, "[provision] Omeka bootstrap not found at $omekaPath; set OMEKA_PATH. Aborting.\n");
+    exit(1);
+}
+
+$blueprint = json_decode((string) file_get_contents(__DIR__ . '/../blueprint.json'), true);
+if (!is_array($blueprint)) {
+    fwrite(STDERR, "[provision] Unable to read blueprint.json; aborting.\n");
     exit(1);
 }
 
@@ -61,104 +75,124 @@ $findUser = static function (string $email) use ($em): ?User {
     return $em->getRepository(User::class)->findOneBy(['email' => $email]);
 };
 
-$siteExists = static function (string $slug) use ($api): bool {
-    return count($api->search('sites', ['slug' => $slug])->getContent()) > 0;
+$propertyId = static function (string $term) use ($api): ?int {
+    $properties = $api->search('properties', ['term' => $term])->getContent();
+    return $properties ? $properties[0]->id() : null;
+};
+$titleId = $propertyId('dcterms:title');
+$literal = static function (string $term, ?string $text) use ($propertyId): array {
+    $id = $propertyId($term);
+    return $id && $text !== null && $text !== ''
+        ? [$term => [['type' => 'literal', 'property_id' => $id, '@value' => $text]]]
+        : [];
+};
+$findByTitle = static function (string $resource, string $title) use ($api, $titleId): ?int {
+    $found = $api->search($resource, [
+        'property' => [['property' => $titleId, 'type' => 'eq', 'text' => $title]],
+        'limit' => 1,
+    ])->getContent();
+    return $found ? $found[0]->id() : null;
 };
 
-// Resolve the dcterms:title property id (defaults to 1 on a stock install).
-$titleProps = $api->search('properties', ['term' => 'dcterms:title'])->getContent();
-$titlePropId = $titleProps ? $titleProps[0]->id() : 1;
+// Sites, by slug and title, as created from the blueprint
+$siteIds = [];
+foreach ($api->search('sites')->getContent() as $site) {
+    $siteIds[strtolower($site->slug())] = $site->id();
+    $siteIds[strtolower($site->title())] = $site->id();
+}
 
-$titleValue = static function (string $text) use ($titlePropId): array {
-    return [[
-        'type' => 'literal',
-        'property_id' => $titlePropId,
-        '@value' => $text,
-    ]];
-};
-
-// --- Demo definition --------------------------------------------------------
-// site-a showcases the three site-scoped roles; site-b shows cross-site isolation.
-// 'role' is the per-site permission (viewer/editor/admin); the global role is set
-// by docker-compose's omeka-s-cli user:add calls. 'collectionOwner' owns the
-// item set, to also exercise ownership-based filtering.
-$sites = [
-    [
-        'slug' => 'site-a',
-        'title' => 'Site A (Team A)',
-        'grants' => [
-            ['email' => 'siteresearcher.a@example.com', 'role' => 'viewer'],
-            ['email' => 'siteeditor.a@example.com',     'role' => 'editor'],
-            ['email' => 'sitemanager.a@example.com',    'role' => 'admin'],
-        ],
-        'collectionOwner' => 'siteeditor.a@example.com',
-    ],
-    [
-        'slug' => 'site-b',
-        'title' => 'Site B (Team B)',
-        'grants' => [
-            ['email' => 'siteeditor.b@example.com', 'role' => 'editor'],
-        ],
-        'collectionOwner' => 'siteeditor.b@example.com',
-    ],
-];
-
-$userSettings = $services->get('Omeka\Settings\User');
-
-foreach ($sites as $d) {
-    // Enable isolation settings for every granted user and build the site's
-    // permission payload (idempotent).
-    $sitePermissions = [];
-    foreach ($d['grants'] as $grant) {
-        $user = $findUser($grant['email']);
-        if (!$user) {
-            fwrite(STDERR, "[provision] User {$grant['email']} not found; skipping grant.\n");
-            continue;
-        }
-        $userSettings->setTargetId($user->getId());
-        $userSettings->set('limit_to_granted_sites', true);
-        $userSettings->set('limit_to_own_assets', true);
-
-        $sitePermissions[] = ['o:user' => ['o:id' => $user->getId()], 'o:role' => $grant['role']];
+// Check every reference before creating anything
+$problems = [];
+foreach ($blueprint['users'] ?? [] as $spec) {
+    if (!$findUser((string) ($spec['email'] ?? ''))) {
+        $problems[] = sprintf('user %s does not exist', $spec['email'] ?? '(no email)');
     }
+}
+foreach (COLLECTION_OWNERS as $title => $email) {
+    if (!$findUser($email)) {
+        $problems[] = sprintf('user %s, owner of "%s", does not exist', $email, $title);
+    }
+}
+foreach ($blueprint['sites'] ?? [] as $spec) {
+    $ref = strtolower((string) ($spec['slug'] ?? $spec['title'] ?? ''));
+    if (!isset($siteIds[$ref])) {
+        $problems[] = sprintf('site %s does not exist', $spec['slug'] ?? $spec['title'] ?? '?');
+    }
+}
+$itemSetTitles = array_map(static fn ($spec) => (string) $spec['title'], $blueprint['itemSets'] ?? []);
+foreach ($blueprint['items'] ?? [] as $spec) {
+    foreach ($spec['sites'] ?? [] as $site) {
+        if (!isset($siteIds[strtolower((string) $site)])) {
+            $problems[] = sprintf('item "%s" names the missing site %s', $spec['title'], $site);
+        }
+    }
+    foreach ($spec['itemSets'] ?? [] as $itemSet) {
+        if (!in_array($itemSet, $itemSetTitles, true)) {
+            $problems[] = sprintf('item "%s" names the undeclared item set "%s"', $spec['title'], $itemSet);
+        }
+    }
+}
+if ($problems) {
+    fwrite(STDERR, "[provision] Not provisioning the demo, the blueprint was not fully applied:\n");
+    foreach (array_unique($problems) as $problem) {
+        fwrite(STDERR, "[provision]   - $problem\n");
+    }
+    exit(1);
+}
 
-    if ($siteExists($d['slug'])) {
-        echo "[provision] Site {$d['slug']} already exists; skipping creation.\n";
+// Per-user settings
+$userSettings = $services->get('Omeka\Settings\User');
+foreach ($blueprint['users'] ?? [] as $spec) {
+    $user = $findUser((string) ($spec['email'] ?? ''));
+    if (!$user || empty($spec['settings'])) {
         continue;
     }
-
-    // Create the site with its per-user permissions.
-    $site = $api->create('sites', [
-        'o:title' => $d['title'],
-        'o:slug' => $d['slug'],
-        'o:theme' => 'default',
-        'o:is_public' => true,
-        'o:site_permission' => $sitePermissions,
-    ])->getContent();
-    $siteId = $site->id();
-    echo "[provision] Created site {$d['slug']} (#{$siteId}) with " . count($sitePermissions) . " permission(s).\n";
-
-    // Create two items assigned to this site.
-    for ($i = 1; $i <= 2; $i++) {
-        $api->create('items', [
-            'dcterms:title' => $titleValue("{$d['title']} - Item {$i}"),
-            'o:is_public' => true,
-            'o:site' => [['o:id' => $siteId]],
-        ]);
+    $userSettings->setTargetId($user->getId());
+    foreach ($spec['settings'] as $key => $value) {
+        $userSettings->set($key, $value);
     }
-    echo "[provision] Created 2 items in {$d['slug']}.\n";
+    echo "[provision] Applied the settings of {$spec['email']}.\n";
+}
 
-    // Create one item set owned by the site's content editor (ownership-based
-    // filtering is independent of site membership).
-    $owner = $findUser($d['collectionOwner']);
-    if ($owner) {
-        $api->create('item_sets', [
-            'dcterms:title' => $titleValue("{$d['title']} - Collection"),
-            'o:is_public' => true,
-            'o:owner' => ['o:id' => $owner->getId()],
-        ]);
-        echo "[provision] Created 1 item set owned by {$d['collectionOwner']}.\n";
+// Item sets
+$itemSetIds = [];
+foreach ($blueprint['itemSets'] ?? [] as $spec) {
+    $title = (string) $spec['title'];
+    $id = $findByTitle('item_sets', $title);
+    if (!$id) {
+        $payload = $literal('dcterms:title', $title)
+            + $literal('dcterms:description', $spec['description'] ?? null)
+            + ['o:is_public' => true];
+        $owner = isset(COLLECTION_OWNERS[$title]) ? $findUser(COLLECTION_OWNERS[$title]) : null;
+        if ($owner) {
+            $payload['o:owner'] = ['o:id' => $owner->getId()];
+        }
+        $id = $api->create('item_sets', $payload)->getContent()->id();
+        echo "[provision] Created item set \"$title\".\n";
     }
+    $itemSetIds[$title] = $id;
+}
+
+// Items
+foreach ($blueprint['items'] ?? [] as $spec) {
+    $title = (string) $spec['title'];
+    if ($findByTitle('items', $title)) {
+        continue;
+    }
+    $payload = $literal('dcterms:title', $title)
+        + $literal('dcterms:description', $spec['description'] ?? null)
+        + $literal('dcterms:creator', $spec['creator'] ?? null)
+        + ['o:is_public' => true];
+    $payload['o:item_set'] = array_values(array_map(
+        static fn ($id) => ['o:id' => $id],
+        array_intersect_key($itemSetIds, array_flip($spec['itemSets'] ?? []))
+    ));
+    $payload['o:site'] = [];
+    foreach ($spec['sites'] ?? [] as $site) {
+        $payload['o:site'][] = ['o:id' => $siteIds[strtolower((string) $site)]];
+    }
+    $api->create('items', $payload);
+    echo "[provision] Created item \"$title\".\n";
 }
 
 echo "[provision] Done.\n";
